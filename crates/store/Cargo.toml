@@ -1,0 +1,23 @@
+[package]
+name = "store"
+description = "SQLite persistence layer for catalog revisions, vendor offers, role presets, and loadout documents."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+core-engine = { path = "../core-engine" }
+sqlx.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+data-ingest = { path = "../data-ingest" }
+sqlx.workspace = true

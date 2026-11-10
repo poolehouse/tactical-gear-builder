@@ -9,6 +9,7 @@ rust-version.workspace = true
 [dependencies]
 core-engine = { path = "../core-engine" }
 data-ingest = { path = "../data-ingest" }
+store = { path = "../store" }
 axum.workspace = true
 tokio.workspace = true
 tower-http.workspace = true
@@ -19,3 +20,5 @@ uuid.workspace = true
 
 [dev-dependencies]
 tower.workspace = true
+tempfile.workspace = true
+sqlx.workspace = true

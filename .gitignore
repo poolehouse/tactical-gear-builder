@@ -17,3 +17,6 @@ frontend/src/engine/
 
 # OS / editor noise
 .DS_Store
+
+# Runtime SQLite database (default DATABASE_URL target)
+tactical_gear.db*

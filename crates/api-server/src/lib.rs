@@ -14,6 +14,14 @@
 //! - `GET  /api/v1/catalog/presets`
 //! - `POST /api/v1/loadouts/evaluate`
 //! - `POST /api/v1/loadouts/from-preset/{preset_id}`
+//! - `POST /api/v1/loadouts` — persist a validated loadout document
+//! - `GET  /api/v1/loadouts` — list persisted loadout metadata
+//! - `GET  /api/v1/loadouts/{id}` — persisted loadout + live evaluation
+//! - `PATCH /api/v1/loadouts/{id}` — declarative update behind an
+//!   optimistic-lock `expected_version` guard
+//! - `DELETE /api/v1/loadouts/{id}`
+//! - `GET  /api/v1/loadouts/{id}/evaluate?catalog_version=` — evaluate a
+//!   stored loadout against its pinned revision or an explicit newer one
 
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
@@ -39,27 +47,47 @@ use core_engine::regulation::{
     ComplianceReport, OperationalRole, PresetPlacement, RegulationPolicy, evaluate_compliance,
 };
 use serde::{Deserialize, Serialize};
+use store::{LoadoutMetadata, PersistedLoadout, Store, StoreError, StoredPlacement};
 use thiserror::Error;
 use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
+use uuid::Uuid;
 
-/// Shared application state: the immutable product catalog.
+/// Shared application state: the immutable product catalog plus, when the
+/// server booted with a database, the persistence layer.
 #[derive(Clone)]
 pub struct AppState {
     catalog: Arc<Catalog>,
+    store: Option<Arc<Store>>,
 }
 
 impl AppState {
-    /// Wrap a catalog in shared state.
+    /// Wrap a catalog in shared state without persistence (the stateless
+    /// routes only; persisted-loadout routes answer 503).
     pub fn new(catalog: Catalog) -> Self {
         Self {
             catalog: Arc::new(catalog),
+            store: None,
+        }
+    }
+
+    /// Wrap a catalog and a migrated, seeded [`Store`] in shared state.
+    /// Accepts either an owned store or an already-shared one.
+    pub fn with_store(catalog: Catalog, store: impl Into<Arc<Store>>) -> Self {
+        Self {
+            catalog: Arc::new(catalog),
+            store: Some(store.into()),
         }
     }
 
     /// The shared catalog.
     pub fn catalog(&self) -> &Catalog {
         &self.catalog
+    }
+
+    /// The persistence layer, when one is configured.
+    pub fn store(&self) -> Option<&Arc<Store>> {
+        self.store.as_ref()
     }
 }
 
@@ -80,6 +108,12 @@ pub fn build_router(state: AppState) -> Router {
             "/api/v1/loadouts/from-preset/{preset_id}",
             post(loadout_from_preset),
         )
+        .route("/api/v1/loadouts", post(create_loadout).get(list_loadouts))
+        .route(
+            "/api/v1/loadouts/{id}",
+            get(get_loadout).patch(update_loadout).delete(delete_loadout),
+        )
+        .route("/api/v1/loadouts/{id}/evaluate", get(evaluate_stored_loadout))
         .layer(TraceLayer::new_for_http())
         .layer(CorsLayer::permissive())
         .with_state(state)
@@ -152,17 +186,72 @@ pub enum ApiError {
     /// Catalog bootstrap failed (500).
     #[error("catalog bootstrap failed: {0}")]
     Catalog(String),
+    /// The persistence layer is not configured on this server (503).
+    #[error("persistence is not configured on this server")]
+    PersistenceUnavailable,
+    /// No loadout with the requested id exists (404).
+    #[error("unknown loadout id `{0}`")]
+    UnknownLoadout(Uuid),
+    /// No catalog revision with the requested version exists (404).
+    #[error("unknown catalog revision {0}")]
+    UnknownCatalogRevision(i64),
+    /// The caller's expected version is stale (409).
+    #[error("version_conflict")]
+    VersionConflict {
+        /// The version actually stored in the row.
+        current_version: i64,
+    },
+    /// A stored record failed `core-engine` validation on read (R2); the
+    /// row is never silently coerced (500).
+    #[error("corrupt_or_invalid_record")]
+    CorruptOrInvalidRecord {
+        /// What was read and why it failed.
+        detail: String,
+    },
 }
 
 impl IntoResponse for ApiError {
     fn into_response(self) -> Response {
         let status = match &self {
-            ApiError::UnknownPlatform(_) | ApiError::UnknownPreset(_) => StatusCode::NOT_FOUND,
+            ApiError::UnknownPlatform(_)
+            | ApiError::UnknownPreset(_)
+            | ApiError::UnknownLoadout(_)
+            | ApiError::UnknownCatalogRevision(_) => StatusCode::NOT_FOUND,
             ApiError::MissingParam(_) | ApiError::InvalidParam { .. } => StatusCode::BAD_REQUEST,
             ApiError::InvalidBody(_) => StatusCode::BAD_REQUEST,
-            ApiError::Catalog(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            ApiError::Catalog(_) | ApiError::CorruptOrInvalidRecord { .. } => {
+                StatusCode::INTERNAL_SERVER_ERROR
+            }
+            ApiError::PersistenceUnavailable => StatusCode::SERVICE_UNAVAILABLE,
+            ApiError::VersionConflict { .. } => StatusCode::CONFLICT,
         };
-        (status, Json(serde_json::json!({ "error": self.to_string() }))).into_response()
+        let body = match &self {
+            ApiError::VersionConflict { current_version } => serde_json::json!({
+                "error": "version_conflict",
+                "current_version": current_version,
+            }),
+            ApiError::CorruptOrInvalidRecord { detail } => serde_json::json!({
+                "error": "corrupt_or_invalid_record",
+                "detail": detail,
+            }),
+            _ => serde_json::json!({ "error": self.to_string() }),
+        };
+        (status, Json(body)).into_response()
+    }
+}
+
+/// Map a [`StoreError`] onto its transport-level `ApiError`.
+fn store_error(error: StoreError) -> ApiError {
+    match error {
+        StoreError::UnknownLoadout(id) => ApiError::UnknownLoadout(id),
+        StoreError::UnknownCatalogRevision(version) => ApiError::UnknownCatalogRevision(version),
+        StoreError::VersionConflict { current_version } => ApiError::VersionConflict {
+            current_version,
+        },
+        StoreError::CorruptOrInvalidRecord { detail } => ApiError::CorruptOrInvalidRecord {
+            detail,
+        },
+        StoreError::Database(detail) => ApiError::Catalog(format!("database error: {detail}")),
     }
 }
 
@@ -296,6 +385,116 @@ pub struct PresetSummary {
     pub default_colorway: Colorway,
     /// How many placements the preset applies.
     pub placement_count: usize,
+}
+
+// --- Spec-05: persisted loadouts ----------------------------------------------------
+
+/// `POST /api/v1/loadouts` request body — the same declarative shape as
+/// `/evaluate`, but persisted (when valid) as a loadout document.
+#[derive(Debug, Clone, Deserialize)]
+pub struct CreateLoadoutRequest {
+    /// SKU of the base platform.
+    pub platform_sku: String,
+    /// Mounts to apply, in order.
+    #[serde(default)]
+    pub placements: Vec<PlacementRequest>,
+    /// Chosen colorway; defaults to the platform's default colorway.
+    #[serde(default)]
+    pub colorway: Option<Colorway>,
+    /// Regulation policy to validate against (`us_army_ar670_1`, ...).
+    #[serde(default)]
+    pub regulation_policy: Option<RegulationPolicy>,
+    /// Operational role to validate against (`jtac`, `sniper_dm`, ...).
+    #[serde(default)]
+    pub operational_role: Option<OperationalRole>,
+}
+
+/// `PATCH /api/v1/loadouts/{id}` request body. Absent fields keep their
+/// current values; `expected_version` must match the stored version.
+#[derive(Debug, Clone, Deserialize)]
+pub struct UpdateLoadoutRequest {
+    /// The version the client based this edit on (optimistic lock).
+    pub expected_version: i64,
+    /// Replacement colorway, when changing it.
+    #[serde(default)]
+    pub colorway: Option<Colorway>,
+    /// Replacement regulation policy, when changing it.
+    #[serde(default)]
+    pub regulation_policy: Option<RegulationPolicy>,
+    /// Replacement operational role, when changing it.
+    #[serde(default)]
+    pub operational_role: Option<OperationalRole>,
+    /// Replacement placement list, when changing the build.
+    #[serde(default)]
+    pub placements: Option<Vec<PlacementRequest>>,
+}
+
+/// `POST`/`PATCH /api/v1/loadouts...` response: the R4/11A contract —
+/// semantic engine failures come back as HTTP 200 with `persisted: false`,
+/// `valid: false`, and the structured `errors[]` inside the summary.
+#[derive(Debug, Clone, Serialize)]
+pub struct LoadoutWriteResponse {
+    /// Whether the document was written to SQLite.
+    pub persisted: bool,
+    /// Whether every placement passed engine validation.
+    pub valid: bool,
+    /// The created/updated loadout id (persisted responses only).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<Uuid>,
+    /// The document version after the write (persisted responses only).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+    /// The pinned catalog revision (persisted responses only).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_version: Option<i64>,
+    /// The full evaluation summary (with `errors[]` when invalid).
+    pub summary: EvaluateResponse,
+}
+
+/// `GET /api/v1/loadouts` response.
+#[derive(Debug, Clone, Serialize)]
+pub struct LoadoutListResponse {
+    /// Persisted loadout metadata, newest update first.
+    pub loadouts: Vec<LoadoutMetadata>,
+    /// Page size actually applied.
+    pub limit: u32,
+    /// Page offset actually applied.
+    pub offset: u32,
+}
+
+/// `GET /api/v1/loadouts` query parameters.
+#[derive(Debug, Clone, Default, Deserialize)]
+struct ListQuery {
+    /// Page size (default 50, capped at 200).
+    limit: Option<u32>,
+    /// Page offset (default 0).
+    offset: Option<u32>,
+}
+
+/// `GET /api/v1/loadouts/{id}` response: the stored document plus its live
+/// evaluation against the pinned catalog revision.
+#[derive(Debug, Clone, Serialize)]
+pub struct LoadoutDetailResponse {
+    /// Persisted row metadata.
+    #[serde(flatten)]
+    pub metadata: LoadoutMetadata,
+    /// The stored placement list.
+    pub placements: Vec<StoredPlacement>,
+    /// The fail-closed replay evaluation (R2).
+    pub summary: EvaluateResponse,
+}
+
+/// `GET /api/v1/loadouts/{id}/evaluate` response.
+#[derive(Debug, Clone, Serialize)]
+pub struct LoadoutEvaluateResponse {
+    /// The evaluated loadout id.
+    pub id: Uuid,
+    /// The document version evaluated.
+    pub version: i64,
+    /// The catalog revision evaluated against.
+    pub catalog_version: i64,
+    /// The evaluation summary.
+    pub summary: EvaluateResponse,
 }
 
 // --- handlers ----------------------------------------------------------------------
@@ -489,7 +688,355 @@ async fn loadout_from_preset(
     }))
 }
 
+// --- Spec-05: persisted loadout handlers --------------------------------------------
+
+/// Resolve the store, or explain that this server booted stateless.
+fn require_store(state: &AppState) -> Result<&Arc<Store>, ApiError> {
+    state.store().ok_or(ApiError::PersistenceUnavailable)
+}
+
+/// `POST /api/v1/loadouts` — evaluate the requested placements through the
+/// engine first (11A): valid builds persist as revision-pinned documents
+/// (201), invalid builds are reported under HTTP 200 with
+/// `persisted: false` and never written (R4).
+async fn create_loadout(
+    State(state): State<AppState>,
+    Json(payload): Json<CreateLoadoutRequest>,
+) -> Result<(StatusCode, Json<LoadoutWriteResponse>), ApiError> {
+    let store = require_store(&state)?;
+    let catalog_version = store.active_catalog_version().await.map_err(store_error)?;
+    let catalog = store
+        .load_catalog_revision(catalog_version)
+        .await
+        .map_err(store_error)?;
+    let platform = catalog
+        .platform(&payload.platform_sku)
+        .cloned()
+        .ok_or_else(|| ApiError::UnknownPlatform(payload.platform_sku.clone()))?;
+    let colorway = payload.colorway.unwrap_or(platform.default_colorway);
+    let placements = to_stored(&payload.placements);
+
+    let evaluation = evaluate_placements(
+        &catalog,
+        &platform,
+        &placement_tuples(&placements),
+        colorway,
+        payload.regulation_policy,
+        payload.operational_role,
+    );
+    if !evaluation.summary.valid {
+        return Ok((
+            StatusCode::OK,
+            Json(not_persisted(evaluation)),
+        ));
+    }
+
+    let persisted = store
+        .create_loadout(
+            &payload.platform_sku,
+            catalog_version,
+            colorway,
+            payload.regulation_policy,
+            payload.operational_role,
+            &placements,
+        )
+        .await
+        .map_err(store_error)?;
+    Ok((
+        StatusCode::CREATED,
+        Json(LoadoutWriteResponse {
+            persisted: true,
+            valid: true,
+            id: Some(persisted.metadata.id),
+            version: Some(persisted.metadata.version),
+            catalog_version: Some(persisted.metadata.catalog_version),
+            summary: evaluation,
+        }),
+    ))
+}
+
+/// `GET /api/v1/loadouts` — persisted loadout metadata, newest update
+/// first, paginated through `?limit=&offset=`.
+async fn list_loadouts(
+    State(state): State<AppState>,
+    Query(params): Query<ListQuery>,
+) -> Result<Json<LoadoutListResponse>, ApiError> {
+    let store = require_store(&state)?;
+    let limit = params.limit.unwrap_or(50).min(200);
+    let offset = params.offset.unwrap_or(0);
+    let loadouts = store
+        .list_loadouts(limit, offset)
+        .await
+        .map_err(store_error)?;
+    Ok(Json(LoadoutListResponse {
+        loadouts,
+        limit,
+        offset,
+    }))
+}
+
+/// `GET /api/v1/loadouts/{id}` — the stored document plus its live,
+/// fail-closed evaluation against the pinned revision (R2). Unknown ids
+/// are 404s; a row that no longer replays cleanly is a structured 500,
+/// never a coerced `valid: false`.
+async fn get_loadout(
+    State(state): State<AppState>,
+    PathParam(id): PathParam<Uuid>,
+) -> Result<Json<LoadoutDetailResponse>, ApiError> {
+    let store = require_store(&state)?;
+    let loadout = fetch_loadout(store, id).await?;
+    Ok(Json(evaluate_pinned_loadout(store, &loadout).await?))
+}
+
+/// `PATCH /api/v1/loadouts/{id}` — declarative update behind the
+/// optimistic-lock guard. Transport failures first (`404` unknown id,
+/// `409` stale `expected_version`), then the same evaluate-before-write
+/// contract as `POST` (11A): an invalid merged build is a 200 with
+/// `persisted: false` and the row is left untouched.
+async fn update_loadout(
+    State(state): State<AppState>,
+    PathParam(id): PathParam<Uuid>,
+    Json(payload): Json<UpdateLoadoutRequest>,
+) -> Result<Json<LoadoutWriteResponse>, ApiError> {
+    let store = require_store(&state)?;
+    let loadout = fetch_loadout(store, id).await?;
+
+    // Transport check first: a stale edit base must not be answered with
+    // a semantic result computed against someone else's row state.
+    if payload.expected_version != loadout.metadata.version {
+        return Err(ApiError::VersionConflict {
+            current_version: loadout.metadata.version,
+        });
+    }
+
+    // Absent fields keep their current values.
+    let colorway = payload.colorway.unwrap_or(loadout.metadata.colorway);
+    let regulation_policy = payload
+        .regulation_policy
+        .or(loadout.metadata.regulation_policy);
+    let operational_role = payload
+        .operational_role
+        .or(loadout.metadata.operational_role);
+    let placements = payload
+        .placements
+        .as_ref()
+        .map(|placements| to_stored(placements))
+        .unwrap_or_else(|| loadout.placements.clone());
+
+    let catalog = store
+        .load_catalog_revision(loadout.metadata.catalog_version)
+        .await
+        .map_err(store_error)?;
+    let platform = pinned_platform(&catalog, &loadout)?;
+    let evaluation = evaluate_placements(
+        &catalog,
+        &platform,
+        &placement_tuples(&placements),
+        colorway,
+        regulation_policy,
+        operational_role,
+    );
+    if !evaluation.summary.valid {
+        return Ok(Json(not_persisted(evaluation)));
+    }
+
+    let updated = store
+        .update_loadout(
+            id,
+            payload.expected_version,
+            colorway,
+            regulation_policy,
+            operational_role,
+            &placements,
+        )
+        .await
+        .map_err(store_error)?;
+    Ok(Json(LoadoutWriteResponse {
+        persisted: true,
+        valid: true,
+        id: Some(updated.metadata.id),
+        version: Some(updated.metadata.version),
+        catalog_version: Some(updated.metadata.catalog_version),
+        summary: evaluation,
+    }))
+}
+
+/// `DELETE /api/v1/loadouts/{id}` — removes the document and its audit
+/// trail; `204` on success, `404` for unknown ids.
+async fn delete_loadout(
+    State(state): State<AppState>,
+    PathParam(id): PathParam<Uuid>,
+) -> Result<StatusCode, ApiError> {
+    let store = require_store(&state)?;
+    if store.delete_loadout(id).await.map_err(store_error)? {
+        Ok(StatusCode::NO_CONTENT)
+    } else {
+        Err(ApiError::UnknownLoadout(id))
+    }
+}
+
+/// `GET /api/v1/loadouts/{id}/evaluate?catalog_version=` — evaluates the
+/// stored loadout against its pinned revision (fail-closed per R2) or an
+/// explicitly named revision. A cross-revision evaluation is a semantic
+/// result — the build legitimately may not fit a different catalog — and
+/// is audited as a `re_evaluated` event.
+async fn evaluate_stored_loadout(
+    State(state): State<AppState>,
+    PathParam(id): PathParam<Uuid>,
+    Query(params): Query<HashMap<String, String>>,
+) -> Result<Json<LoadoutEvaluateResponse>, ApiError> {
+    let store = require_store(&state)?;
+    let loadout = fetch_loadout(store, id).await?;
+
+    let requested = match params.get("catalog_version") {
+        None => loadout.metadata.catalog_version,
+        Some(raw) => raw
+            .parse::<i64>()
+            .map_err(|_| ApiError::InvalidParam {
+                param: "catalog_version".to_owned(),
+                value: raw.clone(),
+            })?,
+    };
+
+    if requested == loadout.metadata.catalog_version {
+        let detail = evaluate_pinned_loadout(store, &loadout).await?;
+        return Ok(Json(LoadoutEvaluateResponse {
+            id,
+            version: detail.metadata.version,
+            catalog_version: requested,
+            summary: detail.summary,
+        }));
+    }
+
+    // Cross-revision evaluation: semantic result (R4), audited.
+    let catalog = store
+        .load_catalog_revision(requested)
+        .await
+        .map_err(store_error)?;
+    let platform = catalog
+        .platform(&loadout.metadata.platform_sku)
+        .cloned()
+        .ok_or_else(|| ApiError::CorruptOrInvalidRecord {
+            detail: format!(
+                "loadout {id} references platform `{}` absent from revision {requested}",
+                loadout.metadata.platform_sku
+            ),
+        })?;
+    let evaluation = evaluate_placements(
+        &catalog,
+        &platform,
+        &placement_tuples(&loadout.placements),
+        loadout.metadata.colorway,
+        loadout.metadata.regulation_policy,
+        loadout.metadata.operational_role,
+    );
+    store
+        .record_re_evaluation(id, requested)
+        .await
+        .map_err(store_error)?;
+    Ok(Json(LoadoutEvaluateResponse {
+        id,
+        version: loadout.metadata.version,
+        catalog_version: requested,
+        summary: evaluation,
+    }))
+}
+
 // --- helpers ----------------------------------------------------------------------
+
+/// Fetch a loadout or surface its 404.
+async fn fetch_loadout(store: &Store, id: Uuid) -> Result<PersistedLoadout, ApiError> {
+    store
+        .get_loadout(id)
+        .await
+        .map_err(store_error)?
+        .ok_or(ApiError::UnknownLoadout(id))
+}
+
+/// Look up the loadout's platform inside its pinned revision; a missing
+/// platform in a pinned document is corruption (R2), not a 404 — the loadout
+/// itself exists.
+fn pinned_platform(catalog: &Catalog, loadout: &PersistedLoadout) -> Result<PlatformSpec, ApiError> {
+    catalog
+        .platform(&loadout.metadata.platform_sku)
+        .cloned()
+        .ok_or_else(|| ApiError::CorruptOrInvalidRecord {
+            detail: format!(
+                "loadout {} references unknown platform `{}` in revision {}",
+                loadout.metadata.id, loadout.metadata.platform_sku, loadout.metadata.catalog_version
+            ),
+        })
+}
+
+/// Replay a stored loadout against its pinned revision, fail-closed (R2):
+/// the document was only ever written after passing this exact evaluation,
+/// so a row that no longer replays cleanly has been corrupted out-of-band
+/// and surfaces as a structured 500.
+async fn evaluate_pinned_loadout(
+    store: &Store,
+    loadout: &PersistedLoadout,
+) -> Result<LoadoutDetailResponse, ApiError> {
+    let catalog = store
+        .load_catalog_revision(loadout.metadata.catalog_version)
+        .await
+        .map_err(store_error)?;
+    let platform = pinned_platform(&catalog, loadout)?;
+    let evaluation = evaluate_placements(
+        &catalog,
+        &platform,
+        &placement_tuples(&loadout.placements),
+        loadout.metadata.colorway,
+        loadout.metadata.regulation_policy,
+        loadout.metadata.operational_role,
+    );
+    if !evaluation.summary.valid {
+        return Err(ApiError::CorruptOrInvalidRecord {
+            detail: format!(
+                "stored loadout {} no longer evaluates cleanly against revision {}: {:?}",
+                loadout.metadata.id, loadout.metadata.catalog_version, evaluation.summary.errors
+            ),
+        });
+    }
+    Ok(LoadoutDetailResponse {
+        metadata: loadout.metadata.clone(),
+        placements: loadout.placements.clone(),
+        summary: evaluation,
+    })
+}
+
+/// The R4/11A semantic-failure response body: nothing was written.
+fn not_persisted(evaluation: EvaluateResponse) -> LoadoutWriteResponse {
+    LoadoutWriteResponse {
+        persisted: false,
+        valid: false,
+        id: None,
+        version: None,
+        catalog_version: None,
+        summary: evaluation,
+    }
+}
+
+/// Convert API placement requests into their canonical stored form.
+fn to_stored(requests: &[PlacementRequest]) -> Vec<StoredPlacement> {
+    requests
+        .iter()
+        .map(|p| StoredPlacement {
+            slot_id: p.slot_id.clone(),
+            component_sku: p.component_sku.clone(),
+            col_idx: p.col_idx,
+            row_idx: p.row_idx,
+        })
+        .collect()
+}
+
+/// Expand stored placements into the tuple shape `evaluate_placements`
+/// consumes.
+fn placement_tuples(placements: &[StoredPlacement]) -> Vec<(String, String, u8, u8)> {
+    placements
+        .iter()
+        .map(|p| (p.slot_id.clone(), p.component_sku.clone(), p.col_idx, p.row_idx))
+        .collect()
+}
 
 /// Shared evaluation core for `/evaluate` and `/from-preset`: applies the
 /// placements in order (collecting per-placement errors without aborting),

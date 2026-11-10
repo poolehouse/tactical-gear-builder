@@ -44,6 +44,10 @@ WebAssembly inside the browser demo — with zero divergence, because the same
 - **Role presets.** Six curated starter loadouts instantiate through the
   normal engine validation path (adapter auto-injection, PALS collisions,
   pricing) and validate compliant under their own declared policy and role.
+- **Persistent loadouts.** The API persists validated builds as versioned,
+  catalog-revision-pinned documents — optimistic-locked updates, an
+  append-only audit trail, and fail-closed reads that never coerce a row
+  that no longer passes engine validation.
 
 ## Workspace layout
 
@@ -51,7 +55,8 @@ WebAssembly inside the browser demo — with zero divergence, because the same
 | --- | --- |
 | `crates/core-engine` | Pure compatibility domain: catalog types, interface families, adapter graph, PALS occupancy, `LoadoutDraft` state machine, 2D anchor math. No I/O, no async — compiles anywhere Rust does. |
 | `crates/data-ingest` | CSV → canonical catalog pipeline (fail-closed), sample-data generator, and SQL seed writer. |
-| `crates/api-server` | Axum REST API over the engine: catalog browsing, per-slot compatibility classification, loadout evaluation. |
+| `crates/store` | SQLite persistence layer: append-only catalog revisions, vendor offers, role presets, and loadout documents with optimistic locking and an audit trail. |
+| `crates/api-server` | Axum REST API over the engine: catalog browsing, per-slot compatibility classification, loadout evaluation, and stateful loadout CRUD backed by `store`. |
 | `crates/wasm-engine` | Thin `wasm-bindgen` wrapper exporting the engine (plus embedded catalog seed) to the browser. |
 | `frontend/` | React + Vite 2D visual builder — the GitHub Pages demo. |
 | `seeds/` | The canonical, byte-deterministic catalog seed (`catalog_seed.json` + `seed.sql`), embedded into the wasm build. |
@@ -66,6 +71,12 @@ GET  /api/v1/catalog/platforms/{sku}/compatible-components?slot_id=
 GET  /api/v1/catalog/presets
 POST /api/v1/loadouts/evaluate
 POST /api/v1/loadouts/from-preset/{preset_id}
+POST /api/v1/loadouts
+GET  /api/v1/loadouts
+GET  /api/v1/loadouts/{id}
+PATCH /api/v1/loadouts/{id}
+DELETE /api/v1/loadouts/{id}
+GET  /api/v1/loadouts/{id}/evaluate?catalog_version=
 ```
 
 `compatible-components` classifies every catalog component against a slot as
@@ -78,6 +89,18 @@ in which case the response carries a compliance report (violations and
 advisories are semantic results under HTTP 200, never transport errors).
 `from-preset` instantiates a curated role preset and evaluates it under its
 own declared context.
+
+The `loadouts` CRUD routes persist server-side build documents. Every write
+is evaluated through the engine first: a valid build persists as a
+catalog-revision-pinned document (201), while an invalid one answers HTTP 200
+with `persisted: false` and the structured `errors[]` — semantic failures are
+never transport errors, which are reserved for 404 (unknown id), 409 (stale
+`expected_version`), and 503 (no database configured). `PATCH` merges absent
+fields behind the optimistic-lock guard and bumps a monotonic version; every
+write appends an audit event. Stored loadouts pin the catalog revision they
+were created under and replay fail-closed against it, so a record that no
+longer validates surfaces as a structured corruption error — never a coerced
+document.
 
 ## The browser demo
 
@@ -116,7 +139,8 @@ Requirements: Rust (stable), [wasm-pack], Node 18+.
 cargo test --workspace
 cargo clippy --workspace --all-targets -- -D warnings
 
-# run the REST API (serves the seed catalog)
+# run the REST API (serves the seed catalog; persists loadouts to SQLite,
+# self-seeded on first boot — override with DATABASE_URL)
 cargo run -p api-server
 
 # regenerate the canonical seed from sample data
