@@ -1,0 +1,15 @@
+[package]
+name = "core-engine"
+description = "Deterministic gear compatibility, single-hop adapter bridging, PALS/MOLLE occupancy math, and 2D sprite anchors for the tactical gear visual builder."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+# Pure compute, zero I/O: no async runtimes, no web frameworks, no network or
+# database access in this crate.
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid.workspace = true

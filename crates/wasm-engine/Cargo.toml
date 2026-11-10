@@ -1,0 +1,23 @@
+[package]
+name = "wasm-engine"
+description = "WebAssembly bindings for core-engine, powering the browser-based visual builder demo."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+core-engine = { path = "../core-engine" }
+wasm-bindgen.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+# `uuid`'s v4 feature (pulled in through the workspace) requires a randomness
+# source on wasm32-unknown-unknown; uuid's `js` feature routes getrandom to
+# the browser crypto API. The engine itself only consumes deterministic v5
+# ids from the embedded seed.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+uuid = { workspace = true, features = ["js"] }

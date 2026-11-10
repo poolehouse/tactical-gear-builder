@@ -1,0 +1,19 @@
+# Rust
+/target/
+**/*.rs.bk
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/tsconfig.tsbuildinfo
+
+# Generated wasm-pack output (rebuilt via `npm run build:wasm` / CI)
+frontend/src/engine/
+
+# Environment / local config
+.env
+.env.*
+
+# OS / editor noise
+.DS_Store

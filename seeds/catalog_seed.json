@@ -1,0 +1,3607 @@
+{
+  "platforms": [
+    {
+      "id": "555c0b79-f71c-5237-ad97-c5e43a49e080",
+      "sku": "crye-precision-jpc-2-0",
+      "name": "JPC 2.0",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "CryeAvsFlap",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "CryeZip10",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "eb3eab4f-0bf5-5021-a3b4-9d8d65ec8448",
+      "sku": "crye-precision-airlite-spc",
+      "name": "AirLite SPC",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "CryeAvsFlap",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "CryeZip10",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "3ac1acc9-497c-5587-b6e1-1d5be0c8f322",
+      "sku": "crye-precision-avs",
+      "name": "AVS",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "CryeAvsFlap",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "CryeZip10",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "4bd9f4b2-a52e-5a95-bb6d-7fac41a40717",
+      "sku": "ferro-concepts-fcpc-v5",
+      "name": "FCPC v5",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "GhookLowProfile",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "FerroZip",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "ProprietaryTegris",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "ProprietaryTegris",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "d2c6784d-b243-5640-acae-5fa3bd0b1899",
+      "sku": "ferro-concepts-the-slickster",
+      "name": "The Slickster",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Shooter"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "InternalVelcroLoop",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "InternalVelcroLoop",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "a21b8b96-e2f2-5d69-b614-732b8d053ae9",
+      "sku": "spiritus-systems-lv-119-overt",
+      "name": "LV-119 Overt",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "SpiritusZip",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "FirstSpearTubes2In",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "FirstSpearTubes2In",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "62563608-a0d2-5a8a-a40a-d13e94148382",
+      "sku": "spiritus-systems-lv-119-covert",
+      "name": "LV-119 Covert",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "VelcroFlap",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "VelcroFlap",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "5f2de14d-63f6-5756-83a7-4c6676f6c2ba",
+      "sku": "velocity-systems-scarab-lt",
+      "name": "Scarab LT",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "VelocityYkk10",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "InternalVelcroLoop",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "InternalVelcroLoop",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "946b6a73-0543-5034-9488-5a54026cf5e1",
+      "sku": "mayflower-apc",
+      "name": "APC",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Shooter"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "VelcroFlap",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "VelcroFlap",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "f623f560-27f8-5809-b596-9b7c3918d358",
+      "sku": "shaw-concepts-arc-v2",
+      "name": "ARC V2",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "ShawArcQuad",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "VelocityYkk10",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "FirstSpearTubes2In",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "FirstSpearTubes2In",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "ccf78919-f932-541c-a7c6-ba4ac7fb7ab9",
+      "sku": "agilite-k19-3-0",
+      "name": "K19 3.0",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Shooter"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "VelocityYkk10",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "VelcroFlap",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "VelcroFlap",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "fc0cdc4b-eb78-5f38-8341-7b47fc88eac1",
+      "sku": "agilite-k-zero",
+      "name": "K-Zero",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Shooter"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "InternalVelcroLoop",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "InternalVelcroLoop",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "79ac6446-a746-5af4-a133-ed5cf7a4a13e",
+      "sku": "defense-mechanisms-mepc",
+      "name": "MEPC",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Shooter"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "ProprietaryTegris",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "ProprietaryTegris",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "0c693303-3ea0-5ea5-8594-e8a9a6834d1b",
+      "sku": "firstspear-strandhogg-v2",
+      "name": "Strandhögg v2",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "GhookLowProfile",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "FirstSpearTubes2In",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "FirstSpearTubes2In",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "08efef69-7eca-5e4a-be48-8cbb0afd5071",
+      "sku": "london-bridge-trading-lbt-6094a-g3",
+      "name": "LBT-6094A G3",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Swimmer"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 3,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "ee157fa3-7dbf-5c11-8b9b-759844bc8916",
+      "sku": "hrt-tactical-hrac",
+      "name": "HRAC",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Shooter"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "VelocityYkk10",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "InternalVelcroLoop",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "InternalVelcroLoop",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "228c5713-d055-5274-9ca0-e30f173c3618",
+      "sku": "haley-strategic-thorax",
+      "name": "Thorax",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Shooter"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "VelocityYkk10",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "FirstSpearTubes2In",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "FirstSpearTubes2In",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "b953f382-21a3-52df-996c-7afc4c86cf50",
+      "sku": "warrior-assault-systems-dcs",
+      "name": "DCS",
+      "category": "plate_carrier",
+      "plate_cuts": [
+        "SapiEsapi",
+        "Shooter"
+      ],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "front_placard",
+          "label": "Front placard field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 18.0,
+            "width_pct": 40.0,
+            "height_pct": 46.0,
+            "z_index": 10
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 3,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "rear_panel",
+          "label": "Zip-on back panel",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "rear_pals_field",
+          "label": "Rear MOLLE field",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 30.0,
+            "y_pct": 20.0,
+            "width_pct": 40.0,
+            "height_pct": 44.0,
+            "z_index": 9
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "cummerbund_left",
+          "label": "Cummerbund left",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 5.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "cummerbund_right",
+          "label": "Cummerbund right",
+          "interface": "PassThroughSkeletal",
+          "anchor": {
+            "x_pct": 75.0,
+            "y_pct": 25.0,
+            "width_pct": 20.0,
+            "height_pct": 35.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "d8898154-f573-5d50-b73c-ef9d809a6198",
+      "sku": "aws-smu-belt",
+      "name": "SMU Belt",
+      "category": "belt",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "belt_outer_pals",
+          "label": "Outer PALS field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 2.0,
+            "y_pct": 40.0,
+            "width_pct": 96.0,
+            "height_pct": 20.0,
+            "z_index": 5
+          },
+          "pals_grid": {
+            "cols": 18,
+            "rows": 2,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "holster_drop_zone",
+          "label": "Holster drop zone",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 12.0,
+            "y_pct": 62.0,
+            "width_pct": 18.0,
+            "height_pct": 26.0,
+            "z_index": 6
+          },
+          "pals_grid": {
+            "cols": 2,
+            "rows": 3,
+            "occupied": [
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "7c22a29d-1b17-54a8-9740-f908e4692383",
+      "sku": "ferro-concepts-bison-belt",
+      "name": "Bison Belt",
+      "category": "belt",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "belt_outer_pals",
+          "label": "Outer PALS field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 2.0,
+            "y_pct": 40.0,
+            "width_pct": 96.0,
+            "height_pct": 20.0,
+            "z_index": 5
+          },
+          "pals_grid": {
+            "cols": 18,
+            "rows": 2,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "holster_drop_zone",
+          "label": "Holster drop zone",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 12.0,
+            "y_pct": 62.0,
+            "width_pct": 18.0,
+            "height_pct": 26.0,
+            "z_index": 6
+          },
+          "pals_grid": {
+            "cols": 2,
+            "rows": 3,
+            "occupied": [
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "79bce871-59e1-5c91-a518-0294391a85a9",
+      "sku": "ronin-tactics-sensor-belt",
+      "name": "Sensor Belt",
+      "category": "belt",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "belt_outer_pals",
+          "label": "Outer PALS field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 2.0,
+            "y_pct": 40.0,
+            "width_pct": 96.0,
+            "height_pct": 20.0,
+            "z_index": 5
+          },
+          "pals_grid": {
+            "cols": 18,
+            "rows": 2,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "holster_drop_zone",
+          "label": "Holster drop zone",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 12.0,
+            "y_pct": 62.0,
+            "width_pct": 18.0,
+            "height_pct": 26.0,
+            "z_index": 6
+          },
+          "pals_grid": {
+            "cols": 2,
+            "rows": 3,
+            "occupied": [
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "b74912df-9ca2-5610-8339-a12f605af5c4",
+      "sku": "agilite-battle-belt",
+      "name": "Battle Belt",
+      "category": "belt",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "belt_outer_pals",
+          "label": "Outer PALS field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 2.0,
+            "y_pct": 40.0,
+            "width_pct": 96.0,
+            "height_pct": 20.0,
+            "z_index": 5
+          },
+          "pals_grid": {
+            "cols": 18,
+            "rows": 2,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "holster_drop_zone",
+          "label": "Holster drop zone",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 12.0,
+            "y_pct": 62.0,
+            "width_pct": 18.0,
+            "height_pct": 26.0,
+            "z_index": 6
+          },
+          "pals_grid": {
+            "cols": 2,
+            "rows": 3,
+            "occupied": [
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ],
+              [
+                false,
+                false
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "7e7c2a65-5fcd-5eaf-a815-802a13a048e0",
+      "sku": "crye-precision-mrb-2-0",
+      "name": "MRB 2.0",
+      "category": "chest_rig",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "rig_main_cell",
+          "label": "Main cell",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 25.0,
+            "y_pct": 20.0,
+            "width_pct": 50.0,
+            "height_pct": 42.0,
+            "z_index": 10
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 3,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "wing_left",
+          "label": "Left wing",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 4.0,
+            "y_pct": 24.0,
+            "width_pct": 18.0,
+            "height_pct": 34.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "wing_right",
+          "label": "Right wing",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 78.0,
+            "y_pct": 24.0,
+            "width_pct": 18.0,
+            "height_pct": 34.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Sub-load / dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "d769ff4d-4b9e-58b3-9135-c47840657d0a",
+      "sku": "mayflower-uw-gen-iv-chest-rig",
+      "name": "UW Gen IV Chest Rig",
+      "category": "chest_rig",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "rig_main_cell",
+          "label": "Main cell",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 25.0,
+            "y_pct": 20.0,
+            "width_pct": 50.0,
+            "height_pct": 42.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "wing_left",
+          "label": "Left wing",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 4.0,
+            "y_pct": 24.0,
+            "width_pct": 18.0,
+            "height_pct": 34.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "wing_right",
+          "label": "Right wing",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 78.0,
+            "y_pct": 24.0,
+            "width_pct": 18.0,
+            "height_pct": 34.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Sub-load / dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "901d9adf-da60-5d11-b4bb-60bca3d8da1a",
+      "sku": "t-rex-arms-ac1",
+      "name": "AC1",
+      "category": "chest_rig",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "rig_main_cell",
+          "label": "Main cell",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 25.0,
+            "y_pct": 20.0,
+            "width_pct": 50.0,
+            "height_pct": 42.0,
+            "z_index": 10
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 3,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "wing_left",
+          "label": "Left wing",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 4.0,
+            "y_pct": 24.0,
+            "width_pct": 18.0,
+            "height_pct": 34.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "wing_right",
+          "label": "Right wing",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 78.0,
+            "y_pct": 24.0,
+            "width_pct": 18.0,
+            "height_pct": 34.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Sub-load / dangler zone",
+          "interface": "GhookLowProfile",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "16ed9162-59a8-5399-88b3-94d1543cad4f",
+      "sku": "spiritus-systems-micro-fight-mk4",
+      "name": "Micro Fight Mk4",
+      "category": "chest_rig",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "rig_main_cell",
+          "label": "Main cell",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 25.0,
+            "y_pct": 20.0,
+            "width_pct": 50.0,
+            "height_pct": 42.0,
+            "z_index": 10
+          }
+        },
+        {
+          "id": "wing_left",
+          "label": "Left wing",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 4.0,
+            "y_pct": 24.0,
+            "width_pct": 18.0,
+            "height_pct": 34.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "wing_right",
+          "label": "Right wing",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 78.0,
+            "y_pct": 24.0,
+            "width_pct": 18.0,
+            "height_pct": 34.0,
+            "z_index": 8
+          }
+        },
+        {
+          "id": "dangler_slot",
+          "label": "Sub-load / dangler zone",
+          "interface": "SwiftClip1InchQasm",
+          "anchor": {
+            "x_pct": 40.0,
+            "y_pct": 66.0,
+            "width_pct": 20.0,
+            "height_pct": 12.0,
+            "z_index": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "8530bf5b-dcec-52fc-8f94-ee01fc9bba35",
+      "sku": "jayjays-gen-4-brecon",
+      "name": "Gen 4 Brecon",
+      "category": "lbe",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "lbe_main_field",
+          "label": "MOLLE sustainment field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 15.0,
+            "y_pct": 25.0,
+            "width_pct": 70.0,
+            "height_pct": 45.0,
+            "z_index": 6
+          },
+          "pals_grid": {
+            "cols": 8,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "buttpack_interface",
+          "label": "Buttpack / field pack mount",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 25.0,
+            "y_pct": 72.0,
+            "width_pct": 50.0,
+            "height_pct": 20.0,
+            "z_index": 7
+          }
+        }
+      ]
+    },
+    {
+      "id": "3ec33447-1228-58ca-b2c0-6698c164d36a",
+      "sku": "usgi-molle-ii-ruck",
+      "name": "MOLLE II Ruck",
+      "category": "lbe",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "lbe_main_field",
+          "label": "MOLLE sustainment field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 15.0,
+            "y_pct": 25.0,
+            "width_pct": 70.0,
+            "height_pct": 45.0,
+            "z_index": 6
+          },
+          "pals_grid": {
+            "cols": 8,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "buttpack_interface",
+          "label": "Buttpack / field pack mount",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 25.0,
+            "y_pct": 72.0,
+            "width_pct": 50.0,
+            "height_pct": 20.0,
+            "z_index": 7
+          }
+        }
+      ]
+    },
+    {
+      "id": "edf7eaec-a3f8-555c-a4b4-b14497461731",
+      "sku": "london-bridge-trading-lbv",
+      "name": "LBV",
+      "category": "lbe",
+      "plate_cuts": [],
+      "sizes": [
+        "Small",
+        "Medium",
+        "Large",
+        "XLarge"
+      ],
+      "slots": [
+        {
+          "id": "lbe_main_field",
+          "label": "MOLLE sustainment field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 15.0,
+            "y_pct": 25.0,
+            "width_pct": 70.0,
+            "height_pct": 45.0,
+            "z_index": 6
+          },
+          "pals_grid": {
+            "cols": 8,
+            "rows": 4,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        },
+        {
+          "id": "buttpack_interface",
+          "label": "Buttpack / field pack mount",
+          "interface": "StandardMolle",
+          "anchor": {
+            "x_pct": 25.0,
+            "y_pct": 72.0,
+            "width_pct": 50.0,
+            "height_pct": 20.0,
+            "z_index": 7
+          }
+        }
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "a0aa075f-466c-5ab3-9385-fd57adfc39f4",
+      "sku": "spiritus-mk5-placard",
+      "name": "Spiritus Systems MK5 Placard",
+      "kind": "Placard",
+      "interface": "SwiftClip1InchQasm",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      },
+      "child_slots": [
+        {
+          "id": "placard_front_pals",
+          "label": "Placard front PALS field",
+          "interface": "StandardPals1In",
+          "anchor": {
+            "x_pct": 4.0,
+            "y_pct": 10.0,
+            "width_pct": 92.0,
+            "height_pct": 82.0,
+            "z_index": 4
+          },
+          "pals_grid": {
+            "cols": 6,
+            "rows": 3,
+            "occupied": [
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ],
+              [
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "41541651-2750-5128-8440-04e77954f42d",
+      "sku": "ferro-dope-flap",
+      "name": "Ferro Concepts DOPE Flap",
+      "kind": "Placard",
+      "interface": "GhookLowProfile",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      }
+    },
+    {
+      "id": "da956548-ff5f-5090-82f2-6ade015e29ee",
+      "sku": "haley-d3crm-placard",
+      "name": "Haley Strategic D3CR Micro Placard",
+      "kind": "Placard",
+      "interface": "SwiftClip1InchQasm",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      }
+    },
+    {
+      "id": "4b85a566-8a76-52a7-a103-e085ad8db797",
+      "sku": "esstac-kywi-556-double",
+      "name": "Esstac KYWI 5.56 Double",
+      "kind": "BeltItem",
+      "interface": "StandardPals1In",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      },
+      "pals_footprint": {
+        "cols": 2,
+        "rows": 2
+      }
+    },
+    {
+      "id": "c59bce05-3bff-5591-8cda-d3a1d12391e7",
+      "sku": "spiritus-spud-pouch",
+      "name": "Spiritus Systems SPUD Pouch",
+      "kind": "BeltItem",
+      "interface": "SwiftClip1InchQasm",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      }
+    },
+    {
+      "id": "7347feda-44c8-5f1b-9d8a-7ea94eb2d01e",
+      "sku": "ferro-roll-1-ifak",
+      "name": "Ferro Concepts Roll-1 IFAK",
+      "kind": "BeltItem",
+      "interface": "StandardPals1In",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      },
+      "pals_footprint": {
+        "cols": 2,
+        "rows": 2
+      }
+    },
+    {
+      "id": "39a5d551-28c7-5035-93ef-df10312fbd21",
+      "sku": "crye-zip-on-pack-2-0",
+      "name": "Crye Zip-On Pack 2.0",
+      "kind": "BackPanel",
+      "interface": "CryeZip10",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      }
+    },
+    {
+      "id": "32f981fb-cbc6-5571-b350-e9641c447d9c",
+      "sku": "ferro-back-panel-banger",
+      "name": "Ferro Concepts Back Panel Banger",
+      "kind": "BackPanel",
+      "interface": "FerroZip",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      }
+    },
+    {
+      "id": "3e28cd87-fb95-559e-a546-18dc1525dcc3",
+      "sku": "safariland-ubl-mid-ride",
+      "name": "Safariland UBL Mid-Ride",
+      "kind": "BeltItem",
+      "interface": "StandardPals1In",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      },
+      "pals_footprint": {
+        "cols": 2,
+        "rows": 3
+      }
+    },
+    {
+      "id": "4a070623-7911-5c2e-8d67-10873d37fda9",
+      "sku": "bfg-micro-trauma-now",
+      "name": "BFG Micro Trauma NOW!",
+      "kind": "BeltItem",
+      "interface": "SwiftClip1InchQasm",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      },
+      "pals_footprint": {
+        "cols": 4,
+        "rows": 3
+      }
+    }
+  ],
+  "adapter_bridges": [
+    {
+      "id": "17733885-d880-5a8b-a527-401321d9b4aa",
+      "sku": "axl-avp-jpc",
+      "name": "AXL AVP (AVS Vertical Placard) Adapter",
+      "platform_interface": "CryeAvsFlap",
+      "component_interface": "SwiftClip1InchQasm",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 6.0,
+        "z_index": 1
+      }
+    },
+    {
+      "id": "c2db5460-0262-5b1c-88f2-dc964cab101e",
+      "sku": "axl-eclipse-velcro-adapter",
+      "name": "AXL Eclipse Velcro Placard Adapter",
+      "platform_interface": "VelcroFlap",
+      "component_interface": "SwiftClip1InchQasm",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 6.0,
+        "z_index": 1
+      }
+    },
+    {
+      "id": "3f6afb9b-f356-56e0-8e3e-637678f85c66",
+      "sku": "ferro-3ac-tubes-adapter",
+      "name": "Ferro 3AC Tubes Cummerbund Adapter",
+      "platform_interface": "FirstSpearTubes2In",
+      "component_interface": "SwiftClip1InchQasm",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 6.0,
+        "z_index": 1
+      }
+    },
+    {
+      "id": "8d353880-8b84-54c4-b425-8cbd6124b577",
+      "sku": "ghook-to-qasm-buckle-kit",
+      "name": "G-Hook to QASM SwiftClip Buckle Kit",
+      "platform_interface": "GhookLowProfile",
+      "component_interface": "SwiftClip1InchQasm",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 6.0,
+        "z_index": 1
+      }
+    }
+  ]
+}

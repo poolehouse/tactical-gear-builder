@@ -1,0 +1,21 @@
+[package]
+name = "api-server"
+description = "Axum REST API serving the tactical gear catalog and loadout evaluation."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+core-engine = { path = "../core-engine" }
+data-ingest = { path = "../data-ingest" }
+axum.workspace = true
+tokio.workspace = true
+tower-http.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tower.workspace = true

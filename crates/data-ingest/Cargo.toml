@@ -1,0 +1,22 @@
+[package]
+name = "data-ingest"
+description = "CSV normalization, seed generator, and validation CLI for the tactical gear catalog."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "data-ingest"
+path = "src/main.rs"
+
+[dependencies]
+core-engine = { path = "../core-engine" }
+csv.workspace = true
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+slug.workspace = true
+
+[dev-dependencies]
