@@ -19,7 +19,11 @@ use core_engine::graph::{
     resolve_slot_mount, CompatibilityResult, ComponentSpec, IncompatibilityReason, MountSlot,
 };
 use core_engine::loadout::{LoadoutDraft, LoadoutSummary, MountedItem};
-use serde::Serialize;
+use core_engine::pricing::Colorway;
+use core_engine::regulation::{
+    ComplianceReport, OperationalRole, RegulationPolicy, apply_preset, evaluate_compliance,
+};
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 /// The deterministic catalog seed, embedded at compile time. Regenerate with
@@ -37,6 +41,18 @@ struct PlatformSummaryDto {
     name: String,
     category: Option<core_engine::graph::PlatformCategory>,
     slot_count: usize,
+}
+
+/// List-view summary of a role preset.
+#[derive(Serialize, Deserialize)]
+struct PresetSummaryDto {
+    preset_id: String,
+    name: String,
+    role: Option<OperationalRole>,
+    policy: RegulationPolicy,
+    platform_sku: String,
+    default_colorway: Colorway,
+    placement_count: usize,
 }
 
 /// Summary of an adapter bridge a mount requires.
@@ -78,13 +94,19 @@ struct OpResultDto {
 }
 
 /// Full renderable draft state: the evaluation summary plus the live mounted
-/// items (including their child slots with current grid occupancy) and the
-/// platform with its live PALS occupancy.
+/// items (including their child slots with current grid occupancy), the
+/// platform with its live PALS occupancy, and — when a regulation policy or
+/// operational role is active — the compliance report.
 #[derive(Serialize)]
 struct DraftStateDto {
     summary: LoadoutSummary,
     platform: core_engine::graph::PlatformSpec,
     mounted: Vec<MountedItem>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    compliance: Option<ComplianceReport>,
+    /// The colorway the compliance report was evaluated under, when set.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    colorway: Option<Colorway>,
 }
 
 // --- engine ----------------------------------------------------------------------
@@ -161,7 +183,34 @@ impl Engine {
         Ok(Draft {
             catalog: self.catalog.clone(),
             draft: LoadoutDraft::new(platform),
+            colorway: None,
+            policy: None,
+            role: None,
         })
+    }
+
+    /// Role preset summaries (preset id, name, role, policy, platform,
+    /// default colorway, placement count), in catalog order.
+    #[wasm_bindgen]
+    pub fn presets(&self) -> String {
+        to_json(&preset_summaries(&self.catalog))
+    }
+
+    /// The full preset definition (placements, platform, policy, role,
+    /// default colorway) by preset id, or `undefined` when unknown.
+    #[wasm_bindgen]
+    pub fn preset(&self, preset_id: &str) -> Option<String> {
+        self.catalog.preset(preset_id).map(to_json)
+    }
+
+    /// Instantiate a role preset into a live draft: placements are applied
+    /// through the normal engine validation path (adapter auto-injection,
+    /// PALS collisions), and the draft's compliance context is seeded from
+    /// the preset's declared colorway, policy, and role. Fails loudly for
+    /// unknown preset ids and for placements the engine rejects.
+    #[wasm_bindgen]
+    pub fn load_preset(&self, preset_id: &str) -> Result<Draft, JsValue> {
+        load_preset_into_draft(&self.catalog, preset_id).map_err(|error| JsValue::from_str(&error))
     }
 }
 
@@ -173,6 +222,12 @@ impl Engine {
 pub struct Draft {
     catalog: Catalog,
     draft: LoadoutDraft,
+    /// Chosen colorway, evaluated against the active policy.
+    colorway: Option<Colorway>,
+    /// Active regulation policy, when one is selected.
+    policy: Option<RegulationPolicy>,
+    /// Active operational role, when one is selected.
+    role: Option<OperationalRole>,
 }
 
 #[wasm_bindgen]
@@ -217,17 +272,58 @@ impl Draft {
         }
     }
 
+    /// Set the compliance evaluation context: the chosen colorway plus the
+    /// optional regulation policy and operational role. Values are the same
+    /// snake_case strings the REST API accepts (`"multicam"`,
+    /// `"us_army_ar670_1"`, `"sniper_dm"`); `undefined`/`null` clears a
+    /// field. Unknown values fail loudly instead of being ignored.
+    ///
+    /// Returns `{"ok":true}` or `{"ok":false,"error":"..."}`; the caller
+    /// refreshes via [`Draft::state`].
+    #[wasm_bindgen]
+    pub fn set_compliance_context(
+        &mut self,
+        colorway: Option<String>,
+        policy: Option<String>,
+        role: Option<String>,
+    ) -> String {
+        let colorway = match colorway.map(|raw| parse_variant::<Colorway>(&raw)) {
+            None => None,
+            Some(Err(error)) => return error,
+            Some(Ok(value)) => Some(value),
+        };
+        let policy = match policy.map(|raw| parse_variant::<RegulationPolicy>(&raw)) {
+            None => None,
+            Some(Err(error)) => return error,
+            Some(Ok(value)) => Some(value),
+        };
+        let role = match role.map(|raw| parse_variant::<OperationalRole>(&raw)) {
+            None => None,
+            Some(Err(error)) => return error,
+            Some(Ok(value)) => Some(value),
+        };
+        self.colorway = colorway;
+        self.policy = policy;
+        self.role = role;
+        to_json(&OpResultDto {
+            ok: true,
+            error: None,
+        })
+    }
+
     /// The full renderable draft state: `LoadoutSummary` (ordered layers,
-    /// BOM, warnings), the platform with live PALS occupancy, and the live
-    /// mounted items with their child slots.
+    /// priced BOM, warnings), the platform with live PALS occupancy, the
+    /// live mounted items with their child slots, and — when a policy or
+    /// role is active — the compliance report.
     #[wasm_bindgen]
     pub fn state(&self) -> String {
-        let platform = self.draft.platform().clone();
-        to_json(&DraftStateDto {
-            summary: self.draft.summary(),
-            platform,
-            mounted: self.draft.mounted().to_vec(),
-        })
+        to_json(&draft_state(
+            &self.catalog,
+            &self.draft,
+            self.colorway,
+            self.policy,
+            self.role,
+        ))
     }
 }
 
@@ -242,6 +338,84 @@ fn parse_embedded_catalog() -> Catalog {
 /// Serialize a DTO compactly for the JS boundary.
 fn to_json<T: Serialize>(value: &T) -> String {
     serde_json::to_string(value).expect("DTO serialization is infallible")
+}
+
+/// Build the preset list-view summaries, in catalog order.
+fn preset_summaries(catalog: &Catalog) -> Vec<PresetSummaryDto> {
+    catalog
+        .role_presets
+        .iter()
+        .map(|preset| PresetSummaryDto {
+            preset_id: preset.preset_id.clone(),
+            name: preset.name.clone(),
+            role: preset.role,
+            policy: preset.policy,
+            platform_sku: preset.platform_sku.clone(),
+            default_colorway: preset.default_colorway,
+            placement_count: preset.placements.len(),
+        })
+        .collect()
+}
+
+/// Instantiate a preset into a live draft with its compliance context
+/// seeded from the preset's own declaration. Errors are human-readable
+/// strings so both the wasm boundary and the native tests can surface them.
+fn load_preset_into_draft(catalog: &Catalog, preset_id: &str) -> Result<Draft, String> {
+    let preset = catalog
+        .preset(preset_id)
+        .ok_or_else(|| format!("unknown preset id `{preset_id}`"))?;
+    let draft = apply_preset(catalog, preset).map_err(|error| error.to_string())?;
+    Ok(Draft {
+        catalog: catalog.clone(),
+        draft,
+        colorway: Some(preset.default_colorway),
+        policy: Some(preset.policy),
+        role: preset.role,
+    })
+}
+
+/// Snapshot the renderable draft state, attaching the compliance report
+/// when a policy or role is active.
+fn draft_state(
+    catalog: &Catalog,
+    draft: &LoadoutDraft,
+    colorway: Option<Colorway>,
+    policy: Option<RegulationPolicy>,
+    role: Option<OperationalRole>,
+) -> DraftStateDto {
+    let platform = draft.platform().clone();
+    let compliance = if policy.is_some() || role.is_some() {
+        Some(evaluate_compliance(
+            catalog,
+            draft,
+            colorway.unwrap_or(platform.default_colorway),
+            policy,
+            role,
+        ))
+    } else {
+        None
+    };
+    DraftStateDto {
+        summary: draft.summary(),
+        platform,
+        mounted: draft.mounted().to_vec(),
+        compliance,
+        colorway,
+    }
+}
+
+/// Parse one snake_case enum value (`"multicam"`, `"us_army_ar670_1"`) from
+/// the JS boundary, returning a ready-to-return error string on failure.
+/// Unknown values are loud failures, never silent fallbacks (R2).
+fn parse_variant<T: serde::de::DeserializeOwned>(raw: &str) -> Result<T, String> {
+    let value = serde_json::Value::String(raw.replace('"', ""));
+    let parsed: T = serde_json::from_value(value).map_err(|error| {
+        to_json(&OpResultDto {
+            ok: false,
+            error: Some(format!("invalid value `{raw}`: {error}")),
+        })
+    })?;
+    Ok(parsed)
 }
 
 /// Classify every catalog component against `slot`, mirroring the REST
@@ -298,14 +472,26 @@ fn component_entry(component: &ComponentSpec) -> ComponentCompatEntryDto {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use core_engine::regulation::RolePreset;
 
     #[test]
     fn embedded_catalog_parses_and_is_complete() {
         let catalog = parse_embedded_catalog();
         assert_eq!(catalog.platforms.len(), 29);
-        assert_eq!(catalog.components.len(), 10);
+        assert_eq!(catalog.components.len(), 12);
         assert_eq!(catalog.adapter_bridges.len(), 4);
+        assert_eq!(catalog.role_presets.len(), 6);
         assert!(catalog.platform("crye-precision-jpc-2-0").is_some());
+        assert!(catalog.preset("jtac").is_some());
+        // Every seeded platform and component is priced.
+        assert!(catalog
+            .platforms
+            .iter()
+            .all(|platform| platform.msrp_cents > 0));
+        assert!(catalog
+            .components
+            .iter()
+            .all(|component| component.msrp_cents > 0));
     }
 
     #[test]
@@ -356,5 +542,98 @@ mod tests {
             .incompatible
             .iter()
             .any(|entry| entry.sku == "spiritus-mk5-placard"));
+    }
+
+    #[test]
+    fn preset_summaries_list_all_six_presets() {
+        let catalog = parse_embedded_catalog();
+        let presets = preset_summaries(&catalog);
+        let ids: Vec<&str> = presets.iter().map(|p| p.preset_id.as_str()).collect();
+        assert_eq!(
+            ids,
+            vec!["breacher", "jtac", "drone-operator", "sniper-dm", "recce", "le-patrol"]
+        );
+        let le = presets.iter().find(|p| p.preset_id == "le-patrol").unwrap();
+        assert!(le.role.is_none(), "LE patrol is policy-only");
+    }
+
+    #[test]
+    fn load_preset_applies_and_carries_compliance_context() {
+        let catalog = parse_embedded_catalog();
+
+        // Unknown preset ids fail loudly.
+        assert!(load_preset_into_draft(&catalog, "ghost").is_err());
+
+        let draft = load_preset_into_draft(&catalog, "jtac").expect("jtac preset applies");
+        let state = draft_state(
+            &draft.catalog,
+            &draft.draft,
+            draft.colorway,
+            draft.policy,
+            draft.role,
+        );
+
+        assert!(state.summary.valid);
+        assert!(state.summary.errors.is_empty());
+        assert!(state
+            .summary
+            .bom
+            .iter()
+            .any(|line| line.sku == "axl-avp-jpc" && line.is_adapter));
+        assert!(state.summary.total_msrp_cents > 0);
+        assert!(state.summary.total_best_price_cents > 0);
+
+        // The compliance context was seeded from the preset declaration.
+        let compliance = state.compliance.expect("jtac declares policy+role");
+        assert!(compliance.compliant, "violations: {:?}", compliance.violations);
+        assert_eq!(state.colorway, Some(Colorway::Multicam));
+
+        // The full preset definition echoes placements for client editing.
+        let preset: RolePreset = serde_json::from_str(
+            &catalog.preset("jtac").map(to_json).expect("jtac preset exists"),
+        )
+        .expect("preset JSON");
+        assert_eq!(preset.platform_sku, "crye-precision-jpc-2-0");
+        assert_eq!(preset.placements.len(), 5);
+        assert_eq!(preset.placements[0].slot_id, "front_placard");
+    }
+
+    #[test]
+    fn compliance_context_parses_and_rejects_bad_values() {
+        let catalog = parse_embedded_catalog();
+        let platform = catalog
+            .platform("crye-precision-jpc-2-0")
+            .unwrap()
+            .clone();
+        let draft = LoadoutDraft::new(platform);
+
+        // Without a policy or role, state carries no compliance report.
+        let state = draft_state(&catalog, &draft, None, None, None);
+        assert!(state.compliance.is_none());
+
+        // AR 670-1 on a bare platform in Black reports typed violations.
+        let state = draft_state(
+            &catalog,
+            &draft,
+            Some(Colorway::Black),
+            Some(RegulationPolicy::UsArmyAr670_1),
+            None,
+        );
+        let compliance = state.compliance.expect("policy active");
+        assert!(!compliance.compliant);
+        assert!(compliance.violations.iter().any(|issue| matches!(
+            issue.code,
+            core_engine::regulation::ComplianceRuleCode::DisallowedColorway { .. }
+        )));
+
+        // Unknown enum values fail loudly instead of silently no-op'ing.
+        assert!(parse_variant::<Colorway>("neon-pink").is_err());
+        assert!(parse_variant::<RegulationPolicy>("geneva-convention").is_err());
+        assert!(parse_variant::<OperationalRole>("wizard").is_err());
+        assert!(parse_variant::<Colorway>("multicam").is_ok());
+
+        // Clearing the context removes the compliance report again.
+        let state = draft_state(&catalog, &draft, None, None, None);
+        assert!(state.compliance.is_none());
     }
 }

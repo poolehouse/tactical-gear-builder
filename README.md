@@ -31,6 +31,19 @@ WebAssembly inside the browser demo — with zero divergence, because the same
 - **Fail-closed ingest.** Catalog CSVs with unknown interfaces, missing
   anchors, or malformed rows are rejected with row/column-precise errors —
   never silently coerced or defaulted.
+- **Vendor pricing & BOM rollup.** Every platform, component, and adapter
+  carries an integer-cents MSRP plus competitive vendor listings. The BOM
+  totals MSRP, the optimized build cost (best in-stock offer per line,
+  lowest price wins, ties broken by vendor name), and total savings — exact
+  integer math, no floats.
+- **Regulation & role validation.** Military/LE regulation policies
+  (AR 670-1, USMC MARADMIN, LE patrol/SWAT) and operational role profiles
+  (breacher, JTAC, drone operator, sniper/DM, recce) evaluate a build against
+  typed capability tags — never product names. Violations block, advisories
+  don't; every finding names mountable suggested SKUs that close the gap.
+- **Role presets.** Six curated starter loadouts instantiate through the
+  normal engine validation path (adapter auto-injection, PALS collisions,
+  pricing) and validate compliant under their own declared policy and role.
 
 ## Workspace layout
 
@@ -50,14 +63,21 @@ GET  /health
 GET  /api/v1/catalog/platforms
 GET  /api/v1/catalog/platforms/{sku}
 GET  /api/v1/catalog/platforms/{sku}/compatible-components?slot_id=
+GET  /api/v1/catalog/presets
 POST /api/v1/loadouts/evaluate
+POST /api/v1/loadouts/from-preset/{preset_id}
 ```
 
 `compatible-components` classifies every catalog component against a slot as
 `native_fit`, `requires_adapter` (with the required bridge SKUs), or
 `incompatible` (with a machine-readable reason). `evaluate` runs a full
-loadout spec through the engine and returns z-ordered render layers, the bill
-of materials, and validity with errors.
+loadout spec through the engine and returns z-ordered render layers, the
+priced bill of materials with totals, and validity with errors; it also
+accepts an optional `colorway`, `regulation_policy`, and `operational_role`,
+in which case the response carries a compliance report (violations and
+advisories are semantic results under HTTP 200, never transport errors).
+`from-preset` instantiates a curated role preset and evaluates it under its
+own declared context.
 
 ## The browser demo
 
@@ -77,6 +97,15 @@ Try this flow:
    rejection.
 4. Select a mount on the canvas and unequip it — child mounts and the
    adapter cascade away.
+5. In the context bar, set the colorway to **Black** and the regulation to
+   **US Army AR 670-1** — the compliance panel flags the disallowed colorway,
+   missing IFAK, and insufficient magazine carriage, each with clickable
+   suggested-SKU chips that place the fix for you.
+6. Load the **JTAC** role preset — five placements apply through the same
+   engine validation path, the compliance context seeds from the preset's
+   own declaration (multicam, AR 670-1, JTAC role), and the priced BOM
+   includes the auto-injected adapter with per-line vendor offers and
+   totals.
 
 ## Development
 

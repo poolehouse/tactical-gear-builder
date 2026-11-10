@@ -29,6 +29,7 @@ use crate::graph::{
     mount_on_pals, resolve_slot_mount, CompatibilityResult, IncompatibilityReason, MountSlot,
     PalsFootprint, PlatformSpec,
 };
+use crate::pricing::{best_offer, effective_price_cents, savings_cents, VendorOffer};
 use crate::spatial::{AnchorBox2D, SpatialError};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
@@ -130,13 +131,19 @@ pub struct MountedItem {
     pub anchor: AnchorBox2D,
     /// Render layer: 0 platform, 10 adapter, 20 primary, 30 child.
     pub z_index: i16,
+    /// MSRP of this item, snapshotted from the catalog at equip time.
+    pub msrp_cents: u32,
+    /// Vendor listings for this item, snapshotted at equip time so the BOM
+    /// rollup needs no further catalog access.
+    pub vendor_offers: Vec<VendorOffer>,
     /// Child slots this item exposes, with live PALS occupancy state.
     pub child_slots: Vec<MountSlot>,
     /// Mount ids of the items placed onto this item's child slots.
     pub child_mounts: Vec<String>,
 }
 
-/// One bill-of-materials line, aggregated per SKU.
+/// One bill-of-materials line, aggregated per SKU. Pricing fields are
+/// per-unit; multiply by `quantity` for the line total.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BomLineItem {
     /// SKU slug.
@@ -147,6 +154,13 @@ pub struct BomLineItem {
     pub quantity: u32,
     /// Whether this line is an adapter bridge or a component.
     pub is_adapter: bool,
+    /// Per-unit manufacturer's suggested retail price, US cents.
+    pub msrp_cents: u32,
+    /// Per-unit best in-stock vendor offer, when one exists.
+    pub best_offer: Option<VendorOffer>,
+    /// Per-unit savings: MSRP minus the best in-stock price, clamped at zero
+    /// (zero when no vendor holds stock).
+    pub savings_cents: u32,
 }
 
 /// What a render layer represents.
@@ -195,6 +209,14 @@ pub struct LoadoutSummary {
     pub layers_2d: Vec<Layer2D>,
     /// Bill of materials, in first-mount order.
     pub bom: Vec<BomLineItem>,
+    /// Total MSRP across the platform and every BOM line (qty-weighted),
+    /// US cents.
+    pub total_msrp_cents: u32,
+    /// Total optimized build cost: platform plus every line at its best
+    /// in-stock vendor price (MSRP where no stock exists), US cents.
+    pub total_best_price_cents: u32,
+    /// Total savings versus MSRP, clamped at zero, US cents.
+    pub total_savings_cents: u32,
     /// Non-fatal advisories.
     pub warnings: Vec<String>,
     /// Fatal placement errors (filled in by API-level evaluation).
@@ -429,6 +451,8 @@ impl LoadoutDraft {
                 serves_mount: Some(component_mount_id.clone()),
                 anchor,
                 z_index: ADAPTER_LAYER,
+                msrp_cents: adapter.msrp_cents,
+                vendor_offers: adapter.vendor_offers.clone(),
                 child_slots: Vec::new(),
                 child_mounts: Vec::new(),
             });
@@ -450,6 +474,8 @@ impl LoadoutDraft {
             serves_mount: None,
             anchor,
             z_index: layer,
+            msrp_cents: component.msrp_cents,
+            vendor_offers: component.vendor_offers.clone(),
             child_slots: component.child_slots.clone(),
             child_mounts: Vec::new(),
         };
@@ -599,7 +625,9 @@ impl LoadoutDraft {
             slot_id: item.slot_id.clone(),
         }));
 
-        // BOM in first-mount order, aggregated per SKU.
+        // BOM in first-mount order, aggregated per SKU. Pricing fields are
+        // snapshotted per unit at equip time; totals weight them by quantity
+        // and include the platform itself.
         let mut bom: Vec<BomLineItem> = Vec::new();
         for item in &self.mounted {
             match bom.iter_mut().find(|line| line.sku == item.sku) {
@@ -609,9 +637,29 @@ impl LoadoutDraft {
                     name: item.name.clone(),
                     quantity: 1,
                     is_adapter: item.is_adapter,
+                    msrp_cents: item.msrp_cents,
+                    best_offer: best_offer(&item.vendor_offers).cloned(),
+                    savings_cents: savings_cents(item.msrp_cents, &item.vendor_offers),
                 }),
             }
         }
+
+        // Cost rollup: the platform line plus every BOM line, qty-weighted.
+        // Saturating arithmetic keeps totals well-defined even on absurd
+        // quantities; prices are u32 cents so this never loses precision.
+        let mut total_msrp_cents = self.platform.msrp_cents;
+        let mut total_best_price_cents =
+            effective_price_cents(self.platform.msrp_cents, &self.platform.vendor_offers);
+        for line in &bom {
+            total_msrp_cents = total_msrp_cents.saturating_add(line.msrp_cents.saturating_mul(line.quantity));
+            let unit_best = line
+                .best_offer
+                .as_ref()
+                .map_or(line.msrp_cents, |offer| offer.price_cents);
+            total_best_price_cents =
+                total_best_price_cents.saturating_add(unit_best.saturating_mul(line.quantity));
+        }
+        let total_savings_cents = total_msrp_cents.saturating_sub(total_best_price_cents);
 
         LoadoutSummary {
             platform_sku: self.platform.sku.clone(),
@@ -619,6 +667,9 @@ impl LoadoutDraft {
             valid: true,
             layers_2d: layers,
             bom,
+            total_msrp_cents,
+            total_best_price_cents,
+            total_savings_cents,
             warnings: self.warnings.clone(),
             errors: Vec::new(),
         }

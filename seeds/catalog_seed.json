@@ -126,7 +126,35 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 29900,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 26499,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/crye-precision-jpc-2-0"
+        },
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 27499,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/crye-precision-jpc-2-0"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 28900,
+          "in_stock": false,
+          "product_url": "https://www.uspatriottactical.com/products/crye-precision-jpc-2-0"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "eb3eab4f-0bf5-5021-a3b4-9d8d65ec8448",
@@ -254,7 +282,29 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 24900,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 21999,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/crye-precision-airlite-spc"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 23400,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/crye-precision-airlite-spc"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "3ac1acc9-497c-5587-b6e1-1d5be0c8f322",
@@ -382,7 +432,28 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 59900,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 54900,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/crye-precision-avs"
+        },
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 56900,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/crye-precision-avs"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "4bd9f4b2-a52e-5a95-bb6d-7fac41a40717",
@@ -510,7 +581,34 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 32500,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 29499,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/ferro-concepts-fcpc-v5"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 30900,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/ferro-concepts-fcpc-v5"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 31750,
+          "in_stock": false,
+          "product_url": "https://www.uspatriottactical.com/products/ferro-concepts-fcpc-v5"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "d2c6784d-b243-5640-acae-5fa3bd0b1899",
@@ -638,7 +736,30 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 21500,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 18999,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/ferro-concepts-the-slickster"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 20100,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/ferro-concepts-the-slickster"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "wolf_grey",
+        "black"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "a21b8b96-e2f2-5d69-b614-732b8d053ae9",
@@ -766,7 +887,29 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 27400,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 24499,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/spiritus-systems-lv-119-overt"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 25900,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/spiritus-systems-lv-119-overt"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "62563608-a0d2-5a8a-a40a-d13e94148382",
@@ -894,7 +1037,28 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 26400,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 23499,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/spiritus-systems-lv-119-covert"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 24900,
+          "in_stock": true,
+          "product_url": "https://www.vingtqlops.com/products/spiritus-systems-lv-119-covert"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "coyote_brown"
     },
     {
       "id": "5f2de14d-63f6-5756-83a7-4c6676f6c2ba",
@@ -1022,7 +1186,28 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 28900,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 25999,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/velocity-systems-scarab-lt"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 27200,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/velocity-systems-scarab-lt"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "946b6a73-0543-5034-9488-5a54026cf5e1",
@@ -1150,7 +1335,28 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 24900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 21999,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/mayflower-apc"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 23100,
+          "in_stock": false,
+          "product_url": "https://www.gritrsports.com/products/mayflower-apc"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "f623f560-27f8-5809-b596-9b7c3918d358",
@@ -1278,7 +1484,29 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 27900,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 24999,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/shaw-concepts-arc-v2"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 26300,
+          "in_stock": true,
+          "product_url": "https://www.vingtqlops.com/products/shaw-concepts-arc-v2"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "ccf78919-f932-541c-a7c6-ba4ac7fb7ab9",
@@ -1406,7 +1634,36 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 25900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 22999,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/agilite-k19-3-0"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 24200,
+          "in_stock": true,
+          "product_url": "https://www.uspatriottactical.com/products/agilite-k19-3-0"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 25400,
+          "in_stock": false,
+          "product_url": "https://www.primaryarms.com/products/agilite-k19-3-0"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black",
+        "wolf_grey"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "fc0cdc4b-eb78-5f38-8341-7b47fc88eac1",
@@ -1534,7 +1791,28 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 21900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 19299,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/agilite-k-zero"
+        },
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 20500,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/agilite-k-zero"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "black"
+      ],
+      "default_colorway": "coyote_brown"
     },
     {
       "id": "79ac6446-a746-5af4-a133-ed5cf7a4a13e",
@@ -1662,7 +1940,28 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 23900,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 21299,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/defense-mechanisms-mepc"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 22400,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/defense-mechanisms-mepc"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "0c693303-3ea0-5ea5-8594-e8a9a6834d1b",
@@ -1790,7 +2089,34 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 30900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 27499,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/firstspear-strandhogg-v2"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 28900,
+          "in_stock": true,
+          "product_url": "https://www.vingtqlops.com/products/firstspear-strandhogg-v2"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 29950,
+          "in_stock": false,
+          "product_url": "https://www.uspatriottactical.com/products/firstspear-strandhogg-v2"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "08efef69-7eca-5e4a-be48-8cbb0afd5071",
@@ -1948,7 +2274,29 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 30900,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 27999,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/london-bridge-trading-lbt-6094a-g3"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 29200,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/london-bridge-trading-lbt-6094a-g3"
+        }
+      ],
+      "allowed_colorways": [
+        "coyote_brown",
+        "multicam",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "coyote_brown"
     },
     {
       "id": "ee157fa3-7dbf-5c11-8b9b-759844bc8916",
@@ -2076,7 +2424,29 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 24900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 21999,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/hrt-tactical-hrac"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 23400,
+          "in_stock": false,
+          "product_url": "https://www.uspatriottactical.com/products/hrt-tactical-hrac"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "black",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "228c5713-d055-5274-9ca0-e30f173c3618",
@@ -2204,7 +2574,28 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 30400,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 27499,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/haley-strategic-thorax"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 28600,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/haley-strategic-thorax"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "b953f382-21a3-52df-996c-7afc4c86cf50",
@@ -2362,7 +2753,28 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 23900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 20999,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/warrior-assault-systems-dcs"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 22300,
+          "in_stock": true,
+          "product_url": "https://www.vingtqlops.com/products/warrior-assault-systems-dcs"
+        }
+      ],
+      "allowed_colorways": [
+        "coyote_brown",
+        "multicam",
+        "ranger_green"
+      ],
+      "default_colorway": "coyote_brown"
     },
     {
       "id": "d8898154-f573-5d50-b73c-ef9d809a6198",
@@ -2465,7 +2877,35 @@
             ]
           }
         }
-      ]
+      ],
+      "msrp_cents": 10500,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 8999,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/aws-smu-belt"
+        },
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 9750,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/aws-smu-belt"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 10100,
+          "in_stock": false,
+          "product_url": "https://www.gritrsports.com/products/aws-smu-belt"
+        }
+      ],
+      "allowed_colorways": [
+        "black",
+        "coyote_brown",
+        "multicam",
+        "ranger_green"
+      ],
+      "default_colorway": "black"
     },
     {
       "id": "7c22a29d-1b17-54a8-9740-f908e4692383",
@@ -2568,7 +3008,28 @@
             ]
           }
         }
-      ]
+      ],
+      "msrp_cents": 12900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 11499,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/ferro-concepts-bison-belt"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 12100,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/ferro-concepts-bison-belt"
+        }
+      ],
+      "allowed_colorways": [
+        "black",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "black"
     },
     {
       "id": "79bce871-59e1-5c91-a518-0294391a85a9",
@@ -2671,7 +3132,29 @@
             ]
           }
         }
-      ]
+      ],
+      "msrp_cents": 17900,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 15999,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/ronin-tactics-sensor-belt"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 16800,
+          "in_stock": true,
+          "product_url": "https://www.vingtqlops.com/products/ronin-tactics-sensor-belt"
+        }
+      ],
+      "allowed_colorways": [
+        "black",
+        "coyote_brown",
+        "ranger_green",
+        "multicam"
+      ],
+      "default_colorway": "black"
     },
     {
       "id": "b74912df-9ca2-5610-8339-a12f605af5c4",
@@ -2774,7 +3257,35 @@
             ]
           }
         }
-      ]
+      ],
+      "msrp_cents": 11900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 9999,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/agilite-battle-belt"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 10900,
+          "in_stock": true,
+          "product_url": "https://www.uspatriottactical.com/products/agilite-battle-belt"
+        },
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 11400,
+          "in_stock": false,
+          "product_url": "https://www.optactical.com/products/agilite-battle-belt"
+        }
+      ],
+      "allowed_colorways": [
+        "black",
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "black"
     },
     {
       "id": "7e7c2a65-5fcd-5eaf-a815-802a13a048e0",
@@ -2867,7 +3378,28 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 39900,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 36499,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/crye-precision-mrb-2-0"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 37800,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/crye-precision-mrb-2-0"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "d769ff4d-4b9e-58b3-9135-c47840657d0a",
@@ -2930,7 +3462,29 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 29900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 26999,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/mayflower-uw-gen-iv-chest-rig"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 28200,
+          "in_stock": false,
+          "product_url": "https://www.gritrsports.com/products/mayflower-uw-gen-iv-chest-rig"
+        }
+      ],
+      "allowed_colorways": [
+        "coyote_brown",
+        "multicam",
+        "ranger_green",
+        "woodland_m81"
+      ],
+      "default_colorway": "coyote_brown"
     },
     {
       "id": "901d9adf-da60-5d11-b4bb-60bca3d8da1a",
@@ -3023,7 +3577,29 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 14900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 12999,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/t-rex-arms-ac1"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 13800,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/t-rex-arms-ac1"
+        }
+      ],
+      "allowed_colorways": [
+        "black",
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "16ed9162-59a8-5399-88b3-94d1543cad4f",
@@ -3086,7 +3662,29 @@
             "z_index": 12
           }
         }
-      ]
+      ],
+      "msrp_cents": 16400,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 14499,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/spiritus-systems-micro-fight-mk4"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 15300,
+          "in_stock": true,
+          "product_url": "https://www.vingtqlops.com/products/spiritus-systems-micro-fight-mk4"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "8530bf5b-dcec-52fc-8f94-ee01fc9bba35",
@@ -3171,7 +3769,28 @@
             "z_index": 7
           }
         }
-      ]
+      ],
+      "msrp_cents": 18900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 16999,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/jayjays-gen-4-brecon"
+        },
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 17750,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/jayjays-gen-4-brecon"
+        }
+      ],
+      "allowed_colorways": [
+        "coyote_brown",
+        "multicam",
+        "woodland_m81"
+      ],
+      "default_colorway": "coyote_brown"
     },
     {
       "id": "3ec33447-1228-58ca-b2c0-6698c164d36a",
@@ -3256,7 +3875,34 @@
             "z_index": 7
           }
         }
-      ]
+      ],
+      "msrp_cents": 14900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 12500,
+          "in_stock": false,
+          "product_url": "https://www.gritrsports.com/products/usgi-molle-ii-ruck"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 13200,
+          "in_stock": false,
+          "product_url": "https://www.uspatriottactical.com/products/usgi-molle-ii-ruck"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 13900,
+          "in_stock": false,
+          "product_url": "https://www.vingtqlops.com/products/usgi-molle-ii-ruck"
+        }
+      ],
+      "allowed_colorways": [
+        "woodland_m81",
+        "coyote_brown",
+        "multicam"
+      ],
+      "default_colorway": "woodland_m81"
     },
     {
       "id": "edf7eaec-a3f8-555c-a4b4-b14497461731",
@@ -3341,7 +3987,29 @@
             "z_index": 7
           }
         }
-      ]
+      ],
+      "msrp_cents": 11900,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 10499,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/london-bridge-trading-lbv"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 11100,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/london-bridge-trading-lbv"
+        }
+      ],
+      "allowed_colorways": [
+        "coyote_brown",
+        "multicam",
+        "woodland_m81",
+        "black"
+      ],
+      "default_colorway": "coyote_brown"
     }
   ],
   "components": [
@@ -3401,6 +4069,33 @@
             ]
           }
         }
+      ],
+      "msrp_cents": 14000,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 12499,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/spiritus-mk5-placard"
+        },
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 13200,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/spiritus-mk5-placard"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        {
+          "RifleMagCapacity": 3
+        }
       ]
     },
     {
@@ -3415,7 +4110,31 @@
         "width_pct": 100.0,
         "height_pct": 100.0,
         "z_index": 1
-      }
+      },
+      "msrp_cents": 8500,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 7499,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/ferro-dope-flap"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 7999,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/ferro-dope-flap"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        "AdminAtakUtility"
+      ]
     },
     {
       "id": "da956548-ff5f-5090-82f2-6ade015e29ee",
@@ -3429,7 +4148,38 @@
         "width_pct": 100.0,
         "height_pct": 100.0,
         "z_index": 1
-      }
+      },
+      "msrp_cents": 20000,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 17999,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/haley-d3crm-placard"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 18800,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/haley-d3crm-placard"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 19500,
+          "in_stock": false,
+          "product_url": "https://www.uspatriottactical.com/products/haley-d3crm-placard"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        "ProneLowProfile"
+      ]
     },
     {
       "id": "4b85a566-8a76-52a7-a103-e085ad8db797",
@@ -3447,7 +4197,40 @@
       "pals_footprint": {
         "cols": 2,
         "rows": 2
-      }
+      },
+      "msrp_cents": 5500,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 4799,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/esstac-kywi-556-double"
+        },
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 4999,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/esstac-kywi-556-double"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 5250,
+          "in_stock": false,
+          "product_url": "https://www.gritrsports.com/products/esstac-kywi-556-double"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        {
+          "RifleMagCapacity": 2
+        }
+      ]
     },
     {
       "id": "c59bce05-3bff-5591-8cda-d3a1d12391e7",
@@ -3461,7 +4244,32 @@
         "width_pct": 100.0,
         "height_pct": 100.0,
         "z_index": 1
-      }
+      },
+      "msrp_cents": 6500,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 5799,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/spiritus-spud-pouch"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 6100,
+          "in_stock": true,
+          "product_url": "https://www.vingtqlops.com/products/spiritus-spud-pouch"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        "CommsRoutingOrPtt",
+        "HydrationSustainment"
+      ]
     },
     {
       "id": "7347feda-44c8-5f1b-9d8a-7ea94eb2d01e",
@@ -3479,7 +4287,32 @@
       "pals_footprint": {
         "cols": 2,
         "rows": 2
-      }
+      },
+      "msrp_cents": 11500,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 10199,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/ferro-roll-1-ifak"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 10800,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/ferro-roll-1-ifak"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        "MedicalIfak"
+      ]
     },
     {
       "id": "39a5d551-28c7-5035-93ef-df10312fbd21",
@@ -3493,7 +4326,31 @@
         "width_pct": 100.0,
         "height_pct": 100.0,
         "z_index": 1
-      }
+      },
+      "msrp_cents": 25000,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 22499,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/crye-zip-on-pack-2-0"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 23600,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/crye-zip-on-pack-2-0"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        "HydrationSustainment"
+      ]
     },
     {
       "id": "32f981fb-cbc6-5571-b350-e9641c447d9c",
@@ -3507,7 +4364,32 @@
         "width_pct": 100.0,
         "height_pct": 100.0,
         "z_index": 1
-      }
+      },
+      "msrp_cents": 15000,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 13299,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/ferro-back-panel-banger"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 14100,
+          "in_stock": false,
+          "product_url": "https://www.uspatriottactical.com/products/ferro-back-panel-banger"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        "BreachingOrOrdnance",
+        "HydrationSustainment"
+      ]
     },
     {
       "id": "3e28cd87-fb95-559e-a546-18dc1525dcc3",
@@ -3525,7 +4407,37 @@
       "pals_footprint": {
         "cols": 2,
         "rows": 3
-      }
+      },
+      "msrp_cents": 6200,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 5499,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/safariland-ubl-mid-ride"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 5799,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/safariland-ubl-mid-ride"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 5950,
+          "in_stock": false,
+          "product_url": "https://www.gritrsports.com/products/safariland-ubl-mid-ride"
+        }
+      ],
+      "allowed_colorways": [
+        "black",
+        "coyote_brown",
+        "multicam"
+      ],
+      "default_colorway": "black",
+      "capabilities": [
+        "HolsterRetention"
+      ]
     },
     {
       "id": "4a070623-7911-5c2e-8d67-10873d37fda9",
@@ -3543,7 +4455,118 @@
       "pals_footprint": {
         "cols": 4,
         "rows": 3
-      }
+      },
+      "msrp_cents": 9500,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 8399,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/bfg-micro-trauma-now"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 8900,
+          "in_stock": true,
+          "product_url": "https://www.vingtqlops.com/products/bfg-micro-trauma-now"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        "MedicalIfak"
+      ]
+    },
+    {
+      "id": "4cea6742-562c-54ca-9cbb-71f7e0e1a163",
+      "sku": "agilite-ptt-3-panel",
+      "name": "Agilite PTT-3 Comms Panel",
+      "kind": "BeltItem",
+      "interface": "StandardPals1In",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      },
+      "pals_footprint": {
+        "cols": 3,
+        "rows": 2
+      },
+      "msrp_cents": 7000,
+      "vendor_offers": [
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 6199,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/agilite-ptt-3-panel"
+        },
+        {
+          "vendor_name": "US Patriot Tactical",
+          "price_cents": 6550,
+          "in_stock": true,
+          "product_url": "https://www.uspatriottactical.com/products/agilite-ptt-3-panel"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        "CommsRoutingOrPtt"
+      ]
+    },
+    {
+      "id": "f63aefff-a607-5ec5-8880-774805413e80",
+      "sku": "ferro-concepts-admin-pouch",
+      "name": "Ferro Concepts Admin Pouch",
+      "kind": "BeltItem",
+      "interface": "StandardPals1In",
+      "anchor": {
+        "x_pct": 0.0,
+        "y_pct": 0.0,
+        "width_pct": 100.0,
+        "height_pct": 100.0,
+        "z_index": 1
+      },
+      "pals_footprint": {
+        "cols": 2,
+        "rows": 2
+      },
+      "msrp_cents": 5000,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 4399,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/ferro-concepts-admin-pouch"
+        },
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 4650,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/ferro-concepts-admin-pouch"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam",
+      "capabilities": [
+        "AdminAtakUtility"
+      ]
     }
   ],
   "adapter_bridges": [
@@ -3559,7 +4582,28 @@
         "width_pct": 100.0,
         "height_pct": 6.0,
         "z_index": 1
-      }
+      },
+      "msrp_cents": 6000,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 5299,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/axl-avp-jpc"
+        },
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 5650,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/axl-avp-jpc"
+        }
+      ],
+      "allowed_colorways": [
+        "coyote_brown",
+        "multicam",
+        "ranger_green"
+      ],
+      "default_colorway": "coyote_brown"
     },
     {
       "id": "c2db5460-0262-5b1c-88f2-dc964cab101e",
@@ -3573,7 +4617,28 @@
         "width_pct": 100.0,
         "height_pct": 6.0,
         "z_index": 1
-      }
+      },
+      "msrp_cents": 4500,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 3999,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/axl-eclipse-velcro-adapter"
+        },
+        {
+          "vendor_name": "Gritr Sports",
+          "price_cents": 4200,
+          "in_stock": true,
+          "product_url": "https://www.gritrsports.com/products/axl-eclipse-velcro-adapter"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "3f6afb9b-f356-56e0-8e3e-637678f85c66",
@@ -3587,7 +4652,28 @@
         "width_pct": 100.0,
         "height_pct": 6.0,
         "z_index": 1
-      }
+      },
+      "msrp_cents": 5500,
+      "vendor_offers": [
+        {
+          "vendor_name": "SKD Tactical",
+          "price_cents": 4899,
+          "in_stock": true,
+          "product_url": "https://www.skdtactical.com/products/ferro-3ac-tubes-adapter"
+        },
+        {
+          "vendor_name": "Primary Arms",
+          "price_cents": 5150,
+          "in_stock": true,
+          "product_url": "https://www.primaryarms.com/products/ferro-3ac-tubes-adapter"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green"
+      ],
+      "default_colorway": "multicam"
     },
     {
       "id": "8d353880-8b84-54c4-b425-8cbd6124b577",
@@ -3601,7 +4687,271 @@
         "width_pct": 100.0,
         "height_pct": 6.0,
         "z_index": 1
-      }
+      },
+      "msrp_cents": 3500,
+      "vendor_offers": [
+        {
+          "vendor_name": "Optactical",
+          "price_cents": 3099,
+          "in_stock": true,
+          "product_url": "https://www.optactical.com/products/ghook-to-qasm-buckle-kit"
+        },
+        {
+          "vendor_name": "Vingtqlc Ops",
+          "price_cents": 3300,
+          "in_stock": true,
+          "product_url": "https://www.vingtqlops.com/products/ghook-to-qasm-buckle-kit"
+        }
+      ],
+      "allowed_colorways": [
+        "multicam",
+        "coyote_brown",
+        "ranger_green",
+        "black"
+      ],
+      "default_colorway": "multicam"
+    }
+  ],
+  "role_presets": [
+    {
+      "preset_id": "breacher",
+      "name": "Breacher",
+      "role": "breacher",
+      "policy": "us_army_ar670_1",
+      "platform_sku": "ferro-concepts-fcpc-v5",
+      "default_colorway": "multicam",
+      "placements": [
+        {
+          "slot_id": "front_placard",
+          "component_sku": "spiritus-mk5-placard",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "rear_panel",
+          "component_sku": "ferro-back-panel-banger",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "m2.placard_front_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "m2.placard_front_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 2,
+          "row": 0
+        },
+        {
+          "slot_id": "m2.placard_front_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 4,
+          "row": 0
+        },
+        {
+          "slot_id": "dangler_slot",
+          "component_sku": "bfg-micro-trauma-now",
+          "col": 0,
+          "row": 0
+        }
+      ]
+    },
+    {
+      "preset_id": "jtac",
+      "name": "JTAC",
+      "role": "jtac",
+      "policy": "us_army_ar670_1",
+      "platform_sku": "crye-precision-jpc-2-0",
+      "default_colorway": "multicam",
+      "placements": [
+        {
+          "slot_id": "front_placard",
+          "component_sku": "spiritus-mk5-placard",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "m2.placard_front_pals",
+          "component_sku": "ferro-concepts-admin-pouch",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "m2.placard_front_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 2,
+          "row": 0
+        },
+        {
+          "slot_id": "m2.placard_front_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 4,
+          "row": 0
+        },
+        {
+          "slot_id": "dangler_slot",
+          "component_sku": "bfg-micro-trauma-now",
+          "col": 0,
+          "row": 0
+        }
+      ]
+    },
+    {
+      "preset_id": "drone-operator",
+      "name": "Drone Operator",
+      "role": "drone_operator",
+      "policy": "us_army_ar670_1",
+      "platform_sku": "spiritus-systems-lv-119-overt",
+      "default_colorway": "multicam",
+      "placements": [
+        {
+          "slot_id": "front_placard",
+          "component_sku": "spiritus-mk5-placard",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "m1.placard_front_pals",
+          "component_sku": "ferro-concepts-admin-pouch",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "m1.placard_front_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 2,
+          "row": 0
+        },
+        {
+          "slot_id": "m1.placard_front_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 4,
+          "row": 0
+        },
+        {
+          "slot_id": "dangler_slot",
+          "component_sku": "bfg-micro-trauma-now",
+          "col": 0,
+          "row": 0
+        }
+      ]
+    },
+    {
+      "preset_id": "sniper-dm",
+      "name": "Sniper / DM",
+      "role": "sniper_dm",
+      "policy": "us_army_ar670_1",
+      "platform_sku": "t-rex-arms-ac1",
+      "default_colorway": "multicam",
+      "placements": [
+        {
+          "slot_id": "rig_main_cell",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "rig_main_cell",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 2,
+          "row": 0
+        },
+        {
+          "slot_id": "rig_main_cell",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 4,
+          "row": 0
+        },
+        {
+          "slot_id": "wing_left",
+          "component_sku": "ferro-roll-1-ifak",
+          "col": 0,
+          "row": 0
+        }
+      ]
+    },
+    {
+      "preset_id": "recce",
+      "name": "Recce",
+      "role": "recce",
+      "policy": "us_army_ar670_1",
+      "platform_sku": "crye-precision-jpc-2-0",
+      "default_colorway": "multicam",
+      "placements": [
+        {
+          "slot_id": "front_placard",
+          "component_sku": "spiritus-mk5-placard",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "rear_panel",
+          "component_sku": "crye-zip-on-pack-2-0",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "m2.placard_front_pals",
+          "component_sku": "ferro-concepts-admin-pouch",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "m2.placard_front_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 2,
+          "row": 0
+        },
+        {
+          "slot_id": "m2.placard_front_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 4,
+          "row": 0
+        },
+        {
+          "slot_id": "dangler_slot",
+          "component_sku": "bfg-micro-trauma-now",
+          "col": 0,
+          "row": 0
+        }
+      ]
+    },
+    {
+      "preset_id": "le-patrol",
+      "name": "LE Patrol",
+      "role": null,
+      "policy": "law_enforcement_patrol",
+      "platform_sku": "aws-smu-belt",
+      "default_colorway": "black",
+      "placements": [
+        {
+          "slot_id": "holster_drop_zone",
+          "component_sku": "safariland-ubl-mid-ride",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "belt_outer_pals",
+          "component_sku": "ferro-roll-1-ifak",
+          "col": 0,
+          "row": 0
+        },
+        {
+          "slot_id": "belt_outer_pals",
+          "component_sku": "esstac-kywi-556-double",
+          "col": 2,
+          "row": 0
+        },
+        {
+          "slot_id": "belt_outer_pals",
+          "component_sku": "agilite-ptt-3-panel",
+          "col": 4,
+          "row": 0
+        }
+      ]
     }
   ]
 }

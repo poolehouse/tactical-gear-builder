@@ -11,7 +11,9 @@
 //! - `GET  /api/v1/catalog/platforms` (`?category=`)
 //! - `GET  /api/v1/catalog/platforms/{sku}`
 //! - `GET  /api/v1/catalog/platforms/{sku}/compatible-components?slot_id=`
+//! - `GET  /api/v1/catalog/presets`
 //! - `POST /api/v1/loadouts/evaluate`
+//! - `POST /api/v1/loadouts/from-preset/{preset_id}`
 
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
@@ -32,6 +34,10 @@ use core_engine::graph::{
     PlatformCategory, PlatformSpec,
 };
 use core_engine::loadout::{LoadoutDraft, LoadoutSummary};
+use core_engine::pricing::Colorway;
+use core_engine::regulation::{
+    ComplianceReport, OperationalRole, PresetPlacement, RegulationPolicy, evaluate_compliance,
+};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use tower_http::cors::CorsLayer;
@@ -68,7 +74,12 @@ pub fn build_router(state: AppState) -> Router {
             "/api/v1/catalog/platforms/{sku}/compatible-components",
             get(compatible_components),
         )
+        .route("/api/v1/catalog/presets", get(list_presets))
         .route("/api/v1/loadouts/evaluate", post(evaluate_loadout))
+        .route(
+            "/api/v1/loadouts/from-preset/{preset_id}",
+            post(loadout_from_preset),
+        )
         .layer(TraceLayer::new_for_http())
         .layer(CorsLayer::permissive())
         .with_state(state)
@@ -121,6 +132,9 @@ pub enum ApiError {
     /// No platform with the requested SKU exists (404).
     #[error("unknown platform sku `{0}`")]
     UnknownPlatform(String),
+    /// No role preset with the requested id exists (404).
+    #[error("unknown preset id `{0}`")]
+    UnknownPreset(String),
     /// A required query parameter is missing (400).
     #[error("missing required query parameter `{0}`")]
     MissingParam(String),
@@ -143,7 +157,7 @@ pub enum ApiError {
 impl IntoResponse for ApiError {
     fn into_response(self) -> Response {
         let status = match &self {
-            ApiError::UnknownPlatform(_) => StatusCode::NOT_FOUND,
+            ApiError::UnknownPlatform(_) | ApiError::UnknownPreset(_) => StatusCode::NOT_FOUND,
             ApiError::MissingParam(_) | ApiError::InvalidParam { .. } => StatusCode::BAD_REQUEST,
             ApiError::InvalidBody(_) => StatusCode::BAD_REQUEST,
             ApiError::Catalog(_) => StatusCode::INTERNAL_SERVER_ERROR,
@@ -212,6 +226,15 @@ pub struct EvaluateRequest {
     pub platform_sku: String,
     /// Mounts to apply, in order.
     pub placements: Vec<PlacementRequest>,
+    /// Chosen colorway; defaults to the platform's default colorway.
+    #[serde(default)]
+    pub colorway: Option<Colorway>,
+    /// Regulation policy to validate against (`us_army_ar670_1`, ...).
+    #[serde(default)]
+    pub regulation_policy: Option<RegulationPolicy>,
+    /// Operational role to validate against (`jtac`, `sniper_dm`, ...).
+    #[serde(default)]
+    pub operational_role: Option<OperationalRole>,
 }
 
 /// One placement in an [`EvaluateRequest`].
@@ -225,6 +248,54 @@ pub struct PlacementRequest {
     pub col_idx: u8,
     /// PALS row index (grid mounts).
     pub row_idx: u8,
+}
+
+/// `POST /api/v1/loadouts/evaluate` (and `from-preset`) response: the full
+/// loadout summary with the compliance report flattened alongside it.
+#[derive(Debug, Clone, Serialize)]
+pub struct EvaluateResponse {
+    /// The loadout evaluation summary (valid, layers, BOM, pricing, errors).
+    #[serde(flatten)]
+    pub summary: LoadoutSummary,
+    /// Regulation/role compliance report. Present only when the request
+    /// named a policy or role; violations are semantic results, never HTTP
+    /// errors (R4).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance: Option<ComplianceReport>,
+}
+
+/// `POST /api/v1/loadouts/from-preset/{preset_id}` response.
+#[derive(Debug, Clone, Serialize)]
+pub struct FromPresetResponse {
+    /// The evaluated preset build and its compliance report.
+    #[serde(flatten)]
+    pub evaluation: EvaluateResponse,
+    /// The preset id that was applied.
+    pub preset_id: String,
+    /// The platform the preset builds on.
+    pub platform_sku: String,
+    /// The placements that were applied, so a client can continue editing
+    /// the preset build through `/evaluate` afterwards.
+    pub placements: Vec<PresetPlacement>,
+}
+
+/// List-view summary of a role preset.
+#[derive(Debug, Clone, Serialize)]
+pub struct PresetSummary {
+    /// Preset id slug (`"jtac"`).
+    pub preset_id: String,
+    /// Display name.
+    pub name: String,
+    /// Operational role the preset targets, when it has one.
+    pub role: Option<OperationalRole>,
+    /// Regulation policy the preset validates against.
+    pub policy: RegulationPolicy,
+    /// Platform the preset builds on.
+    pub platform_sku: String,
+    /// The preset's default colorway.
+    pub default_colorway: Colorway,
+    /// How many placements the preset applies.
+    pub placement_count: usize,
 }
 
 // --- handlers ----------------------------------------------------------------------
@@ -324,45 +395,141 @@ async fn compatible_components(
     Ok(Json(report))
 }
 
+/// `GET /api/v1/catalog/presets` — the curated role presets, in catalog
+/// order.
+async fn list_presets(State(state): State<AppState>) -> Json<Vec<PresetSummary>> {
+    let presets = state
+        .catalog()
+        .role_presets
+        .iter()
+        .map(|preset| PresetSummary {
+            preset_id: preset.preset_id.clone(),
+            name: preset.name.clone(),
+            role: preset.role,
+            policy: preset.policy,
+            platform_sku: preset.platform_sku.clone(),
+            default_colorway: preset.default_colorway,
+            placement_count: preset.placements.len(),
+        })
+        .collect();
+    Json(presets)
+}
+
 /// `POST /api/v1/loadouts/evaluate` — runs a [`LoadoutDraft`] over the
-/// placement list and returns the full evaluation summary. Individual failed
-/// placements are reported in `errors` with `valid: false` (HTTP 200);
-/// an unknown platform is a 404.
+/// placement list and returns the full evaluation summary plus, when a
+/// policy or role was named, the compliance report. Individual failed
+/// placements and compliance violations are reported in the body with HTTP
+/// 200 (R4); an unknown platform is a 404.
 async fn evaluate_loadout(
     State(state): State<AppState>,
     Json(payload): Json<EvaluateRequest>,
-) -> Result<Json<LoadoutSummary>, ApiError> {
+) -> Result<Json<EvaluateResponse>, ApiError> {
     let catalog = state.catalog();
     let platform = catalog
         .platform(&payload.platform_sku)
         .ok_or_else(|| ApiError::UnknownPlatform(payload.platform_sku.clone()))?
         .clone();
 
-    let mut draft = LoadoutDraft::new(platform);
+    let placements: Vec<(String, String, u8, u8)> = payload
+        .placements
+        .iter()
+        .map(|p| (p.slot_id.clone(), p.component_sku.clone(), p.col_idx, p.row_idx))
+        .collect();
+
+    Ok(Json(evaluate_placements(
+        catalog,
+        &platform,
+        &placements,
+        payload.colorway.unwrap_or(platform.default_colorway),
+        payload.regulation_policy,
+        payload.operational_role,
+    )))
+}
+
+/// `POST /api/v1/loadouts/from-preset/{preset_id}` — instantiates a curated
+/// role preset through the normal engine validation path and evaluates it
+/// against its own declared colorway, policy, and role. Unknown preset ids
+/// are 404s; a preset placement that fails engine validation is reported in
+/// the body with HTTP 200 (R4), exactly like `/evaluate`.
+async fn loadout_from_preset(
+    State(state): State<AppState>,
+    PathParam(preset_id): PathParam<String>,
+) -> Result<Json<FromPresetResponse>, ApiError> {
+    let catalog = state.catalog();
+    let preset = catalog
+        .preset(&preset_id)
+        .ok_or_else(|| ApiError::UnknownPreset(preset_id.clone()))?;
+    let platform = catalog
+        .platform(&preset.platform_sku)
+        .cloned()
+        .ok_or_else(|| ApiError::Catalog(format!(
+            "preset `{preset_id}` references unknown platform `{}`",
+            preset.platform_sku
+        )))?;
+
+    let placements: Vec<(String, String, u8, u8)> = preset
+        .placements
+        .iter()
+        .map(|p| (p.slot_id.clone(), p.component_sku.clone(), p.col, p.row))
+        .collect();
+    let evaluation = evaluate_placements(
+        catalog,
+        &platform,
+        &placements,
+        preset.default_colorway,
+        Some(preset.policy),
+        preset.role,
+    );
+
+    Ok(Json(FromPresetResponse {
+        evaluation,
+        preset_id: preset.preset_id.clone(),
+        platform_sku: preset.platform_sku.clone(),
+        placements: preset.placements.clone(),
+    }))
+}
+
+// --- helpers ----------------------------------------------------------------------
+
+/// Shared evaluation core for `/evaluate` and `/from-preset`: applies the
+/// placements in order (collecting per-placement errors without aborting),
+/// snapshots the summary, and — when a policy or role is active — attaches
+/// the compliance report.
+fn evaluate_placements(
+    catalog: &Catalog,
+    platform: &PlatformSpec,
+    placements: &[(String, String, u8, u8)],
+    colorway: Colorway,
+    policy: Option<RegulationPolicy>,
+    role: Option<OperationalRole>,
+) -> EvaluateResponse {
+    let mut draft = LoadoutDraft::new(platform.clone());
     let mut errors = Vec::new();
-    for placement in &payload.placements {
+    for (slot_id, component_sku, col, row) in placements {
         // Grid placements carry the requested cell; non-grid mounts position
         // through their render anchor and ignore the indices.
-        let result = draft.equip_component(
-            catalog,
-            &placement.slot_id,
-            &placement.component_sku,
-            Some((placement.col_idx, placement.row_idx)),
-        );
+        let result = draft.equip_component(catalog, slot_id, component_sku, Some((*col, *row)));
         if let Err(error) = result {
             errors.push(error.to_string());
         }
     }
+
+    let compliance = if policy.is_some() || role.is_some() {
+        Some(evaluate_compliance(catalog, &draft, colorway, policy, role))
+    } else {
+        None
+    };
 
     let mut summary = draft.summary();
     if !errors.is_empty() {
         summary.valid = false;
         summary.errors = errors;
     }
-    Ok(Json(summary))
+    EvaluateResponse {
+        summary,
+        compliance,
+    }
 }
-
-// --- helpers ----------------------------------------------------------------------
 
 /// Map a `?category=` value onto a [`PlatformCategory`].
 fn parse_category(raw: &str) -> Result<PlatformCategory, ApiError> {

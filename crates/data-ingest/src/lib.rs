@@ -15,6 +15,7 @@
 
 pub mod csv_models;
 pub mod normalizer;
+pub mod pricing_seed;
 pub mod sample_csvs;
 pub mod sql_gen;
 
@@ -49,6 +50,17 @@ pub enum IngestError {
         column: String,
         /// The offending raw cell text.
         raw_value: String,
+    },
+    /// A normalized item has no entry in the pricing seed table. There is no
+    /// default price: a missing entry is a data bug, not a zero.
+    #[error("no pricing seed entry for sku `{sku}` (CSV row {row}, source `{sheet}`)")]
+    MissingPricing {
+        /// 1-based CSV data row number.
+        row: usize,
+        /// Which sheet the row came from.
+        sheet: &'static str,
+        /// The normalized SKU slug that lacks pricing data.
+        sku: String,
     },
     /// A required CSV file is missing from the input directory.
     #[error("missing required input file: {0}")]

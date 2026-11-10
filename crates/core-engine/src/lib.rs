@@ -23,13 +23,15 @@ pub mod codec;
 pub mod graph;
 pub mod interfaces;
 pub mod loadout;
+pub mod pricing;
+pub mod regulation;
 pub mod spatial;
 
 pub use catalog::Catalog;
 pub use graph::{
-    AdapterBridge, CompatibilityResult, ComponentKind, ComponentSpec, IncompatibilityReason,
-    MountSlot, PalsFootprint, PlatformCategory, PlatformSpec, mount_on_pals, resolve_mount,
-    resolve_slot_mount,
+    AdapterBridge, CapabilityTag, CompatibilityResult, ComponentKind, ComponentSpec,
+    IncompatibilityReason, MountSlot, PalsFootprint, PlatformCategory, PlatformSpec, mount_on_pals,
+    resolve_mount, resolve_slot_mount,
 };
 /// Re-export so downstream crates can construct `Uuid` id fields without
 /// adding `uuid` as a direct dependency.
@@ -38,5 +40,11 @@ pub use interfaces::{InterfaceFamily, InterfaceStandard, PlateCut, Size};
 pub use loadout::{
     ADAPTER_LAYER, CHILD_LAYER, PLATFORM_LAYER, PRIMARY_LAYER, BomLineItem, Layer2D, LayerKind,
     LoadoutDraft, LoadoutError, LoadoutSummary, MountedItem,
+};
+pub use pricing::{Colorway, VendorOffer, best_offer, effective_price_cents, savings_cents};
+pub use regulation::{
+    ComplianceIssue, ComplianceRecommendation, ComplianceReport, ComplianceRuleCode,
+    OperationalRole, PresetApplyError, PresetPlacement, RegulationPolicy, RolePreset,
+    apply_preset, evaluate_compliance,
 };
 pub use spatial::{AnchorBox2D, PalsMatrix, SpatialError};

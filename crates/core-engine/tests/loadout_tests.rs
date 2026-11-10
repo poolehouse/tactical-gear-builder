@@ -18,6 +18,7 @@ use core_engine::interfaces::{InterfaceStandard, PlateCut, Size};
 use core_engine::loadout::{
     LoadoutDraft, LoadoutError, ADAPTER_LAYER, CHILD_LAYER, PLATFORM_LAYER, PRIMARY_LAYER,
 };
+use core_engine::pricing::Colorway;
 use core_engine::spatial::{AnchorBox2D, PalsMatrix, SpatialError};
 use core_engine::LayerKind;
 use uuid::Uuid;
@@ -28,6 +29,10 @@ use uuid::Uuid;
 /// flap, so 1" SwiftClip placards mount through the AXL AVP adapter.
 fn crye_jpc_2() -> PlatformSpec {
     PlatformSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
         id: Uuid::new_v4(),
         sku: "crye-precision-jpc-2-0".into(),
         name: "Crye Precision JPC 2.0".into(),
@@ -56,6 +61,10 @@ fn crye_jpc_2() -> PlatformSpec {
 /// AWS SMU Belt (from the belts sheet): full 18-column 1" PALS outer field.
 fn aws_smu_belt() -> PlatformSpec {
     PlatformSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
         id: Uuid::new_v4(),
         sku: "aws-smu-belt".into(),
         name: "SMU Belt".into(),
@@ -77,6 +86,11 @@ fn aws_smu_belt() -> PlatformSpec {
 /// placard's render anchor.
 fn spiritus_mk5_placard() -> ComponentSpec {
     ComponentSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
+        capabilities: Vec::new(),
         id: Uuid::new_v4(),
         sku: "spiritus-mk5-placard".into(),
         name: "Spiritus Systems MK5 Placard".into(),
@@ -97,6 +111,11 @@ fn spiritus_mk5_placard() -> ComponentSpec {
 /// Esstac KYWI 5.56 Double: 2x2 PALS footprint.
 fn esstac_kywi_double() -> ComponentSpec {
     ComponentSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
+        capabilities: Vec::new(),
         id: Uuid::new_v4(),
         sku: "esstac-kywi-556-double".into(),
         name: "Esstac KYWI 5.56 Double".into(),
@@ -119,12 +138,17 @@ fn axl_avp_jpc() -> core_engine::graph::AdapterBridge {
         component_interface: InterfaceStandard::SwiftClip1InchQasm,
         // Adapter hardware sits at the top of the slot.
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 6.0, 1),
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
     }
 }
 
 /// The fixture catalog: JPC 2.0 + SMU belt, MK5 placard + KYWI pouch, AXL AVP.
 fn catalog() -> Catalog {
     Catalog {
+        role_presets: Vec::new(),
         platforms: vec![crye_jpc_2(), aws_smu_belt()],
         components: vec![spiritus_mk5_placard(), esstac_kywi_double()],
         adapter_bridges: vec![axl_avp_jpc()],

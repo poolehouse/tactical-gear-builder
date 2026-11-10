@@ -67,10 +67,13 @@ fn end_to_end_ingest_generates_seed_files_with_zero_errors() {
         ]
     );
 
-    // 18 carriers + 4 belts + 4 rigs + 3 LBE platforms, 10 components, 4 adapters.
+    // 18 carriers + 4 belts + 4 rigs + 3 LBE platforms, 12 components
+    // (Spec-04 added the PTT and admin pouches), 4 adapters, 6 role presets.
     assert_eq!(catalog.platforms.len(), 29);
-    assert_eq!(catalog.components.len(), 10);
+    assert_eq!(catalog.components.len(), 12);
     assert_eq!(catalog.adapter_bridges.len(), 4);
+    assert_eq!(catalog.role_presets.len(), 6);
+    assert_eq!(catalog.role_presets[0].preset_id, "breacher");
 
     // Representative rows normalized to the expected slug SKUs and standards.
     let jpc = platform(catalog, "JPC 2.0");
@@ -139,7 +142,8 @@ fn end_to_end_ingest_generates_seed_files_with_zero_errors() {
     assert!(sql.contains("CREATE TABLE IF NOT EXISTS mount_slots"));
     assert!(sql.contains("CREATE TABLE IF NOT EXISTS components"));
     assert!(sql.contains("CREATE TABLE IF NOT EXISTS adapter_bridges"));
-    assert_eq!(sql.matches("ON CONFLICT (id) DO UPDATE").count(), 43); // 29 + 10 + 4
+    assert_eq!(sql.matches("ON CONFLICT (id) DO UPDATE").count(), 45); // 29 + 12 + 4
+    assert_eq!(sql.matches("ON CONFLICT (preset_id) DO UPDATE").count(), 6);
     assert_eq!(
         sql.matches("ON CONFLICT (platform_id, slot_id) DO UPDATE").count(),
         catalog.platforms.iter().map(|p| p.slots.len()).sum::<usize>()

@@ -10,6 +10,7 @@ use core_engine::graph::{
     ComponentSpec, IncompatibilityReason, MountSlot, PlatformCategory, PlatformSpec,
 };
 use core_engine::interfaces::{InterfaceStandard, PlateCut, Size};
+use core_engine::pricing::Colorway;
 use core_engine::spatial::{AnchorBox2D, PalsMatrix, SpatialError};
 use uuid::Uuid;
 
@@ -18,6 +19,10 @@ use uuid::Uuid;
 /// Crye JPC 2.0: front flap is a Crye AVS flap; back is a Crye #10 zipper.
 fn crye_jpc_2() -> PlatformSpec {
     PlatformSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
         id: Uuid::new_v4(),
         sku: "crye-precision-jpc-2-0".into(),
         name: "Crye Precision JPC 2.0".into(),
@@ -46,6 +51,10 @@ fn crye_jpc_2() -> PlatformSpec {
 /// Ferro Concepts FCPC v5: front is G-Hook; back is a Ferro proprietary zipper.
 fn ferro_fcpc_v5() -> PlatformSpec {
     PlatformSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
         id: Uuid::new_v4(),
         sku: "ferro-concepts-fcpc-v5".into(),
         name: "Ferro Concepts FCPC v5".into(),
@@ -74,6 +83,10 @@ fn ferro_fcpc_v5() -> PlatformSpec {
 /// A 6-column PALS belt (e.g. a gun belt with a webbing field).
 fn belt_platform() -> PlatformSpec {
     PlatformSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
         id: Uuid::new_v4(),
         sku: "pals-belt".into(),
         name: "PALS Belt".into(),
@@ -93,6 +106,11 @@ fn belt_platform() -> PlatformSpec {
 /// Spiritus Systems Mk5 placard (1" SwiftClip / QASM).
 fn spiritus_mk5_placard() -> ComponentSpec {
     ComponentSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
+        capabilities: Vec::new(),
         id: Uuid::new_v4(),
         sku: "spiritus-mk5-placard".into(),
         name: "Spiritus Systems Mk5 Placard".into(),
@@ -107,6 +125,11 @@ fn spiritus_mk5_placard() -> ComponentSpec {
 /// A placard with a native Crye AVS flap mount.
 fn avs_flap_placard() -> ComponentSpec {
     ComponentSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
+        capabilities: Vec::new(),
         id: Uuid::new_v4(),
         sku: "crye-avs-detachable-flap".into(),
         name: "Crye AVS Detachable Flap".into(),
@@ -121,6 +144,11 @@ fn avs_flap_placard() -> ComponentSpec {
 /// Spiritus Systems zip-on back panel (Spiritus proprietary zipper).
 fn spiritus_back_panel() -> ComponentSpec {
     ComponentSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
+        capabilities: Vec::new(),
         id: Uuid::new_v4(),
         sku: "spiritus-zip-on-back-panel".into(),
         name: "Spiritus Systems Zip-On Back Panel".into(),
@@ -135,6 +163,11 @@ fn spiritus_back_panel() -> ComponentSpec {
 /// A pouch with a 4x1 PALS footprint.
 fn four_column_pouch() -> ComponentSpec {
     ComponentSpec {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
+        capabilities: Vec::new(),
         id: Uuid::new_v4(),
         sku: "four-column-utility-pouch".into(),
         name: "4-Column Utility Pouch".into(),
@@ -149,6 +182,10 @@ fn four_column_pouch() -> ComponentSpec {
 /// AXL AVP adapter: bolts onto a Crye AVS/JPC flap and exposes 1" SwiftClip.
 fn axl_avp_adapter() -> AdapterBridge {
     AdapterBridge {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
         id: Uuid::new_v4(),
         sku: "axl-avp-jpc".into(),
         name: "AXL AVP (AVS Vertical Placard) Adapter".into(),
@@ -161,6 +198,10 @@ fn axl_avp_adapter() -> AdapterBridge {
 /// Adapter chaining Crye AVS flaps to G-Hooks (for the single-hop test).
 fn avs_to_ghook_adapter() -> AdapterBridge {
     AdapterBridge {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
         id: Uuid::new_v4(),
         sku: "avs-to-ghook-adapter".into(),
         name: "AVS to G-Hook Adapter".into(),
@@ -173,6 +214,10 @@ fn avs_to_ghook_adapter() -> AdapterBridge {
 /// Adapter chaining G-Hooks to Shaw ARC quad mounts (for the single-hop test).
 fn ghook_to_arc_adapter() -> AdapterBridge {
     AdapterBridge {
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
         id: Uuid::new_v4(),
         sku: "ghook-to-arc-adapter".into(),
         name: "G-Hook to Shaw ARC Adapter".into(),
@@ -300,6 +345,11 @@ fn adapter_bridging_is_limited_to_a_single_hop() {
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 100.0, 1),
         pals_footprint: None,
         child_slots: Vec::new(),
+        msrp_cents: 0,
+        vendor_offers: Vec::new(),
+        allowed_colorways: Vec::new(),
+        default_colorway: Colorway::Black,
+        capabilities: Vec::new(),
     };
     let registry = vec![avs_to_ghook_adapter(), ghook_to_arc_adapter()];
 

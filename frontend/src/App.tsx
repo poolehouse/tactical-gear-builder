@@ -6,6 +6,8 @@ import type {
   OpResult,
   PlatformSpec,
   PlatformSummary,
+  PresetSummary,
+  RolePreset,
   PalsFootprint,
   SlotAddress,
 } from "./types";
@@ -15,6 +17,42 @@ import { LoadoutCanvas } from "./components/LoadoutCanvas";
 import { SlotPanel } from "./components/SlotPanel";
 import { ComponentBrowser } from "./components/ComponentBrowser";
 import { BomPanel } from "./components/BomPanel";
+import { colorwayLabel } from "./components/CompliancePanel";
+
+/** Typed enum values accepted by `Draft.set_compliance_context` — the same
+ * snake_case strings the REST API takes (mirrors the core-engine enums). */
+const COLORWAYS = [
+  "multicam",
+  "coyote_brown",
+  "ranger_green",
+  "wolf_grey",
+  "black",
+  "woodland_m81",
+] as const;
+
+const POLICIES = [
+  "us_army_ar670_1",
+  "usmc_maradmin",
+  "law_enforcement_patrol",
+  "law_enforcement_swat",
+] as const;
+
+const ROLES = ["breacher", "jtac", "drone_operator", "sniper_dm", "recce"] as const;
+
+const POLICY_LABELS: Record<string, string> = {
+  us_army_ar670_1: "US Army AR 670-1",
+  usmc_maradmin: "USMC MARADMIN",
+  law_enforcement_patrol: "LE Patrol",
+  law_enforcement_swat: "LE SWAT",
+};
+
+const ROLE_LABELS: Record<string, string> = {
+  breacher: "Breacher",
+  jtac: "JTAC",
+  drone_operator: "Drone Operator",
+  sniper_dm: "Sniper / DM",
+  recce: "Recce",
+};
 
 export type Status = { kind: "ok" | "error" | "info"; text: string } | null;
 
@@ -32,6 +70,7 @@ export function App() {
         const engine = Engine.embedded();
         setEngine(engine);
         setPlatforms(JSON.parse(engine.platforms()) as PlatformSummary[]);
+        setPresets(JSON.parse(engine.presets()) as PresetSummary[]);
       })
       .catch((error: unknown) => {
         if (!cancelled) setBootError(String(error));
@@ -53,6 +92,17 @@ export function App() {
   const [pendingSku, setPendingSku] = useState<string | null>(null);
   const [compat, setCompat] = useState<CompatReport | null>(null);
   const [status, setStatus] = useState<Status>(null);
+
+  // --- role presets + compliance context ------------------------------------
+  const [presets, setPresets] = useState<PresetSummary[]>([]);
+  const [selectedPresetId, setSelectedPresetId] = useState<string>("");
+  /** "" means unset — the engine falls back to the platform default
+   * colorway / no policy / no role. */
+  const [ctx, setCtx] = useState<{ colorway: string; policy: string; role: string }>({
+    colorway: "",
+    policy: "",
+    role: "",
+  });
 
   const refreshState = () => {
     const draft = draftRef.current;
@@ -76,6 +126,9 @@ export function App() {
     setSelectedSlotAddress(parsed.slots[0]?.id ?? null);
     setSelectedMountId(null);
     setPendingSku(null);
+    // A fresh draft carries no compliance context.
+    setCtx({ colorway: "", policy: "", role: "" });
+    setSelectedPresetId("");
     setStatus({
       kind: "info",
       text: `Draft started on ${parsed.name}. Pick a slot, then a component.`,
@@ -151,6 +204,106 @@ export function App() {
     }
   };
 
+  // --- compliance context & role presets -----------------------------------
+
+  /** Update the colorway/policy/role the draft is evaluated under. Always
+   * passes the full triple — the engine call replaces the context, so the
+   * other two selects must ride along. */
+  const applyComplianceContext = (
+    colorway: string,
+    policy: string,
+    role: string
+  ) => {
+    const draft = draftRef.current;
+    if (!draft) return;
+    setCtx({ colorway, policy, role });
+    const result = JSON.parse(
+      draft.set_compliance_context(
+        colorway || undefined,
+        policy || undefined,
+        role || undefined
+      )
+    ) as OpResult;
+    refreshState();
+    if (!result.ok) {
+      setStatus({ kind: "error", text: result.error ?? "unknown failure" });
+    }
+  };
+
+  /** Instantiate a role preset: placements go through the normal engine
+   * validation path, and the compliance context is seeded from the preset's
+   * own declaration. */
+  const loadPreset = (presetId: string) => {
+    if (!engine || !presetId) return;
+    const raw = engine.preset(presetId);
+    if (raw === undefined) {
+      setStatus({ kind: "error", text: `unknown preset id \`${presetId}\`` });
+      return;
+    }
+    const preset = JSON.parse(raw) as RolePreset;
+    let draft: Draft;
+    try {
+      draft = engine.load_preset(presetId);
+    } catch (error) {
+      setStatus({ kind: "error", text: String(error) });
+      return;
+    }
+    draftRef.current?.free();
+    draftRef.current = draft;
+    const parsed = JSON.parse(draft.state()) as DraftState;
+    setState(parsed);
+    setPlatformSku(parsed.platform.sku);
+    setSelectedPresetId(presetId);
+    setCtx({
+      colorway: preset.default_colorway,
+      policy: preset.policy,
+      role: preset.role ?? "",
+    });
+    setSelectedSlotAddress(parsed.platform.slots[0]?.id ?? null);
+    setSelectedMountId(null);
+    setPendingSku(null);
+    setStatus({
+      kind: "ok",
+      text: `Loaded ${preset.name} — ${preset.placements.length} placements, validated under ${POLICY_LABELS[preset.policy] ?? preset.policy}.`,
+    });
+  };
+
+  /** Place a suggested component from the compliance report: try every slot
+   * (platform slots first, then mounted child slots) for a native or
+   * adapter-mediated fit, dropping it into the first free PALS cell;
+   * anchor mounts ignore the cell. If nothing fits right now, fall back to
+   * the manual pending-component flow. */
+  const equipSuggested = (sku: string) => {
+    if (!engine || !state) return;
+    for (const slot of slots) {
+      const report = engine.compatible_on_slot(JSON.stringify(slot.slot));
+      if (report === undefined) continue;
+      const parsed = JSON.parse(report) as CompatReport;
+      const entry = [...parsed.native_fit, ...parsed.requires_adapter].find(
+        (candidate) => candidate.sku === sku
+      );
+      if (!entry) continue;
+      const grid = slot.slot.pals_grid;
+      if (grid && entry.pals_footprint) {
+        const cell = firstFreeCell(
+          grid,
+          entry.pals_footprint.cols,
+          entry.pals_footprint.rows
+        );
+        if (!cell) continue;
+        equip(slot.address, sku, cell[0], cell[1]);
+        return;
+      }
+      equip(slot.address, sku, 0, 0);
+      return;
+    }
+    setPendingSku(sku);
+    setStatus({
+      kind: "info",
+      text: `\`${sku}\` does not fit any current slot — select a compatible slot, then place it from the component browser.`,
+    });
+  };
+
   const selectedMount = useMemo(
     () => state?.mounted.find((item) => item.mount_id === selectedMountId) ?? null,
     [state, selectedMountId]
@@ -196,6 +349,86 @@ export function App() {
           )}
         </div>
       </header>
+
+      <div className="context-bar">
+        <label className="ctx-group">
+          <span className="ctx-label">role preset</span>
+          <select
+            className="ctx-select"
+            value={selectedPresetId}
+            disabled={!engine || presets.length === 0}
+            onChange={(event) => setSelectedPresetId(event.target.value)}
+          >
+            <option value="">&mdash; manual build &mdash;</option>
+            {presets.map((preset) => (
+              <option key={preset.preset_id} value={preset.preset_id}>
+                {preset.name} ({preset.placement_count} placements)
+              </option>
+            ))}
+          </select>
+        </label>
+        <button
+          className="btn"
+          disabled={!engine || !selectedPresetId}
+          onClick={() => loadPreset(selectedPresetId)}
+        >
+          Load preset
+        </button>
+        <label className="ctx-group">
+          <span className="ctx-label">colorway</span>
+          <select
+            className="ctx-select"
+            value={ctx.colorway}
+            disabled={!platformSku}
+            onChange={(event) =>
+              applyComplianceContext(event.target.value, ctx.policy, ctx.role)
+            }
+          >
+            <option value="">platform default</option>
+            {COLORWAYS.map((colorway) => (
+              <option key={colorway} value={colorway}>
+                {colorwayLabel(colorway)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="ctx-group">
+          <span className="ctx-label">regulation</span>
+          <select
+            className="ctx-select"
+            value={ctx.policy}
+            disabled={!platformSku}
+            onChange={(event) =>
+              applyComplianceContext(ctx.colorway, event.target.value, ctx.role)
+            }
+          >
+            <option value="">none</option>
+            {POLICIES.map((policy) => (
+              <option key={policy} value={policy}>
+                {POLICY_LABELS[policy] ?? policy}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="ctx-group">
+          <span className="ctx-label">role</span>
+          <select
+            className="ctx-select"
+            value={ctx.role}
+            disabled={!platformSku}
+            onChange={(event) =>
+              applyComplianceContext(ctx.colorway, ctx.policy, event.target.value)
+            }
+          >
+            <option value="">none</option>
+            {ROLES.map((role) => (
+              <option key={role} value={role}>
+                {ROLE_LABELS[role] ?? role}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
 
       <main className="app-grid">
         <PlatformPicker
@@ -270,6 +503,7 @@ export function App() {
         state={state}
         selectedMount={selectedMount}
         onUnequip={unequip}
+        onSuggestedSku={equipSuggested}
       />
 
       <footer className="app-footer">

@@ -6,10 +6,11 @@
 //! and evaluates against it.
 
 use crate::graph::{AdapterBridge, ComponentSpec, PlatformSpec};
+use crate::regulation::RolePreset;
 use serde::{Deserialize, Serialize};
 
-/// The complete normalized catalog: platforms, starter components, and
-/// aftermarket adapter bridges.
+/// The complete normalized catalog: platforms, starter components, aftermarket
+/// adapter bridges, and curated role presets.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Catalog {
     /// Normalized platform specs (plate carriers, belts, chest rigs, LBE).
@@ -18,6 +19,10 @@ pub struct Catalog {
     pub components: Vec<ComponentSpec>,
     /// Aftermarket adapter bridges.
     pub adapter_bridges: Vec<AdapterBridge>,
+    /// Curated one-click role presets. Defaulted so pre-preset seeds still
+    /// deserialize (an empty preset list is honest data, not a guess).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub role_presets: Vec<RolePreset>,
 }
 
 impl Catalog {
@@ -44,5 +49,12 @@ impl Catalog {
     /// Look up an adapter bridge by SKU slug.
     pub fn adapter(&self, sku: &str) -> Option<&AdapterBridge> {
         self.adapter_bridges.iter().find(|adapter| adapter.sku == sku)
+    }
+
+    /// Look up a role preset by preset id.
+    pub fn preset(&self, preset_id: &str) -> Option<&RolePreset> {
+        self.role_presets
+            .iter()
+            .find(|preset| preset.preset_id == preset_id)
     }
 }

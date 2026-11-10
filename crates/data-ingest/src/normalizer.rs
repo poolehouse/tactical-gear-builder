@@ -410,12 +410,27 @@ pub fn lbe_slots(
 
 use core_engine::graph::{ComponentKind, ComponentSpec, PlatformCategory, PlatformSpec};
 
+/// Resolve the pricing/colorway seed for a platform SKU, failing loudly
+/// when the table has no entry (zero silent fallbacks — R2).
+fn platform_pricing_or_fail(
+    row_no: usize,
+    source: &'static str,
+    sku: &str,
+) -> Result<crate::pricing_seed::ItemPricing, IngestError> {
+    crate::pricing_seed::platform_pricing(sku).ok_or_else(|| IngestError::MissingPricing {
+        row: row_no,
+        sheet: source,
+        sku: sku.to_owned(),
+    })
+}
+
 /// Normalize one plate-carrier row into a `PlatformSpec`.
 pub fn normalize_plate_carrier(row: &RawPlateCarrierRow, row_no: usize) -> Result<PlatformSpec, IngestError> {
     let slug = slug_id(&row.brand, &row.platform_name);
     let front = map_interface(&row.front_placard_interface, PLACARD_TABLE, row_no, "Front Placard Interface")?;
     let cumb = map_interface(&row.cummerbund_interface, CUMMERBUND_TABLE, row_no, "Cummerbund Interface")?;
     let back = map_interface(&row.back_panel_zipper_standard, BACK_PANEL_TABLE, row_no, "Back Panel / Zipper Standard")?;
+    let pricing = platform_pricing_or_fail(row_no, "plate_carriers.csv", &slug)?;
     Ok(PlatformSpec {
         id: deterministic_uuid(&slug),
         sku: slug,
@@ -424,6 +439,10 @@ pub fn normalize_plate_carrier(row: &RawPlateCarrierRow, row_no: usize) -> Resul
         plate_cuts: map_plate_cuts(&row.plate_cut_sizing, row_no)?,
         sizes: default_sizes(),
         slots: plate_carrier_slots(front, cumb, back),
+        msrp_cents: pricing.msrp_cents,
+        vendor_offers: pricing.offers,
+        allowed_colorways: pricing.allowed_colorways,
+        default_colorway: pricing.default_colorway,
     })
 }
 
@@ -433,6 +452,7 @@ pub fn normalize_belt(row: &RawBeltRow, row_no: usize) -> Result<PlatformSpec, I
     let _velcro = map_interface(&row.inner_outer_velcro_spec, BELT_VELCRO_TABLE, row_no, "Inner/Outer Velcro Spec")?;
     let pals = map_interface(&row.molle_pals_mounting_spec, PALS_SPEC_TABLE, row_no, "MOLLE / PALS Mounting Spec")?;
     let _holster = map_interface(&row.holster_mounting_compatibility, PALS_SPEC_TABLE, row_no, "Holster Mounting Compatibility")?;
+    let pricing = platform_pricing_or_fail(row_no, "belts.csv", &slug)?;
     Ok(PlatformSpec {
         id: deterministic_uuid(&slug),
         sku: slug,
@@ -441,6 +461,10 @@ pub fn normalize_belt(row: &RawBeltRow, row_no: usize) -> Result<PlatformSpec, I
         plate_cuts: Vec::new(),
         sizes: default_sizes(),
         slots: belt_slots(pals),
+        msrp_cents: pricing.msrp_cents,
+        vendor_offers: pricing.offers,
+        allowed_colorways: pricing.allowed_colorways,
+        default_colorway: pricing.default_colorway,
     })
 }
 
@@ -455,6 +479,7 @@ pub fn normalize_chest_rig(row: &RawChestRigRow, row_no: usize) -> Result<Platfo
     } else {
         map_interface(&row.sub_load_dangler_interface, PLACARD_TABLE, row_no, "Sub-Load / Dangler Interface")?
     };
+    let pricing = platform_pricing_or_fail(row_no, "chest_rigs.csv", &slug)?;
     Ok(PlatformSpec {
         id: deterministic_uuid(&slug),
         sku: slug,
@@ -463,6 +488,10 @@ pub fn normalize_chest_rig(row: &RawChestRigRow, row_no: usize) -> Result<Platfo
         plate_cuts: Vec::new(),
         sizes: default_sizes(),
         slots: chest_rig_slots(main, &row.harness_buckle_interface, dangler),
+        msrp_cents: pricing.msrp_cents,
+        vendor_offers: pricing.offers,
+        allowed_colorways: pricing.allowed_colorways,
+        default_colorway: pricing.default_colorway,
     })
 }
 
@@ -471,6 +500,7 @@ pub fn normalize_lbe(row: &RawLbeRow, row_no: usize) -> Result<PlatformSpec, Ing
     let slug = slug_id(&row.brand, &row.lbe_system_name);
     let main = map_interface(&row.integrated_vs_molle_pouches, PALS_SPEC_TABLE, row_no, "Integrated vs. MOLLE Pouches")?;
     let buttpack = map_interface(&row.buttpack_field_pack_integration, BACK_PANEL_TABLE, row_no, "Buttpack / Field Pack Integration")?;
+    let pricing = platform_pricing_or_fail(row_no, "lbe.csv", &slug)?;
     Ok(PlatformSpec {
         id: deterministic_uuid(&slug),
         sku: slug,
@@ -479,6 +509,10 @@ pub fn normalize_lbe(row: &RawLbeRow, row_no: usize) -> Result<PlatformSpec, Ing
         plate_cuts: Vec::new(),
         sizes: default_sizes(),
         slots: lbe_slots(main, buttpack),
+        msrp_cents: pricing.msrp_cents,
+        vendor_offers: pricing.offers,
+        allowed_colorways: pricing.allowed_colorways,
+        default_colorway: pricing.default_colorway,
     })
 }
 
@@ -619,19 +653,39 @@ pub fn seed_core_adapters_and_components() -> (Vec<core_engine::graph::AdapterBr
             Some((4, 3)),
             Vec::new(),
         ),
+        // Spec-04 additions: typed comms/PTT and admin/ATAK carriage, so the
+        // JTAC and drone-operator role checks have catalog coverage.
+        component(
+            "agilite-ptt-3-panel",
+            "Agilite PTT-3 Comms Panel",
+            ComponentKind::BeltItem,
+            InterfaceStandard::StandardPals1In,
+            Some((3, 2)),
+            Vec::new(),
+        ),
+        component(
+            "ferro-concepts-admin-pouch",
+            "Ferro Concepts Admin Pouch",
+            ComponentKind::BeltItem,
+            InterfaceStandard::StandardPals1In,
+            Some((2, 2)),
+            Vec::new(),
+        ),
     ];
 
     (adapters, components)
 }
 
-/// Adapter convenience constructor with deterministic id + default hardware
-/// footprint anchor.
+/// Adapter convenience constructor with deterministic id, default hardware
+/// footprint anchor, and pricing/colorways from the seed table.
 fn adapter(
     slug: &str,
     name: &str,
     platform_interface: InterfaceStandard,
     component_interface: InterfaceStandard,
 ) -> core_engine::graph::AdapterBridge {
+    let pricing = crate::pricing_seed::item_offer_pricing(slug)
+        .unwrap_or_else(|| panic!("pricing seed table must cover adapter `{slug}`"));
     core_engine::graph::AdapterBridge {
         id: deterministic_uuid(slug),
         sku: slug.to_owned(),
@@ -640,10 +694,15 @@ fn adapter(
         component_interface,
         // Adapter hardware sits at the top of the slot; the child hangs below.
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 6.0, 1),
+        msrp_cents: pricing.msrp_cents,
+        vendor_offers: pricing.offers,
+        allowed_colorways: pricing.allowed_colorways,
+        default_colorway: pricing.default_colorway,
     }
 }
 
-/// Component convenience constructor with deterministic id + full-slot anchor.
+/// Component convenience constructor with deterministic id, full-slot
+/// anchor, pricing/colorways, and typed capabilities from the seed table.
 fn component(
     slug: &str,
     name: &str,
@@ -652,6 +711,8 @@ fn component(
     footprint: Option<(u8, u8)>,
     child_slots: Vec<MountSlot>,
 ) -> ComponentSpec {
+    let pricing = crate::pricing_seed::item_offer_pricing(slug)
+        .unwrap_or_else(|| panic!("pricing seed table must cover component `{slug}`"));
     ComponentSpec {
         id: deterministic_uuid(slug),
         sku: slug.to_owned(),
@@ -661,6 +722,11 @@ fn component(
         anchor: lay::FULL(),
         pals_footprint: footprint.map(|(cols, rows)| core_engine::graph::PalsFootprint { cols, rows }),
         child_slots,
+        msrp_cents: pricing.msrp_cents,
+        vendor_offers: pricing.offers,
+        allowed_colorways: pricing.allowed_colorways,
+        default_colorway: pricing.default_colorway,
+        capabilities: crate::pricing_seed::capabilities(slug),
     }
 }
 
@@ -721,6 +787,7 @@ pub fn normalize_catalog(input_dir: &std::path::Path) -> Result<IngestReport, In
             platforms,
             components,
             adapter_bridges: adapters,
+            role_presets: crate::pricing_seed::role_presets(),
         },
         rows_ingested: vec![
             ("plate_carriers.csv".into(), carriers.len()),

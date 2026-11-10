@@ -143,7 +143,7 @@ async fn compatible_components_classify_the_jpc_front_placard_slot() {
 
     // The classification is exhaustive over the catalog.
     let total = native.len() + requires_adapter.len() + incompatible.len();
-    assert_eq!(total, 10);
+    assert_eq!(total, 12);
 
     // Missing slot_id and unknown slot are 400s; unknown platform a 404.
     let (status, _) = get(&app, &format!("/api/v1/catalog/platforms/{JPC}/compatible-components")).await;
@@ -283,4 +283,196 @@ async fn evaluate_loadout_mounts_onto_child_slots() {
     assert_eq!(find_entry(bom, KYWI)["quantity"], 1);
     assert_eq!(find_entry(bom, MK5)["quantity"], 1);
     assert_eq!(find_entry(bom, AXL_AVP)["quantity"], 1);
+}
+
+/// The typed rule-code name of one violation/recommendation entry: codes
+/// serialize externally tagged (`{"DisallowedColorway": {...}}`).
+fn rule_code(entry: &Value) -> String {
+    entry["code"]
+        .as_object()
+        .and_then(|code| code.keys().next().cloned())
+        .unwrap_or_else(|| panic!("rule code object missing in {entry:?}"))
+}
+
+// --- Spec-04: pricing, compliance, and role presets ------------------------------
+
+#[tokio::test]
+async fn evaluate_reports_pricing_rollup_with_adapter_costs() {
+    let app = app();
+    let payload = serde_json::json!({
+        "platform_sku": JPC,
+        "placements": [
+            { "slot_id": "front_placard", "component_sku": MK5, "col_idx": 0, "row_idx": 0 },
+        ],
+    });
+
+    let (status, body) = post(&app, "/api/v1/loadouts/evaluate", payload).await;
+    assert_eq!(status, StatusCode::OK);
+
+    // Per-line pricing: MSRP, best in-stock offer, savings.
+    let placard_line = find_entry(body["bom"].as_array().unwrap(), MK5);
+    assert!(placard_line["msrp_cents"].as_u64().unwrap() > 0);
+    let offer = placard_line["best_offer"].as_object().expect("in-stock offer");
+    assert!(offer["price_cents"].as_u64().unwrap() > 0);
+    assert!(!offer["vendor_name"].as_str().unwrap().is_empty());
+    assert!(offer["in_stock"].as_bool().unwrap());
+    let msrp = placard_line["msrp_cents"].as_u64().unwrap();
+    let best = offer["price_cents"].as_u64().unwrap();
+    assert_eq!(placard_line["savings_cents"].as_u64().unwrap(), msrp - best);
+
+    // Totals include the platform, the adapter, and the placard, qty-weighted.
+    let jpc_msrp = 29_900;
+    let total = body["total_msrp_cents"].as_u64().unwrap();
+    assert!(total >= jpc_msrp + 6_000 + 14_000, "total must cover platform+adapter+placard: {total}");
+    let optimized = body["total_best_price_cents"].as_u64().unwrap();
+    assert!(optimized < total, "in-stock offers must beat MSRP: {optimized} vs {total}");
+    assert_eq!(body["total_savings_cents"].as_u64().unwrap(), total - optimized);
+}
+
+#[tokio::test]
+async fn evaluate_without_policy_omits_compliance() {
+    let app = app();
+    let payload = serde_json::json!({
+        "platform_sku": JPC,
+        "placements": [],
+    });
+    let (status, body) = post(&app, "/api/v1/loadouts/evaluate", payload).await;
+    assert_eq!(status, StatusCode::OK);
+    assert!(body.get("compliance").is_none(), "no policy or role named -> no report");
+}
+
+#[tokio::test]
+async fn evaluate_black_jpc_violates_ar670_1_and_multicam_passes() {
+    let app = app();
+
+    // Bare platform in Black under AR 670-1: disallowed colorway, missing
+    // IFAK, insufficient magazine carriage — all under HTTP 200.
+    let payload = serde_json::json!({
+        "platform_sku": JPC,
+        "placements": [],
+        "colorway": "black",
+        "regulation_policy": "us_army_ar670_1",
+    });
+    let (status, body) = post(&app, "/api/v1/loadouts/evaluate", payload).await;
+    assert_eq!(status, StatusCode::OK);
+    let compliance = &body["compliance"];
+    assert_eq!(compliance["compliant"], false);
+    let codes: Vec<String> = compliance["violations"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(rule_code)
+        .collect();
+    assert!(codes.contains(&"DisallowedColorway".to_owned()), "codes: {codes:?}");
+    assert!(codes.contains(&"MissingCapability".to_owned()), "codes: {codes:?}");
+    assert!(codes.contains(&"InsufficientRifleMagCapacity".to_owned()), "codes: {codes:?}");
+    // Suggestions point at mountable catalog SKUs.
+    let ifak_violation = compliance["violations"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|v| rule_code(v) == "MissingCapability")
+        .expect("IFAK violation");
+    let suggested = ifak_violation["suggested_skus"].as_array().unwrap();
+    assert!(!suggested.is_empty(), "IFAK suggestions: {suggested:?}");
+
+    // Multicam with IFAK and magazine carriage equipped: compliant.
+    let payload = serde_json::json!({
+        "platform_sku": JPC,
+        "placements": [
+            { "slot_id": "front_placard", "component_sku": MK5, "col_idx": 0, "row_idx": 0 },
+            { "slot_id": "m2.placard_front_pals", "component_sku": KYWI, "col_idx": 0, "row_idx": 0 },
+            { "slot_id": "m2.placard_front_pals", "component_sku": KYWI, "col_idx": 2, "row_idx": 0 },
+            { "slot_id": "dangler_slot", "component_sku": "bfg-micro-trauma-now", "col_idx": 0, "row_idx": 0 },
+        ],
+        "colorway": "multicam",
+        "regulation_policy": "us_army_ar670_1",
+    });
+    let (status, body) = post(&app, "/api/v1/loadouts/evaluate", payload).await;
+    assert_eq!(status, StatusCode::OK);
+    let compliance = &body["compliance"];
+    assert_eq!(compliance["compliant"], true, "violations: {compliance:?}");
+    assert!(compliance["violations"].as_array().unwrap().is_empty());
+}
+
+#[tokio::test]
+async fn sniper_dm_role_warns_on_stacked_placard_pouches() {
+    let app = app();
+
+    // A KYWI double stacked on the MK5 placard's front PALS field under the
+    // Sniper/DM role: non-blocking prone-profile recommendation.
+    let payload = serde_json::json!({
+        "platform_sku": JPC,
+        "placements": [
+            { "slot_id": "front_placard", "component_sku": MK5, "col_idx": 0, "row_idx": 0 },
+            { "slot_id": "m2.placard_front_pals", "component_sku": KYWI, "col_idx": 0, "row_idx": 0 },
+        ],
+        "operational_role": "sniper_dm",
+    });
+    let (status, body) = post(&app, "/api/v1/loadouts/evaluate", payload).await;
+    assert_eq!(status, StatusCode::OK);
+    let compliance = &body["compliance"];
+    assert_eq!(compliance["compliant"], true, "recommendations never block: {compliance:?}");
+    let recs = compliance["recommendations"].as_array().unwrap();
+    let codes: Vec<String> = recs.iter().map(rule_code).collect();
+    assert!(
+        codes.contains(&"ProneProfileStacking".to_owned()),
+        "prone stacking expected, got: {codes:?}"
+    );
+    let stacking = recs.iter().find(|rec| rule_code(rec) == "ProneProfileStacking").unwrap();
+    assert_eq!(stacking["code"]["ProneProfileStacking"]["slot_id"], "m2.placard_front_pals");
+}
+
+#[tokio::test]
+async fn presets_endpoint_lists_all_six_curated_presets() {
+    let (status, body) = get(&app(), "/api/v1/catalog/presets").await;
+    assert_eq!(status, StatusCode::OK);
+    let presets = body.as_array().expect("preset list");
+    assert_eq!(presets.len(), 6);
+    let ids: Vec<&str> = presets.iter().map(|p| p["preset_id"].as_str().unwrap()).collect();
+    assert_eq!(ids, vec!["breacher", "jtac", "drone-operator", "sniper-dm", "recce", "le-patrol"]);
+
+    // Summaries carry the validation context and placement counts.
+    let jtac = presets.iter().find(|p| p["preset_id"] == "jtac").unwrap();
+    assert_eq!(jtac["role"], "jtac");
+    assert_eq!(jtac["policy"], "us_army_ar670_1");
+    assert_eq!(jtac["platform_sku"], JPC);
+    assert_eq!(jtac["default_colorway"], "multicam");
+    assert_eq!(jtac["placement_count"], 5);
+    let le = presets.iter().find(|p| p["preset_id"] == "le-patrol").unwrap();
+    assert!(le["role"].is_null(), "LE patrol is policy-only");
+    assert_eq!(le["default_colorway"], "black");
+}
+
+#[tokio::test]
+async fn from_preset_instantiates_a_compliant_valid_build() {
+    let app = app();
+
+    let (status, body) = post(&app, "/api/v1/loadouts/from-preset/jtac", serde_json::json!({})).await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(body["preset_id"], "jtac");
+    assert_eq!(body["platform_sku"], JPC);
+    assert_eq!(body["valid"], true);
+    assert!(body["errors"].as_array().unwrap().is_empty());
+
+    // The build is compliant under its own policy and role.
+    let compliance = &body["compliance"];
+    assert_eq!(compliance["compliant"], true, "violations: {compliance:?}");
+
+    // The adapter cost shows up in the priced BOM.
+    let bom = body["bom"].as_array().unwrap();
+    let adapter_line = find_entry(bom, AXL_AVP);
+    assert_eq!(adapter_line["is_adapter"], true);
+    assert!(adapter_line["msrp_cents"].as_u64().unwrap() > 0);
+
+    // Placements echo back so a client can continue editing.
+    let placements = body["placements"].as_array().unwrap();
+    assert_eq!(placements.len(), 5);
+    assert_eq!(placements[0]["slot_id"], "front_placard");
+    assert_eq!(placements[0]["component_sku"], MK5);
+
+    // Unknown preset ids are 404s.
+    let (status, body) = post(&app, "/api/v1/loadouts/from-preset/ghost", serde_json::json!({})).await;
+    assert_eq!(status, StatusCode::NOT_FOUND);
+    assert!(body["error"].as_str().unwrap().contains("ghost"));
 }

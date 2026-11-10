@@ -2,6 +2,7 @@
 //! the deterministic mount resolver.
 
 use crate::interfaces::{InterfaceFamily, InterfaceStandard, PlateCut, Size};
+use crate::pricing::{Colorway, VendorOffer};
 use crate::spatial::{AnchorBox2D, PalsMatrix, SpatialError};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -58,6 +59,14 @@ pub struct PlatformSpec {
     pub sizes: Vec<Size>,
     /// Mount points the platform exposes.
     pub slots: Vec<MountSlot>,
+    /// Manufacturer's suggested retail price, US cents.
+    pub msrp_cents: u32,
+    /// Competitive vendor listings (see [`crate::pricing::best_offer`]).
+    pub vendor_offers: Vec<VendorOffer>,
+    /// Colorways the platform is offered in.
+    pub allowed_colorways: Vec<Colorway>,
+    /// Colorway the platform ships in by default.
+    pub default_colorway: Colorway,
 }
 
 impl PlatformSpec {
@@ -93,6 +102,32 @@ pub enum ComponentKind {
     BeltItem,
 }
 
+/// A typed operational capability a component provides once mounted.
+///
+/// Role and regulation checks match exclusively on these tags — never on
+/// product names, SKUs, or free text (R3). `RifleMagCapacity` carries the
+/// number of primary rifle magazines the item holds; the rest are
+/// present/absent capabilities.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum CapabilityTag {
+    /// Holds `u8` primary rifle magazines (pouch cells, placard inserts).
+    RifleMagCapacity(u8),
+    /// Medical IFAK / trauma kit storage.
+    MedicalIfak,
+    /// Comms routing or PTT housing.
+    CommsRoutingOrPtt,
+    /// Admin / ATAK device mount or utility storage.
+    AdminAtakUtility,
+    /// Breaching tools or ordnance / bang pouch storage.
+    BreachingOrOrdnance,
+    /// Hydration or general sustainment capacity.
+    HydrationSustainment,
+    /// Holster / weapon retention mount.
+    HolsterRetention,
+    /// Contributes to a prone-friendly, low-profile front profile.
+    ProneLowProfile,
+}
+
 /// PALS footprint of a component, in 1" grid cells.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct PalsFootprint {
@@ -126,6 +161,17 @@ pub struct ComponentSpec {
     /// [`anchor`](ComponentSpec::anchor).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub child_slots: Vec<MountSlot>,
+    /// Manufacturer's suggested retail price, US cents.
+    pub msrp_cents: u32,
+    /// Competitive vendor listings (see [`crate::pricing::best_offer`]).
+    pub vendor_offers: Vec<VendorOffer>,
+    /// Colorways the component is offered in.
+    pub allowed_colorways: Vec<Colorway>,
+    /// Colorway the component ships in by default.
+    pub default_colorway: Colorway,
+    /// Typed operational capabilities (role/regulation checks match on
+    /// these — never names or SKUs).
+    pub capabilities: Vec<CapabilityTag>,
 }
 
 /// A single-hop aftermarket adapter that physically bridges one platform
@@ -147,6 +193,14 @@ pub struct AdapterBridge {
     /// Canvas area consumed by the adapter hardware, relative to the slot
     /// anchor.
     pub anchor: AnchorBox2D,
+    /// Manufacturer's suggested retail price, US cents.
+    pub msrp_cents: u32,
+    /// Competitive vendor listings (see [`crate::pricing::best_offer`]).
+    pub vendor_offers: Vec<VendorOffer>,
+    /// Colorways the adapter is offered in.
+    pub allowed_colorways: Vec<Colorway>,
+    /// Colorway the adapter ships in by default.
+    pub default_colorway: Colorway,
 }
 
 impl AdapterBridge {

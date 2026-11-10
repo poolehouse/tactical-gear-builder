@@ -27,6 +27,127 @@ export interface MountSlot {
 
 export type PlatformCategory = "plate_carrier" | "belt" | "chest_rig" | "lbe";
 
+// --- pricing (Spec 04) -------------------------------------------------------------
+
+/** A colorway a product is offered in, or a build is configured as. */
+export type Colorway =
+  | "multicam"
+  | "coyote_brown"
+  | "ranger_green"
+  | "wolf_grey"
+  | "black"
+  | "woodland_m81";
+
+/** One competitive vendor listing. URLs are display-only (never fetched). */
+export interface VendorOffer {
+  vendor_name: string;
+  price_cents: number;
+  in_stock: boolean;
+  product_url: string;
+}
+
+/** Regulation policies a build can be validated against. */
+export type RegulationPolicy =
+  | "us_army_ar670_1"
+  | "usmc_maradmin"
+  | "law_enforcement_patrol"
+  | "law_enforcement_swat";
+
+/** Operational role profiles a build can be validated against. */
+export type OperationalRole =
+  | "breacher"
+  | "jtac"
+  | "drone_operator"
+  | "sniper_dm"
+  | "recce";
+
+/** Typed operational capability a component provides once mounted.
+ *  `RifleMagCapacity` is a tuple variant; the rest serialize as bare
+ *  variant-name strings. */
+export type CapabilityTag =
+  | { RifleMagCapacity: number }
+  | "MedicalIfak"
+  | "CommsRoutingOrPtt"
+  | "AdminAtakUtility"
+  | "BreachingOrOrdnance"
+  | "HydrationSustainment"
+  | "HolsterRetention"
+  | "ProneLowProfile";
+
+/** Typed rule code for one compliance violation/recommendation. Unit
+ *  variants serialize as bare strings; data variants as
+ *  `{ VariantName: { ...fields } }`. */
+export type ComplianceRuleCode =
+  | { DisallowedColorway: { chosen: Colorway; allowed: Colorway[] } }
+  | { InsufficientRifleMagCapacity: { minimum: number; found: number } }
+  | { MissingCapability: { capability: CapabilityTag } }
+  | { MissingAnyCapability: { capabilities: CapabilityTag[] } }
+  | {
+      UnsupportedPlatformCategory: {
+        allowed: PlatformCategory[];
+        found: PlatformCategory | null;
+      };
+    }
+  | "MissingPlacard"
+  | { RecommendRifleMagCapacity: { recommended: number; found: number } }
+  | {
+      RecommendPlatformCategory: {
+        suggested: PlatformCategory[];
+        found: PlatformCategory | null;
+      };
+    }
+  | { ProneProfileStacking: { slot_id: string } };
+
+export interface ComplianceIssue {
+  code: ComplianceRuleCode;
+  message: string;
+  suggested_skus: string[];
+}
+
+export interface ComplianceRecommendation {
+  code: ComplianceRuleCode;
+  message: string;
+  suggested_skus: string[];
+}
+
+export interface ComplianceReport {
+  compliant: boolean;
+  violations: ComplianceIssue[];
+  recommendations: ComplianceRecommendation[];
+}
+
+// --- role presets (Spec 04) --------------------------------------------------------
+
+/** One placement inside a role preset. */
+export interface PresetPlacement {
+  slot_id: string;
+  component_sku: string;
+  col: number;
+  row: number;
+}
+
+/** A curated one-click starter loadout. */
+export interface RolePreset {
+  preset_id: string;
+  name: string;
+  role: OperationalRole | null;
+  policy: RegulationPolicy;
+  platform_sku: string;
+  default_colorway: Colorway;
+  placements: PresetPlacement[];
+}
+
+/** List-view summary of a role preset. */
+export interface PresetSummary {
+  preset_id: string;
+  name: string;
+  role: OperationalRole | null;
+  policy: RegulationPolicy;
+  platform_sku: string;
+  default_colorway: Colorway;
+  placement_count: number;
+}
+
 export interface PlatformSummary {
   sku: string;
   name: string;
@@ -42,6 +163,10 @@ export interface PlatformSpec {
   plate_cuts: string[];
   sizes: string[];
   slots: MountSlot[];
+  msrp_cents: number;
+  vendor_offers: VendorOffer[];
+  allowed_colorways: Colorway[];
+  default_colorway: Colorway;
 }
 
 export interface PlatformWithLiveState extends PlatformSpec {}
@@ -63,6 +188,10 @@ export interface MountedItem {
   serves_mount: string | null;
   anchor: AnchorBox2D;
   z_index: number;
+  /** MSRP snapshotted from the catalog at equip time, US cents. */
+  msrp_cents: number;
+  /** Vendor listings snapshotted at equip time. */
+  vendor_offers: VendorOffer[];
   child_slots: MountSlot[];
   child_mounts: string[];
 }
@@ -84,6 +213,12 @@ export interface BomLineItem {
   name: string;
   quantity: number;
   is_adapter: boolean;
+  /** Per-unit MSRP, US cents. */
+  msrp_cents: number;
+  /** Per-unit best in-stock vendor offer, when one exists. */
+  best_offer?: VendorOffer;
+  /** Per-unit savings versus MSRP, clamped at zero. */
+  savings_cents: number;
 }
 
 export interface LoadoutSummary {
@@ -92,6 +227,12 @@ export interface LoadoutSummary {
   valid: boolean;
   layers_2d: Layer2D[];
   bom: BomLineItem[];
+  /** Total MSRP across the platform and every BOM line, qty-weighted. */
+  total_msrp_cents: number;
+  /** Optimized build cost: best in-stock prices, MSRP where out of stock. */
+  total_best_price_cents: number;
+  /** Total savings versus MSRP, clamped at zero. */
+  total_savings_cents: number;
   warnings: string[];
   errors: string[];
 }
@@ -100,6 +241,10 @@ export interface DraftState {
   summary: LoadoutSummary;
   platform: PlatformWithLiveState;
   mounted: MountedItem[];
+  /** Compliance report, present when a policy or role is active. */
+  compliance?: ComplianceReport;
+  /** The colorway the compliance report was evaluated under, when set. */
+  colorway?: Colorway;
 }
 
 export interface AdapterSummary {
