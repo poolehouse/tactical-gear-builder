@@ -1,5 +1,5 @@
-import type { CompatReport, SlotAddress } from "../types";
-import { prettifyEnum } from "../types";
+import type { CompatReport, PalsMatrix, SlotAddress } from "../types";
+import { firstFreeCell, prettifyEnum } from "../types";
 
 /** `IncompatibilityReason` serializes as a single-key object
  * (`{"InterfaceFamilyMismatch": {...}}`); extract the variant name. */
@@ -49,7 +49,8 @@ export function ComponentBrowser({
     );
   }
 
-  const grid = selectedSlot.slot.pals_grid !== undefined;
+  const grid = selectedSlot.slot.pals_grid ?? null;
+  const hasGrid = grid !== null;
 
   return (
     <section className="pane browser-pane">
@@ -61,7 +62,7 @@ export function ComponentBrowser({
         <div className="pending-banner">
           <span>
             Placing <code>{pendingSku}</code> —{" "}
-            {grid
+            {hasGrid
               ? "click a cell on the highlighted slot."
               : "click the highlighted slot."}
           </span>
@@ -120,7 +121,7 @@ function CompatGroup({
   entries: CompatReport["native_fit"];
   variant: "native" | "adapter" | "incompatible";
   pendingSku: string | null;
-  grid: boolean;
+  grid: PalsMatrix | null;
   onPickComponent: (sku: string) => void;
   onAutoPlace: (sku: string, cols: number, rows: number) => void;
 }) {
@@ -133,6 +134,11 @@ function CompatGroup({
       <ul className="compat-list">
         {entries.map((entry) => {
           const footprint = entry.pals_footprint;
+          const canAutoPlace = Boolean(
+            footprint &&
+              grid &&
+              firstFreeCell(grid, footprint.cols, footprint.rows) !== null
+          );
           return (
             <li key={entry.sku}>
               <button
@@ -160,7 +166,12 @@ function CompatGroup({
                 <button
                   className="btn btn-mini"
                   onClick={() => onAutoPlace(entry.sku, footprint.cols, footprint.rows)}
-                  title="Find the first free cell block and mount there"
+                  disabled={!canAutoPlace}
+                  title={
+                    canAutoPlace
+                      ? "Find the first free cell block and mount there"
+                      : `No free ${footprint.cols}\u00d7${footprint.rows} block on this slot`
+                  }
                 >
                   auto-place
                 </button>

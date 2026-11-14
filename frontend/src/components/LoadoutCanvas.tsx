@@ -7,7 +7,7 @@ import type {
   PalsFootprint,
   SlotAddress,
 } from "../types";
-import { compose, prettifyEnum } from "../types";
+import { compose, gridCanFit, prettifyEnum } from "../types";
 
 /**
  * The 2D paper-doll canvas. Everything is positioned by the engine's
@@ -31,7 +31,7 @@ export function LoadoutCanvas({
   selectedMountId: string | null;
   pendingSku: string | null;
   pendingFootprint: PalsFootprint | null;
-  onSelectMount: (mountId: string) => void;
+  onSelectMount: (mountId: string | null) => void;
   onCellClick: (slotAddress: string, col: number, row: number) => void;
   onZoneClick: (slotAddress: string) => void;
 }) {
@@ -56,9 +56,21 @@ export function LoadoutCanvas({
 
   return (
     <div className="canvas-wrap">
-      <div className="canvas" role="img" aria-label="Loadout canvas">
+      <div
+        className="canvas"
+        role="img"
+        aria-label="Loadout canvas"
+        onClick={(event) => {
+          if ((event.target as HTMLElement).closest(".mount-layer")) return;
+          onSelectMount(null);
+        }}
+      >
         {/* base platform */}
-        <div className="layer platform-silhouette" style={layerStyle(layers[0].anchor)}>
+        <div
+          className="layer platform-silhouette"
+          data-colorway={state.colorway ?? state.platform.default_colorway}
+          style={layerStyle(layers[0].anchor)}
+        >
           <span className="platform-name">{state.platform.name}</span>
         </div>
 
@@ -94,6 +106,9 @@ export function LoadoutCanvas({
           return Array.from({ length: grid.rows }, (_, row) =>
             Array.from({ length: grid.cols }, (_, col) => {
               const occupied = grid.occupied[row][col];
+              const canPlace =
+                !occupied &&
+                gridCanFit(grid, col, row, pendingFootprint.cols, pendingFootprint.rows);
               const previewed =
                 hoverCell !== null &&
                 col >= hoverCell[0] &&
@@ -104,7 +119,9 @@ export function LoadoutCanvas({
                 <button
                   key={`${col}-${row}`}
                   className={`pals-cell${occupied ? " is-occupied" : ""}${
-                    previewed ? " is-preview" : ""
+                    !occupied && !canPlace ? " is-blocked" : ""
+                  }${previewed && canPlace ? " is-preview" : ""}${
+                    previewed && !occupied && !canPlace ? " is-preview-invalid" : ""
                   }`}
                   style={{
                     left: `${anchor.x_pct + cellW * col}%`,
@@ -116,8 +133,24 @@ export function LoadoutCanvas({
                   onMouseLeave={() => setHoverCell(null)}
                   onFocus={() => setHoverCell([col, row])}
                   onBlur={() => setHoverCell(null)}
-                  onClick={() => onCellClick(gridSlot.address, col, row)}
-                  aria-label={`PALS cell ${col},${row}${occupied ? " (occupied)" : ""}`}
+                  onClick={() => {
+                    if (canPlace) onCellClick(gridSlot.address, col, row);
+                  }}
+                  aria-disabled={!canPlace}
+                  title={
+                    occupied
+                      ? "Cell occupied"
+                      : canPlace
+                        ? "Place here"
+                        : `${pendingFootprint.cols}\u00d7${pendingFootprint.rows} footprint does not fit here`
+                  }
+                  aria-label={`PALS cell ${col},${row}${
+                    occupied
+                      ? " (occupied)"
+                      : canPlace
+                        ? ""
+                        : " (footprint does not fit)"
+                  }`}
                 />
               );
             })

@@ -7,15 +7,20 @@ export function SlotPanel({
   slots,
   selectedSlotAddress,
   state,
+  selectedMountId,
   onSelectSlot,
+  onSelectMount,
 }: {
   slots: SlotAddress[];
   selectedSlotAddress: string | null;
   state: DraftState | null;
+  selectedMountId: string | null;
   onSelectSlot: (address: string) => void;
+  onSelectMount: (mountId: string) => void;
 }) {
   const platformSlots = slots.filter((slot) => slot.host.kind === "platform");
   const childSlots = slots.filter((slot) => slot.host.kind === "mounted");
+  const mounts = state?.mounted ?? [];
 
   return (
     <section className="pane slot-pane">
@@ -60,6 +65,40 @@ export function SlotPanel({
         <p className="slot-hint">
           Mounted placards and panels expose their own child slots here.
         </p>
+      )}
+      {mounts.length > 0 && (
+        <>
+          <h3 className="slot-group-title">Mounted items</h3>
+          <ul className="slot-list">
+            {mounts.map((item) => (
+              <li key={item.mount_id}>
+                <button
+                  className={`slot-row mount-row${
+                    item.mount_id === selectedMountId ? " is-selected" : ""
+                  }`}
+                  onClick={() => onSelectMount(item.mount_id)}
+                  title={`${item.name} (${item.mount_id}) on ${item.slot_id}`}
+                >
+                  <span className="slot-row-main">
+                    <span className="slot-id">{item.mount_id}</span>
+                    <span className="slot-interface">
+                      {item.is_adapter ? "adapter" : "component"}
+                    </span>
+                  </span>
+                  <span className="slot-row-meta">
+                    {item.name}
+                    <span className="slot-host">
+                      on {item.slot_id}
+                      {item.child_mounts.length > 0
+                        ? ` \u00b7 +${item.child_mounts.length} children`
+                        : ""}
+                    </span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </section>
   );

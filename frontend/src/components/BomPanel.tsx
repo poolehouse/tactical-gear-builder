@@ -122,67 +122,71 @@ export function BomPanel({
           {summary.bom.length === 0 ? (
             <p className="slot-hint">Nothing equipped yet.</p>
           ) : (
-            <table className="bom-table">
-              <thead>
-                <tr>
-                  <th>qty</th>
-                  <th>sku</th>
-                  <th>name</th>
-                  <th>kind</th>
-                  <th className="bom-num">msrp</th>
-                  <th className="bom-num">best offer</th>
-                  <th className="bom-num">saved</th>
-                </tr>
-              </thead>
-              <tbody>
-                {summary.bom.map((line) => (
-                  <tr key={line.sku} className={line.is_adapter ? "bom-adapter" : ""}>
-                    <td>{line.quantity}</td>
+            <div className="bom-table-wrap">
+              <table className="bom-table">
+                <thead>
+                  <tr>
+                    <th>qty</th>
+                    <th>sku</th>
+                    <th>name</th>
+                    <th>kind</th>
+                    <th className="bom-num">msrp</th>
+                    <th className="bom-num">best offer</th>
+                    <th className="bom-num">saved</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {summary.bom.map((line) => (
+                    <tr key={line.sku} className={line.is_adapter ? "bom-adapter" : ""}>
+                      <td>{line.quantity}</td>
+                      <td>
+                        <code>{line.sku}</code>
+                      </td>
+                      <td>{line.name}</td>
+                      <td>{line.is_adapter ? "adapter" : "component"}</td>
+                      <td className="bom-num">{usd(line.msrp_cents)}</td>
+                      <td className="bom-num bom-vendor">
+                        {line.best_offer
+                          ? `${line.best_offer.vendor_name} @ ${usd(line.best_offer.price_cents)}`
+                          : "\u2014 out of stock \u2014"}
+                      </td>
+                      <td className="bom-num bom-save">
+                        {line.savings_cents > 0 ? `-${usd(line.savings_cents)}` : "\u2014"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="bom-platform">
+                    <td>1</td>
                     <td>
-                      <code>{line.sku}</code>
+                      <code>{state.platform.sku}</code>
                     </td>
-                    <td>{line.name}</td>
-                    <td>{line.is_adapter ? "adapter" : "component"}</td>
-                    <td className="bom-num">{usd(line.msrp_cents)}</td>
+                    <td>{state.platform.name} (platform)</td>
+                    <td>platform</td>
+                    <td className="bom-num">{usd(state.platform.msrp_cents)}</td>
                     <td className="bom-num bom-vendor">
-                      {line.best_offer
-                        ? `${line.best_offer.vendor_name} @ ${usd(line.best_offer.price_cents)}`
+                      {platformOffer
+                        ? `${platformOffer.vendor_name} @ ${usd(platformOffer.price_cents)}`
                         : "\u2014 out of stock \u2014"}
                     </td>
                     <td className="bom-num bom-save">
-                      {line.savings_cents > 0 ? `-${usd(line.savings_cents)}` : "\u2014"}
+                      {platformSavings > 0 ? `-${usd(platformSavings)}` : "\u2014"}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className="bom-platform">
-                  <td>1</td>
-                  <td>
-                    <code>{state.platform.sku}</code>
-                  </td>
-                  <td>{state.platform.name} (platform)</td>
-                  <td>platform</td>
-                  <td className="bom-num">{usd(state.platform.msrp_cents)}</td>
-                  <td className="bom-num bom-vendor">
-                    {platformOffer
-                      ? `${platformOffer.vendor_name} @ ${usd(platformOffer.price_cents)}`
-                      : "\u2014 out of stock \u2014"}
-                  </td>
-                  <td className="bom-num bom-save">
-                    {platformSavings > 0 ? `-${usd(platformSavings)}` : "\u2014"}
-                  </td>
-                </tr>
-                <tr className="bom-totals">
-                  <td colSpan={4}>totals incl. platform</td>
-                  <td className="bom-num">{usd(summary.total_msrp_cents)}</td>
-                  <td className="bom-num">{usd(summary.total_best_price_cents)}</td>
-                  <td className="bom-num bom-save">
-                    -{usd(summary.total_savings_cents)}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                  <tr className="bom-totals">
+                    <td colSpan={4}>totals incl. platform</td>
+                    <td className="bom-num">{usd(summary.total_msrp_cents)}</td>
+                    <td className="bom-num">{usd(summary.total_best_price_cents)}</td>
+                    <td className="bom-num bom-save">
+                      {summary.total_savings_cents > 0
+                        ? `-${usd(summary.total_savings_cents)}`
+                        : "\u2014"}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           )}
           {summary.warnings.length > 0 && (
             <ul className="warning-list">
@@ -195,7 +199,7 @@ export function BomPanel({
 
         <CompliancePanel
           report={state.compliance ?? null}
-          colorway={state.compliance ? evaluatedColorway : null}
+          colorway={evaluatedColorway}
           onSuggestedSku={onSuggestedSku}
         />
       </div>

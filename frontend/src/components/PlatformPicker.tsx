@@ -32,7 +32,10 @@ export function PlatformPicker({
       (platform) =>
         !needle ||
         platform.name.toLowerCase().includes(needle) ||
-        platform.sku.includes(needle)
+        platform.sku.includes(needle) ||
+        (platform.category
+          ? CATEGORY_LABELS[platform.category].toLowerCase().includes(needle)
+          : false)
     );
     return CATEGORY_ORDER.map((category) => ({
       category,
@@ -53,6 +56,11 @@ export function PlatformPicker({
         onChange={(event) => setQuery(event.target.value)}
         aria-label="Filter platforms"
       />
+      {grouped.length === 0 && (
+        <p className="slot-hint">
+          No platforms match &ldquo;{query.trim()}&rdquo;.
+        </p>
+      )}
       {grouped.map(({ category, platforms }) => (
         <div className="picker-group" key={category}>
           <h3 className="picker-group-title">{CATEGORY_LABELS[category]}</h3>

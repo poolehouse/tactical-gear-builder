@@ -309,6 +309,67 @@ button {
   padding-bottom: 8px;
 }
 
+/* Subtle colorway acknowledgement on the platform silhouette — the same
+ * values as the swatch used in the Compliance panel. */
+.platform-silhouette[data-colorway="multicam"] {
+  border-color: rgba(122, 138, 86, 0.75);
+  box-shadow: inset 0 0 60px rgba(122, 138, 86, 0.1);
+}
+.platform-silhouette[data-colorway="coyote_brown"] {
+  border-color: rgba(166, 124, 82, 0.75);
+  box-shadow: inset 0 0 60px rgba(166, 124, 82, 0.1);
+}
+.platform-silhouette[data-colorway="ranger_green"] {
+  border-color: rgba(86, 122, 88, 0.75);
+  box-shadow: inset 0 0 60px rgba(86, 122, 88, 0.1);
+}
+.platform-silhouette[data-colorway="wolf_grey"] {
+  border-color: rgba(136, 146, 156, 0.75);
+  box-shadow: inset 0 0 60px rgba(136, 146, 156, 0.1);
+}
+.platform-silhouette[data-colorway="black"] {
+  border-color: rgba(96, 104, 118, 0.9);
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.35);
+}
+.platform-silhouette[data-colorway="woodland_m81"] {
+  border-color: rgba(96, 106, 66, 0.85);
+  box-shadow: inset 0 0 60px rgba(96, 106, 66, 0.12);
+}
+
+.colorway-swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  border: 1px solid var(--border-strong);
+  vertical-align: -1px;
+}
+.colorway-swatch.cw-multicam {
+  background: linear-gradient(135deg, #6b7a4a 0 33%, #8a7a5a 33% 66%, #4c5b3c 66%);
+}
+.colorway-swatch.cw-coyote_brown {
+  background: #a67c52;
+}
+.colorway-swatch.cw-ranger_green {
+  background: #567a58;
+}
+.colorway-swatch.cw-wolf_grey {
+  background: #88929c;
+}
+.colorway-swatch.cw-black {
+  background: #3a3f4a;
+}
+.colorway-swatch.cw-woodland_m81 {
+  background: linear-gradient(135deg, #5a6236 0 33%, #3f4a2c 33% 66%, #6a6a4a 66%);
+}
+
+.mount-row .slot-row-meta {
+  overflow: hidden;
+}
+.mount-row .slot-row-meta > .slot-host {
+  flex-shrink: 0;
+}
+
 .platform-name {
   font-family: var(--mono);
   font-size: 0.72rem;
@@ -383,6 +444,23 @@ button {
 .pals-cell.is-preview {
   background: rgba(251, 191, 36, 0.35);
   outline-color: var(--amber);
+}
+
+/* Free cell that cannot host the pending footprint (or the anchor would push
+ * it out of bounds). Kept hoverable so the red preview can explain why. */
+.pals-cell.is-blocked {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(148, 163, 184, 0.05) 0 4px,
+    rgba(148, 163, 184, 0.12) 4px 8px
+  );
+  outline-color: rgba(148, 163, 184, 0.22);
+  cursor: not-allowed;
+}
+
+.pals-cell.is-preview-invalid {
+  background: rgba(248, 113, 113, 0.28);
+  outline-color: rgba(248, 113, 113, 0.7);
 }
 
 .mount-layer {
@@ -739,6 +817,11 @@ button {
   align-self: center;
 }
 
+.btn-mini:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .btn-danger {
   border-color: rgba(248, 113, 113, 0.5);
   color: var(--red);
@@ -811,6 +894,12 @@ button {
 .inspector-rows dd {
   margin: 0;
   font-size: 0.82rem;
+}
+
+.bom-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
 }
 
 .bom-table {

@@ -110,7 +110,7 @@ export function App() {
     setState(JSON.parse(draft.state()) as DraftState);
   };
 
-  const selectPlatform = (sku: string) => {
+  const startDraft = (sku: string) => {
     if (!engine) return;
     const spec = engine.platform(sku);
     if (spec === undefined) {
@@ -135,8 +135,21 @@ export function App() {
     });
   };
 
+  /** Re-clicking the active platform must not wipe the build — Reset draft
+   * is the explicit way to start over. */
+  const selectPlatform = (sku: string) => {
+    if (sku === platformSku && draftRef.current) {
+      setStatus({
+        kind: "info",
+        text: `Already building on ${state?.platform.name ?? sku}. Use “Reset draft” to start over.`,
+      });
+      return;
+    }
+    startDraft(sku);
+  };
+
   const resetDraft = () => {
-    if (platformSku) selectPlatform(platformSku);
+    if (platformSku) startDraft(platformSku);
   };
 
   // --- slot list (platform slots + child slots of mounted components) ----------
@@ -181,6 +194,8 @@ export function App() {
     const result = JSON.parse(draft.equip(slotAddress, sku, col, row)) as OpResult;
     refreshState();
     if (result.ok) {
+      // One placement completes the pending action.
+      setPendingSku(null);
       setStatus({ kind: "ok", text: `Equipped \`${sku}\` on \`${slotAddress}\`.` });
     } else {
       setStatus({ kind: "error", text: result.error ?? "unknown failure" });
@@ -469,10 +484,12 @@ export function App() {
             slots={slots}
             selectedSlotAddress={selectedSlotAddress}
             state={state}
+            selectedMountId={selectedMountId}
             onSelectSlot={(address) => {
               setSelectedSlotAddress(address);
               setPendingSku(null);
             }}
+            onSelectMount={(id) => setSelectedMountId(id)}
           />
           {state && (
             <ComponentBrowser

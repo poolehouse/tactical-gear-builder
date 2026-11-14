@@ -83,17 +83,20 @@ export function CompliancePanel({
   return (
     <div className="compliance pane">
       <h2 className="pane-title">
-        Compliance{" "}
-        {report ? (
-          <span className="pane-count">// {colorwayLabel(colorway ?? "multicam")}</span>
-        ) : null}
+        Compliance
+        {colorway && (
+          <span className="pane-count">
+            <span className={`colorway-swatch cw-${colorway}`} aria-hidden="true" />
+            {" "}// {colorwayLabel(colorway)}
+          </span>
+        )}
       </h2>
 
       {!report ? (
         <p className="slot-hint">
-          No regulation policy or role selected — pick one in the context bar
-          (or load a role preset) to validate this build against military /
-          LE regulations.
+          Colorway: {colorwayLabel(colorway ?? "multicam")}. No regulation
+          policy or role selected — pick one in the context bar (or load a role
+          preset) to validate this build against military / LE regulations.
         </p>
       ) : (
         <>
