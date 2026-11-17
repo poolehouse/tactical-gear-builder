@@ -148,3 +148,32 @@ pub struct RawSchemaRuleRow {
     #[serde(rename = "Notes")]
     pub notes: String,
 }
+
+/// Row of `tools_and_munitions.csv`.
+#[derive(Debug, Clone, PartialEq, Deserialize)]
+pub struct RawToolMunitionRow {
+    /// `Tool / Munition / Radio Name`
+    #[serde(rename = "Tool / Munition / Radio Name")]
+    pub item_name: String,
+    /// `Brand`
+    #[serde(rename = "Brand")]
+    pub brand: String,
+    /// `Category`
+    #[serde(rename = "Category")]
+    pub category: String,
+    /// `Mounting Interface`
+    #[serde(rename = "Mounting Interface")]
+    pub mounting_interface: String,
+    /// `Attachment Footprint (Cols x Rows)`
+    #[serde(rename = "Attachment Footprint (Cols x Rows)")]
+    pub attachment_footprint: String,
+    /// `Material Coverage (Cols x Rows)`
+    #[serde(rename = "Material Coverage (Cols x Rows)")]
+    pub material_coverage: String,
+    /// `Ideal Host Section / Placard`
+    #[serde(rename = "Ideal Host Section / Placard")]
+    pub ideal_host_section: String,
+    /// `Operational Capability`
+    #[serde(rename = "Operational Capability")]
+    pub operational_capability: String,
+}

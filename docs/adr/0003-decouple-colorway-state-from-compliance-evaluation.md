@@ -1,0 +1,3 @@
+# Decouple Colorway State from Compliance Policy Evaluation
+
+A Loadout Draft's effective `Colorway` (`state.colorway ?? state.platform.default_colorway`) is tracked and rendered on the canvas silhouette and Compliance Panel header regardless of whether a `RegulationPolicy` or `OperationalRole` is currently selected. `core-engine` only emits a `ComplianceReport` when a policy or role is active, so decoupling colorway display from `ComplianceReport` presence ensures colorway changes always provide immediate visual feedback while passing the full `(colorway, policy, role)` triple on every context update.

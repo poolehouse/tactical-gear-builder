@@ -26,8 +26,8 @@
 
 use crate::catalog::Catalog;
 use crate::graph::{
-    mount_on_pals, resolve_slot_mount, CompatibilityResult, IncompatibilityReason, MountSlot,
-    PalsFootprint, PlatformSpec,
+    mount_on_pals, resolve_slot_mount, CompatibilityResult, IncompatibilityReason, MaterialCoverage,
+    MountSlot, PalsFootprint, PlatformSpec,
 };
 use crate::pricing::{best_offer, effective_price_cents, savings_cents, VendorOffer};
 use crate::spatial::{AnchorBox2D, SpatialError};
@@ -123,6 +123,10 @@ pub struct MountedItem {
     pub pals_position: Option<(u8, u8)>,
     /// PALS footprint, when the component declares one.
     pub pals_footprint: Option<PalsFootprint>,
+    /// Physical material coverage footprint when the item's body exceeds its
+    /// attachment footprint.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub material_coverage: Option<MaterialCoverage>,
     /// Adapter SKUs auto-registered for this mount (components only).
     pub required_adapters: Vec<String>,
     /// For adapters: the mount id of the component this instance serves.
@@ -447,6 +451,7 @@ impl LoadoutDraft {
                 slot_id: path.clone(),
                 pals_position: None,
                 pals_footprint: None,
+                material_coverage: None,
                 required_adapters: Vec::new(),
                 serves_mount: Some(component_mount_id.clone()),
                 anchor,
@@ -467,6 +472,7 @@ impl LoadoutDraft {
             slot_id: path.clone(),
             pals_position: if uses_grid { pals_pos } else { None },
             pals_footprint: component.pals_footprint,
+            material_coverage: component.material_coverage,
             required_adapters: required_adapters
                 .iter()
                 .map(|adapter| adapter.sku.clone())
@@ -562,15 +568,15 @@ impl LoadoutDraft {
                                 item.slot_id.clone(),
                                 col,
                                 row,
-                                footprint.cols,
-                                footprint.rows,
+                                footprint,
+                                item.material_coverage,
                             )
                         },
                     )
                 },
             );
-            if let Some((slot_path, col, row, cols, rows)) = placement {
-                self.release_cells(&slot_path, col, row, cols, rows);
+            if let Some((slot_path, col, row, footprint, coverage)) = placement {
+                self.release_cells(&slot_path, col, row, footprint, coverage);
             }
         }
 
@@ -677,7 +683,14 @@ impl LoadoutDraft {
 
     /// Release the cells of a footprint placed at `slot_path` (a platform slot
     /// id or a `<mount_id>.<child_slot_id>` path).
-    fn release_cells(&mut self, slot_path: &str, col: u8, row: u8, cols: u8, rows: u8) {
+    fn release_cells(
+        &mut self,
+        slot_path: &str,
+        col: u8,
+        row: u8,
+        footprint: PalsFootprint,
+        coverage: Option<MaterialCoverage>,
+    ) {
         match slot_path.split_once('.') {
             None => {
                 if let Some(grid) = self
@@ -685,7 +698,7 @@ impl LoadoutDraft {
                     .slot_mut(slot_path)
                     .and_then(|slot| slot.pals_grid.as_mut())
                 {
-                    grid.release(col, row, cols, rows);
+                    grid.release_with_coverage(col, row, footprint, coverage);
                 }
             }
             Some((parent_mount_id, child_slot_id)) => {
@@ -702,7 +715,7 @@ impl LoadoutDraft {
                     .find(|slot| slot.id == child_slot_id)
                     .and_then(|slot| slot.pals_grid.as_mut())
                 {
-                    grid.release(col, row, cols, rows);
+                    grid.release_with_coverage(col, row, footprint, coverage);
                 }
             }
         }

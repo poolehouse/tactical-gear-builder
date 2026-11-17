@@ -53,6 +53,9 @@ jobs:
       - name: Build frontend
         run: npm run build
         working-directory: frontend
+      - name: Run Playwright E2E canvas seam tests
+        run: npx --yes playwright@1.58.2 install --with-deps chromium && NODE_PATH=$(npm root -g) npx --yes -p playwright@1.58.2 node tests/placement.spec.mjs
+        working-directory: frontend
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

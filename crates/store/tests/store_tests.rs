@@ -91,17 +91,17 @@ async fn bootstrap_seeds_revision_1_with_the_full_catalog() {
 
     let catalog = store.load_catalog_revision(1).await.expect("revision 1");
     assert_eq!(catalog.platforms.len(), 29);
-    assert_eq!(catalog.components.len(), 12);
+    assert_eq!(catalog.components.len(), 20);
     assert_eq!(catalog.adapter_bridges.len(), 4);
     assert_eq!(catalog.role_presets.len(), 6);
     assert_eq!(catalog.platform(JPC).expect("JPC seeded").msrp_cents, 29_900);
 
     // The projection tables carry the full relational copy.
     assert_eq!(count(&store, "SELECT COUNT(*) FROM platforms").await, 29);
-    assert_eq!(count(&store, "SELECT COUNT(*) FROM components").await, 12);
+    assert_eq!(count(&store, "SELECT COUNT(*) FROM components").await, 20);
     assert_eq!(count(&store, "SELECT COUNT(*) FROM adapter_bridges").await, 4);
     assert_eq!(count(&store, "SELECT COUNT(*) FROM role_presets").await, 6);
-    assert_eq!(count(&store, "SELECT COUNT(*) FROM vendor_offers").await, 100);
+    assert_eq!(count(&store, "SELECT COUNT(*) FROM vendor_offers").await, 116);
     assert_eq!(
         count(&store, "SELECT COUNT(*) FROM platform_plate_cuts").await,
         36
@@ -133,7 +133,7 @@ async fn ensure_seeded_is_idempotent() {
     assert_eq!(second, 1, "second call reports the same revision");
     assert_eq!(store.active_catalog_version().await.expect("active"), 1);
     assert_eq!(count(&store, "SELECT COUNT(*) FROM platforms").await, 29);
-    assert_eq!(count(&store, "SELECT COUNT(*) FROM components").await, 12);
+    assert_eq!(count(&store, "SELECT COUNT(*) FROM components").await, 20);
     assert_eq!(count(&store, "SELECT COUNT(*) FROM role_presets").await, 6);
     assert_eq!(
         count(&store, "SELECT COUNT(*) FROM catalog_revisions").await,

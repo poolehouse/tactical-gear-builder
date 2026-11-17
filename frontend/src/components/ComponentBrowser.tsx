@@ -1,5 +1,10 @@
-import type { CompatReport, PalsMatrix, SlotAddress } from "../types";
-import { firstFreeCell, prettifyEnum } from "../types";
+import type {
+  CompatReport,
+  MaterialCoverage,
+  PalsMatrix,
+  SlotAddress,
+} from "../types";
+import { firstFreeCell, isToolOrMunitionSku, prettifyEnum } from "../types";
 
 /** `IncompatibilityReason` serializes as a single-key object
  * (`{"InterfaceFamilyMismatch": {...}}`); extract the variant name. */
@@ -13,8 +18,8 @@ function reasonLabel(reason: unknown): string {
 
 /**
  * Compatibility browser for the selected slot: every catalog component,
- * classified by the engine into native fits, adapter-bridged mounts, and
- * hard incompatibilities.
+ * classified by the engine into native fits, Tools/Munitions/Radios,
+ * adapter-bridged mounts, and hard incompatibilities.
  */
 export function ComponentBrowser({
   report,
@@ -29,7 +34,12 @@ export function ComponentBrowser({
   pendingSku: string | null;
   onPickComponent: (sku: string) => void;
   onClearPending: () => void;
-  onAutoPlace: (sku: string, cols: number, rows: number) => void;
+  onAutoPlace: (
+    sku: string,
+    cols: number,
+    rows: number,
+    coverage?: MaterialCoverage | null
+  ) => void;
 }) {
   if (!selectedSlot) {
     return (
@@ -52,6 +62,15 @@ export function ComponentBrowser({
   const grid = selectedSlot.slot.pals_grid ?? null;
   const hasGrid = grid !== null;
 
+  const coreNative = report.native_fit.filter((e) => !isToolOrMunitionSku(e.sku));
+  const toolsNative = report.native_fit.filter((e) => isToolOrMunitionSku(e.sku));
+  const toolsIncompatible = report.incompatible.filter((e) =>
+    isToolOrMunitionSku(e.sku)
+  );
+  const coreIncompatible = report.incompatible.filter(
+    (e) => !isToolOrMunitionSku(e.sku)
+  );
+
   return (
     <section className="pane browser-pane">
       <h2 className="pane-title">
@@ -63,8 +82,8 @@ export function ComponentBrowser({
           <span>
             Placing <code>{pendingSku}</code> —{" "}
             {hasGrid
-              ? "click a cell on the highlighted slot."
-              : "click the highlighted slot."}
+              ? "click or drop onto a 1\u00d71 cell on the highlighted slot."
+              : "click or drop onto the highlighted slot."}
           </span>
           <button className="btn btn-ghost" onClick={onClearPending}>
             Cancel
@@ -74,9 +93,23 @@ export function ComponentBrowser({
 
       <CompatGroup
         title="Native fit"
-        note="mounts directly"
-        entries={report.native_fit}
+        note="mounts directly · drag or click"
+        entries={coreNative}
         variant="native"
+        pendingSku={pendingSku}
+        grid={grid}
+        onPickComponent={onPickComponent}
+        onAutoPlace={onAutoPlace}
+      />
+      <CompatGroup
+        title="Tools, Munitions & Radios"
+        note={
+          toolsNative.length > 0
+            ? "affix to placard / cummerbund / panel PALS"
+            : "requires a 1\u00d71 PALS grid slot (mount a placard or select a PALS field)"
+        }
+        entries={toolsNative.length > 0 ? toolsNative : toolsIncompatible}
+        variant={toolsNative.length > 0 ? "tools" : "incompatible"}
         pendingSku={pendingSku}
         grid={grid}
         onPickComponent={onPickComponent}
@@ -95,7 +128,7 @@ export function ComponentBrowser({
       <CompatGroup
         title="Incompatible"
         note="no single-hop mount exists"
-        entries={report.incompatible}
+        entries={coreIncompatible}
         variant="incompatible"
         pendingSku={pendingSku}
         grid={grid}
@@ -119,13 +152,19 @@ function CompatGroup({
   title: string;
   note: string;
   entries: CompatReport["native_fit"];
-  variant: "native" | "adapter" | "incompatible";
+  variant: "native" | "tools" | "adapter" | "incompatible";
   pendingSku: string | null;
   grid: PalsMatrix | null;
   onPickComponent: (sku: string) => void;
-  onAutoPlace: (sku: string, cols: number, rows: number) => void;
+  onAutoPlace: (
+    sku: string,
+    cols: number,
+    rows: number,
+    coverage?: MaterialCoverage | null
+  ) => void;
 }) {
   if (entries.length === 0) return null;
+  const isDisabled = variant === "incompatible";
   return (
     <div className={`compat-group compat-${variant}`}>
       <h3 className="compat-title">
@@ -134,23 +173,41 @@ function CompatGroup({
       <ul className="compat-list">
         {entries.map((entry) => {
           const footprint = entry.pals_footprint;
+          const coverage = entry.material_coverage;
+          const hasOverhang = Boolean(
+            footprint &&
+              coverage &&
+              (coverage.cols !== footprint.cols || coverage.rows !== footprint.rows)
+          );
           const canAutoPlace = Boolean(
             footprint &&
               grid &&
-              firstFreeCell(grid, footprint.cols, footprint.rows) !== null
+              firstFreeCell(grid, footprint.cols, footprint.rows, coverage) !== null
           );
           return (
             <li key={entry.sku}>
               <button
                 className={`compat-entry${pendingSku === entry.sku ? " is-pending" : ""}`}
                 onClick={() => onPickComponent(entry.sku)}
-                disabled={variant === "incompatible"}
+                disabled={isDisabled}
+                draggable={!isDisabled}
+                onDragStart={(event) => {
+                  if (isDisabled) return;
+                  event.dataTransfer.setData("text/plain", entry.sku);
+                  event.dataTransfer.effectAllowed = "copy";
+                  onPickComponent(entry.sku);
+                }}
               >
                 <span className="compat-name">{entry.name}</span>
                 <span className="compat-kind">{prettifyEnum(entry.kind)}</span>
                 {footprint && (
                   <span className="compat-footprint">
-                    {footprint.cols}&times;{footprint.rows} cells
+                    {footprint.cols}&times;{footprint.rows} attach
+                  </span>
+                )}
+                {hasOverhang && coverage && (
+                  <span className="compat-coverage">
+                    {coverage.cols}&times;{coverage.rows} covers
                   </span>
                 )}
                 {entry.adapters?.map((adapter) => (
@@ -158,14 +215,16 @@ function CompatGroup({
                     + {adapter.sku}
                   </span>
                 ))}
-                {variant === "incompatible" && reasonLabel(entry.reason) && (
+                {isDisabled && reasonLabel(entry.reason) && (
                   <span className="compat-reason">{reasonLabel(entry.reason)}</span>
                 )}
               </button>
-              {variant !== "incompatible" && grid && footprint && (
+              {!isDisabled && grid && footprint && (
                 <button
                   className="btn btn-mini"
-                  onClick={() => onAutoPlace(entry.sku, footprint.cols, footprint.rows)}
+                  onClick={() =>
+                    onAutoPlace(entry.sku, footprint.cols, footprint.rows, coverage)
+                  }
                   disabled={!canAutoPlace}
                   title={
                     canAutoPlace

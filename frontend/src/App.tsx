@@ -3,6 +3,8 @@ import init, { Engine, Draft } from "./engine/engine";
 import type {
   CompatReport,
   DraftState,
+  KitSection,
+  MaterialCoverage,
   OpResult,
   PlatformSpec,
   PlatformSummary,
@@ -11,7 +13,7 @@ import type {
   PalsFootprint,
   SlotAddress,
 } from "./types";
-import { firstFreeCell } from "./types";
+import { firstFreeCell, sectionOfSlotId } from "./types";
 import { PlatformPicker } from "./components/PlatformPicker";
 import { LoadoutCanvas } from "./components/LoadoutCanvas";
 import { SlotPanel } from "./components/SlotPanel";
@@ -85,6 +87,7 @@ export function App() {
   const [platformSku, setPlatformSku] = useState<string | null>(null);
   const [state, setState] = useState<DraftState | null>(null);
 
+  const [activeSection, setActiveSection] = useState<KitSection>("all");
   const [selectedSlotAddress, setSelectedSlotAddress] = useState<string | null>(
     null
   );
@@ -123,6 +126,7 @@ export function App() {
     draftRef.current = draft;
     setPlatformSku(sku);
     setState(JSON.parse(draft.state()) as DraftState);
+    setActiveSection("all");
     setSelectedSlotAddress(parsed.slots[0]?.id ?? null);
     setSelectedMountId(null);
     setPendingSku(null);
@@ -131,7 +135,7 @@ export function App() {
     setSelectedPresetId("");
     setStatus({
       kind: "info",
-      text: `Draft started on ${parsed.name}. Pick a slot, then a component.`,
+      text: `Draft started on ${parsed.name}. Pick a slot, then drag or click a component onto 1\u00d71 MOLLE cuts.`,
     });
   };
 
@@ -221,9 +225,6 @@ export function App() {
 
   // --- compliance context & role presets -----------------------------------
 
-  /** Update the colorway/policy/role the draft is evaluated under. Always
-   * passes the full triple — the engine call replaces the context, so the
-   * other two selects must ride along. */
   const applyComplianceContext = (
     colorway: string,
     policy: string,
@@ -245,9 +246,6 @@ export function App() {
     }
   };
 
-  /** Instantiate a role preset: placements go through the normal engine
-   * validation path, and the compliance context is seeded from the preset's
-   * own declaration. */
   const loadPreset = (presetId: string) => {
     if (!engine || !presetId) return;
     const raw = engine.preset(presetId);
@@ -274,6 +272,7 @@ export function App() {
       policy: preset.policy,
       role: preset.role ?? "",
     });
+    setActiveSection("all");
     setSelectedSlotAddress(parsed.platform.slots[0]?.id ?? null);
     setSelectedMountId(null);
     setPendingSku(null);
@@ -283,11 +282,6 @@ export function App() {
     });
   };
 
-  /** Place a suggested component from the compliance report: try every slot
-   * (platform slots first, then mounted child slots) for a native or
-   * adapter-mediated fit, dropping it into the first free PALS cell;
-   * anchor mounts ignore the cell. If nothing fits right now, fall back to
-   * the manual pending-component flow. */
   const equipSuggested = (sku: string) => {
     if (!engine || !state) return;
     for (const slot of slots) {
@@ -303,7 +297,8 @@ export function App() {
         const cell = firstFreeCell(
           grid,
           entry.pals_footprint.cols,
-          entry.pals_footprint.rows
+          entry.pals_footprint.rows,
+          entry.material_coverage
         );
         if (!cell) continue;
         equip(slot.address, sku, cell[0], cell[1]);
@@ -317,6 +312,22 @@ export function App() {
       kind: "info",
       text: `\`${sku}\` does not fit any current slot — select a compatible slot, then place it from the component browser.`,
     });
+  };
+
+  const handleSelectSection = (section: KitSection) => {
+    setActiveSection(section);
+    if (section === "all" || !state) return;
+    // Keep the current slot if it already belongs to this section; otherwise
+    // pick the first slot in that section so the browser stays ready.
+    const matches = (addr: string) => {
+      const sec = sectionOfSlotId(addr, state.mounted);
+      return section === "sub_load" ? sec === "sub_load" || sec === "belt" : sec === section;
+    };
+    if (selectedSlotAddress && matches(selectedSlotAddress)) return;
+    const firstInSec = slots.find((s) => matches(s.address));
+    if (firstInSec) {
+      setSelectedSlotAddress(firstInSec.address);
+    }
   };
 
   const selectedMount = useMemo(
@@ -459,8 +470,11 @@ export function App() {
               slots={slots}
               selectedSlot={selectedSlot}
               selectedMountId={selectedMountId}
+              activeSection={activeSection}
               pendingSku={pendingSku}
               pendingFootprint={footprintOf(compat, pendingSku)}
+              pendingCoverage={coverageOf(compat, pendingSku)}
+              onSelectSection={handleSelectSection}
               onSelectMount={(id) => {
                 setSelectedMountId(id);
               }}
@@ -469,6 +483,12 @@ export function App() {
               }}
               onZoneClick={(slotAddress) => {
                 if (pendingSku) equip(slotAddress, pendingSku, 0, 0);
+              }}
+              onDropOnCell={(slotAddress, sku, col, row) => {
+                equip(slotAddress, sku, col, row);
+              }}
+              onDropOnZone={(slotAddress, sku) => {
+                equip(slotAddress, sku, 0, 0);
               }}
             />
           ) : (
@@ -485,6 +505,7 @@ export function App() {
             selectedSlotAddress={selectedSlotAddress}
             state={state}
             selectedMountId={selectedMountId}
+            activeSection={activeSection}
             onSelectSlot={(address) => {
               setSelectedSlotAddress(address);
               setPendingSku(null);
@@ -498,10 +519,10 @@ export function App() {
               pendingSku={pendingSku}
               onPickComponent={(sku) => setPendingSku(sku)}
               onClearPending={() => setPendingSku(null)}
-              onAutoPlace={(sku, cols, rows) => {
+              onAutoPlace={(sku, cols, rows, coverage) => {
                 const grid = selectedSlot?.slot.pals_grid;
                 if (!selectedSlot || !grid) return;
-                const cell = firstFreeCell(grid, cols, rows);
+                const cell = firstFreeCell(grid, cols, rows, coverage);
                 if (cell) {
                   equip(selectedSlot.address, sku, cell[0], cell[1]);
                 } else {
@@ -527,16 +548,16 @@ export function App() {
         <p>
           Same engine as the <code>axum</code> REST API (<code>core-engine</code>{" "}
           crate), compiled to WebAssembly with the catalog seed embedded at build
-          time. PALS occupancy, adapter auto-injection, and 2D anchors are all
-          computed client-side.
+          time. PALS occupancy, material coverage overhang, adapter auto-injection,
+          and 2D/3D section anchors are all computed client-side.
         </p>
       </footer>
     </div>
   );
 }
 
-/** Look up the PALS footprint of a pending component from the current
- * compatibility report (entries carry footprints for auto-placement). */
+/** Look up the PALS attachment footprint of a pending component from the current
+ * compatibility report. */
 function footprintOf(
   report: CompatReport | null,
   sku: string | null
@@ -548,6 +569,23 @@ function footprintOf(
     ...report.incompatible,
   ]) {
     if (entry.sku === sku) return entry.pals_footprint ?? null;
+  }
+  return null;
+}
+
+/** Look up the Material Coverage footprint of a pending component from the
+ * current compatibility report. */
+function coverageOf(
+  report: CompatReport | null,
+  sku: string | null
+): MaterialCoverage | null {
+  if (!report || !sku) return null;
+  for (const entry of [
+    ...report.native_fit,
+    ...report.requires_adapter,
+    ...report.incompatible,
+  ]) {
+    if (entry.sku === sku) return entry.material_coverage ?? null;
   }
   return null;
 }

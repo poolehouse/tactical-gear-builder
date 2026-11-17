@@ -329,15 +329,110 @@ const SCHEMA_ROWS: &[&[&str]] = &[
         "Laser-cut micro format."],
 ];
 
-/// Write all five sample CSVs into `dir`.
+const TOOL_MUNITION_HEADERS: &[&str] = &[
+    "Tool / Munition / Radio Name",
+    "Brand",
+    "Category",
+    "Mounting Interface",
+    "Attachment Footprint (Cols x Rows)",
+    "Material Coverage (Cols x Rows)",
+    "Ideal Host Section / Placard",
+    "Operational Capability",
+];
+
+const TOOL_MUNITION_ROWS: &[&[&str]] = &[
+    &[
+        "BRB Tool",
+        "Good Guy",
+        "Tool",
+        "1\" PALS (Standard MOLLE)",
+        "1x2",
+        "2x4",
+        "Placard / Cummerbund / Back Panel",
+        "Breaching / Pry Tool",
+    ],
+    &[
+        "Halligan Tool",
+        "Paratech",
+        "Tool",
+        "1\" PALS (Standard MOLLE)",
+        "1x3",
+        "2x4",
+        "Back Panel / Cummerbund",
+        "Heavy Mechanical Breaching",
+    ],
+    &[
+        "Strip Breach Charge",
+        "Slap",
+        "Munition",
+        "1\" PALS (Standard MOLLE)",
+        "1x2",
+        "1x3",
+        "Back Panel / Placard PALS",
+        "Explosive Breaching / Ordnance",
+    ],
+    &[
+        "M84 Flashbang Pouch",
+        "TYR",
+        "Munition",
+        "1\" PALS (Standard MOLLE)",
+        "1x2",
+        "1x2",
+        "Placard / Cummerbund / Belt",
+        "Diversionary Munition / Ordnance",
+    ],
+    &[
+        "PRC-152 Radio Pouch",
+        "Spiritus",
+        "Radio",
+        "1\" PALS (Standard MOLLE)",
+        "2x2",
+        "2x3",
+        "Cummerbund / Placard Wing",
+        "Tactical Comms / PTT Routing",
+    ],
+    &[
+        "PRC-163 Radio Pouch",
+        "Crye",
+        "Radio",
+        "1\" PALS (Standard MOLLE)",
+        "2x2",
+        "3x3",
+        "Cummerbund / Back Panel",
+        "Dual-Channel MANET / Comms",
+    ],
+    &[
+        "PMAG 556 Triple Insert",
+        "Magpul",
+        "Magazine",
+        "1\" PALS (Standard MOLLE)",
+        "3x2",
+        "3x2",
+        "Placard Front PALS / Cummerbund",
+        "3x 5.56 Primary Rifle Magazines",
+    ],
+    &[
+        "CAT TQ Shear Wing",
+        "NAR",
+        "Medical",
+        "1\" PALS (Standard MOLLE)",
+        "1x2",
+        "1x3",
+        "Placard Side / Belt / Cummerbund",
+        "Medical IFAK / Tourniquet & Shears",
+    ],
+];
+
+/// Write all six sample CSVs into `dir`.
 pub fn write_sample_csvs(dir: &std::path::Path) -> Result<(), IngestError> {
     std::fs::create_dir_all(dir)?;
-    let samples: [Sheet; 5] = [
+    let samples: [Sheet; 6] = [
         ("plate_carriers.csv", PLATE_CARRIER_HEADERS, PLATE_CARRIER_ROWS),
         ("belts.csv", BELT_HEADERS, BELT_ROWS),
         ("chest_rigs.csv", CHEST_RIG_HEADERS, CHEST_RIG_ROWS),
         ("lbe.csv", LBE_HEADERS, LBE_ROWS),
         ("compatibility_schema.csv", SCHEMA_HEADERS, SCHEMA_ROWS),
+        ("tools_and_munitions.csv", TOOL_MUNITION_HEADERS, TOOL_MUNITION_ROWS),
     ];
     for (file, headers, rows) in samples {
         write_one(&dir.join(file), headers, rows)?;

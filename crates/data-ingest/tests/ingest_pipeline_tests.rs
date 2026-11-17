@@ -51,7 +51,7 @@ fn end_to_end_ingest_generates_seed_files_with_zero_errors() {
     let (report, _dir) = ingest_samples("e2e");
     let catalog = &report.catalog;
 
-    // All five sheets were read (19 + 4 + 4 + 3 + 19 schema rows).
+    // All six sheets were read (18 + 4 + 4 + 3 + 19 schema + 8 tools/munitions/radios rows).
     assert_eq!(
         report
             .rows_ingested
@@ -64,13 +64,14 @@ fn end_to_end_ingest_generates_seed_files_with_zero_errors() {
             ("chest_rigs.csv", 4),
             ("lbe.csv", 3),
             ("compatibility_schema.csv", 19),
+            ("tools_and_munitions.csv", 8),
         ]
     );
 
-    // 18 carriers + 4 belts + 4 rigs + 3 LBE platforms, 12 components
-    // (Spec-04 added the PTT and admin pouches), 4 adapters, 6 role presets.
+    // 18 carriers + 4 belts + 4 rigs + 3 LBE platforms, 20 components
+    // (12 core + 8 tools/munitions/radios), 4 adapters, 6 role presets.
     assert_eq!(catalog.platforms.len(), 29);
-    assert_eq!(catalog.components.len(), 12);
+    assert_eq!(catalog.components.len(), 20);
     assert_eq!(catalog.adapter_bridges.len(), 4);
     assert_eq!(catalog.role_presets.len(), 6);
     assert_eq!(catalog.role_presets[0].preset_id, "breacher");
@@ -142,11 +143,77 @@ fn end_to_end_ingest_generates_seed_files_with_zero_errors() {
     assert!(sql.contains("CREATE TABLE IF NOT EXISTS mount_slots"));
     assert!(sql.contains("CREATE TABLE IF NOT EXISTS components"));
     assert!(sql.contains("CREATE TABLE IF NOT EXISTS adapter_bridges"));
-    assert_eq!(sql.matches("ON CONFLICT (id) DO UPDATE").count(), 45); // 29 + 12 + 4
+    assert_eq!(sql.matches("ON CONFLICT (id) DO UPDATE").count(), 53); // 29 + 20 + 4
     assert_eq!(sql.matches("ON CONFLICT (preset_id) DO UPDATE").count(), 6);
     assert_eq!(
         sql.matches("ON CONFLICT (platform_id, slot_id) DO UPDATE").count(),
         catalog.platforms.iter().map(|p| p.slots.len()).sum::<usize>()
+    );
+}
+
+#[test]
+fn tools_and_munitions_csv_ingests_breach_charges_halligan_brb_and_radios() {
+    let (report, _dir) = ingest_samples("tools-csv");
+    let catalog = &report.catalog;
+
+    assert!(
+        report
+            .rows_ingested
+            .iter()
+            .any(|(file, n)| file == "tools_and_munitions.csv" && *n == 8),
+        "tools_and_munitions.csv must ingest 8 rows: {:?}",
+        report.rows_ingested
+    );
+
+    // Good Guy BRB Tool: 1x2 attachment, 2x4 material coverage
+    let brb = catalog
+        .component("good-guy-brb-tool")
+        .expect("Good Guy BRB Tool ingested");
+    assert_eq!(
+        brb.pals_footprint,
+        Some(core_engine::graph::PalsFootprint { cols: 1, rows: 2 })
+    );
+    assert_eq!(
+        brb.material_coverage,
+        Some(core_engine::graph::MaterialCoverage::new(2, 4))
+    );
+
+    // Halligan Breaching Tool: 1x3 attachment, 2x4 material coverage
+    let halligan = catalog
+        .component("paratech-halligan-tool")
+        .expect("Halligan tool ingested");
+    assert_eq!(
+        halligan.pals_footprint,
+        Some(core_engine::graph::PalsFootprint { cols: 1, rows: 3 })
+    );
+    assert_eq!(
+        halligan.material_coverage,
+        Some(core_engine::graph::MaterialCoverage::new(2, 4))
+    );
+
+    // Linear Strip Breach Charge & AN/PRC-152 Radio Pouch
+    assert!(catalog.component("slap-strip-breach-charge").is_some());
+    let prc152 = catalog
+        .component("spiritus-prc-152-radio-pouch")
+        .expect("AN/PRC-152 radio pouch ingested");
+    assert_eq!(
+        prc152.pals_footprint,
+        Some(core_engine::graph::PalsFootprint { cols: 2, rows: 2 })
+    );
+    assert_eq!(
+        prc152.material_coverage,
+        Some(core_engine::graph::MaterialCoverage::new(2, 3))
+    );
+
+    // Plate carrier cummerbunds expose 6x3 PALS grids for section-by-section mounting
+    let jpc = platform(catalog, "JPC 2.0");
+    assert_eq!(
+        jpc.slot("cummerbund_left")
+            .unwrap()
+            .pals_grid
+            .as_ref()
+            .map(|g| (g.cols, g.rows)),
+        Some((6, 3))
     );
 }
 

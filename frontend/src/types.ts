@@ -13,8 +13,10 @@ export interface AnchorBox2D {
 export interface PalsMatrix {
   cols: number;
   rows: number;
-  /** Row-major: occupied[row][col] */
+  /** Row-major: occupied[row][col] (true for attachment OR material coverage) */
   occupied: boolean[][];
+  /** Row-major: covered[row][col] (true for material overhang beyond attachment) */
+  covered?: boolean[][];
 }
 
 export interface MountSlot {
@@ -26,6 +28,22 @@ export interface MountSlot {
 }
 
 export type PlatformCategory = "plate_carrier" | "belt" | "chest_rig" | "lbe";
+
+export type KitSection =
+  | "all"
+  | "front"
+  | "rear"
+  | "left_side"
+  | "right_side"
+  | "sub_load"
+  | "belt";
+
+/** 3D coordinate frame for projecting a 2D section onto a 3D rig mesh. */
+export interface SectionFrame3D {
+  normal: [number, number, number];
+  origin_3d: [number, number, number];
+  up_3d: [number, number, number];
+}
 
 // --- pricing (Spec 04) -------------------------------------------------------------
 
@@ -176,6 +194,13 @@ export interface PalsFootprint {
   rows: number;
 }
 
+export interface MaterialCoverage {
+  cols: number;
+  rows: number;
+  offset_col?: number;
+  offset_row?: number;
+}
+
 export interface MountedItem {
   mount_id: string;
   sku: string;
@@ -184,6 +209,7 @@ export interface MountedItem {
   slot_id: string;
   pals_position: [number, number] | null;
   pals_footprint: PalsFootprint | null;
+  material_coverage?: MaterialCoverage | null;
   required_adapters: string[];
   serves_mount: string | null;
   anchor: AnchorBox2D;
@@ -257,6 +283,8 @@ export interface ComponentCompatEntry {
   name: string;
   kind: string;
   pals_footprint?: PalsFootprint;
+  material_coverage?: MaterialCoverage;
+  capabilities?: CapabilityTag[];
   adapters?: AdapterSummary[];
   reason?: unknown;
 }
@@ -272,7 +300,7 @@ export interface OpResult {
   error?: string;
 }
 
-// --- geometry helpers ------------------------------------------------------------
+// --- geometry & section helpers ---------------------------------------------------
 
 /** Compose a child anchor (relative to `parent`) into canvas space — the
  * TS mirror of `AnchorBox2D::compose` in core-engine. */
@@ -286,37 +314,92 @@ export function compose(parent: AnchorBox2D, child: AnchorBox2D): AnchorBox2D {
   };
 }
 
-/** Whether a footprint fits at (col, row) on a live PALS grid. */
+/** Whether an attachment footprint and optional material coverage fit at
+ * (col, row) on a live PALS grid — exact TS mirror of
+ * `PalsMatrix::can_fit_with_coverage`. */
 export function gridCanFit(
   grid: PalsMatrix,
   col: number,
   row: number,
   cols: number,
-  rows: number
+  rows: number,
+  coverage?: MaterialCoverage | null
 ): boolean {
   if (col < 0 || row < 0 || col + cols > grid.cols || row + rows > grid.rows) {
     return false;
   }
   for (let r = row; r < row + rows; r++) {
     for (let c = col; c < col + cols; c++) {
-      if (grid.occupied[r][c]) return false;
+      if (grid.occupied[r]?.[c]) return false;
+    }
+  }
+  if (coverage && coverage.cols > 0 && coverage.rows > 0) {
+    const startC = col + (coverage.offset_col ?? 0);
+    const startR = row + (coverage.offset_row ?? 0);
+    for (let r = startR; r < startR + coverage.rows; r++) {
+      for (let c = startC; c < startC + coverage.cols; c++) {
+        if (c >= 0 && c < grid.cols && r >= 0 && r < grid.rows) {
+          if (grid.occupied[r]?.[c]) return false;
+        }
+      }
     }
   }
   return true;
 }
 
-/** First free cell for a footprint, scanning left-to-right then top-to-bottom. */
+/** First free cell for a footprint + optional material coverage, scanning
+ * left-to-right then top-to-bottom. */
 export function firstFreeCell(
   grid: PalsMatrix,
   cols: number,
-  rows: number
+  rows: number,
+  coverage?: MaterialCoverage | null
 ): [number, number] | null {
   for (let row = 0; row + rows <= grid.rows; row++) {
     for (let col = 0; col + cols <= grid.cols; col++) {
-      if (gridCanFit(grid, col, row, cols, rows)) return [col, row];
+      if (gridCanFit(grid, col, row, cols, rows, coverage)) return [col, row];
     }
   }
   return null;
+}
+
+/** Infer the canonical `KitSection` from a slot identifier or path. */
+export function sectionOfSlotId(slotId: string, mounted?: MountedItem[]): Exclude<KitSection, "all"> {
+  if (slotId.includes(".") && mounted) {
+    const [parentId, childId] = slotId.split(".");
+    if (childId.includes("panel_tool")) return "rear";
+    const parent = mounted.find((m) => m.mount_id === parentId);
+    if (parent) return sectionOfSlotId(parent.slot_id, mounted);
+  }
+  const bare = slotId.includes(".") ? slotId.split(".").pop()! : slotId;
+  if (bare.includes("rear") || bare.includes("back") || bare.includes("panel_tool")) {
+    return "rear";
+  }
+  if (bare.includes("left")) return "left_side";
+  if (bare.includes("right")) return "right_side";
+  if (bare.includes("dangler") || bare.includes("buttpack") || bare.includes("sub_load")) {
+    return "sub_load";
+  }
+  if (bare.includes("belt") || bare.includes("holster")) {
+    return "belt";
+  }
+  return "front";
+}
+
+/** Whether a component SKU comes from the `tools_and_munitions.csv` catalog section. */
+export const TOOL_MUNITION_SKUS = new Set<string>([
+  "good-guy-brb-tool",
+  "paratech-halligan-tool",
+  "slap-strip-breach-charge",
+  "tyr-m84-flashbang-pouch",
+  "spiritus-prc-152-radio-pouch",
+  "crye-prc-163-radio-pouch",
+  "magpul-pmag-556-triple-insert",
+  "nar-cat-tq-shear-wing",
+]);
+
+export function isToolOrMunitionSku(sku: string): boolean {
+  return TOOL_MUNITION_SKUS.has(sku);
 }
 
 // --- display helpers ---------------------------------------------------------------

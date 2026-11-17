@@ -1158,6 +1158,119 @@ button {
   margin: 6px 0 0;
 }
 
+/* --- kit section tabs + dual-footprint material coverage ---------------------- */
+
+.section-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.section-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+
+.section-tab:hover {
+  border-color: var(--accent-line);
+  color: var(--text);
+}
+
+.section-tab.is-active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.section-badge {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(94, 234, 212, 0.18);
+  color: var(--accent);
+  font-size: 0.65rem;
+}
+
+.slot-section-tag {
+  color: var(--accent);
+  text-transform: uppercase;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+}
+
+.pals-cell.is-idle {
+  background: rgba(94, 234, 212, 0.04);
+  outline: 1px dashed rgba(94, 234, 212, 0.18);
+  outline-offset: -1px;
+}
+
+.pals-cell.is-covered {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(167, 139, 250, 0.12) 0 4px,
+    rgba(248, 113, 113, 0.14) 4px 8px
+  );
+  outline-color: rgba(167, 139, 250, 0.55);
+}
+
+.pals-cell.is-preview-coverage {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(167, 139, 250, 0.25) 0 4px,
+    rgba(251, 191, 36, 0.22) 4px 8px
+  );
+  outline: 1px dashed var(--violet);
+  outline-offset: -1px;
+}
+
+.mount-layer.has-overhang {
+  overflow: visible;
+}
+
+.material-overhang-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px dashed rgba(167, 139, 250, 0.65);
+  background: rgba(167, 139, 250, 0.08);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.legend-coverage {
+  background: rgba(167, 139, 250, 0.25);
+  border: 1px dashed var(--violet);
+}
+
+.compat-tools .compat-title {
+  color: var(--violet);
+}
+
+.compat-coverage {
+  font-size: 0.66rem;
+  color: var(--violet);
+  font-family: var(--mono);
+}
+
+.compat-entry[draggable="true"] {
+  cursor: grab;
+}
+
+.compat-entry[draggable="true"]:active {
+  cursor: grabbing;
+}
+
 /* --- footer + boot ---------------------------------------------------------------- */
 
 .app-footer {

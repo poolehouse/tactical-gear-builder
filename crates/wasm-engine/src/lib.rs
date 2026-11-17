@@ -71,6 +71,13 @@ struct ComponentCompatEntryDto {
     /// PALS footprint, when the component declares one (auto-placement).
     #[serde(skip_serializing_if = "Option::is_none")]
     pals_footprint: Option<core_engine::graph::PalsFootprint>,
+    /// Physical material coverage footprint when the item's body exceeds its
+    /// attachment footprint.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    material_coverage: Option<core_engine::graph::MaterialCoverage>,
+    /// Typed operational capabilities carried by this component.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    capabilities: Vec<core_engine::graph::CapabilityTag>,
     #[serde(skip_serializing_if = "Option::is_none")]
     adapters: Option<Vec<AdapterSummaryDto>>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -462,6 +469,8 @@ fn component_entry(component: &ComponentSpec) -> ComponentCompatEntryDto {
         name: component.name.clone(),
         kind: component.kind,
         pals_footprint: component.pals_footprint,
+        material_coverage: component.material_coverage,
+        capabilities: component.capabilities.clone(),
         adapters: None,
         reason: None,
     }
@@ -478,7 +487,7 @@ mod tests {
     fn embedded_catalog_parses_and_is_complete() {
         let catalog = parse_embedded_catalog();
         assert_eq!(catalog.platforms.len(), 29);
-        assert_eq!(catalog.components.len(), 12);
+        assert_eq!(catalog.components.len(), 20);
         assert_eq!(catalog.adapter_bridges.len(), 4);
         assert_eq!(catalog.role_presets.len(), 6);
         assert!(catalog.platform("crye-precision-jpc-2-0").is_some());

@@ -1,11 +1,88 @@
-//! The compatibility graph: platforms, mount slots, components, adapters, and
-//! the deterministic mount resolver.
+//! The compatibility graph: platforms, mount slots, kit sections, components,
+//! adapters, and the deterministic mount resolver.
 
 use crate::interfaces::{InterfaceFamily, InterfaceStandard, PlateCut, Size};
 use crate::pricing::{Colorway, VendorOffer};
 use crate::spatial::{AnchorBox2D, PalsMatrix, SpatialError};
+pub use crate::spatial::{MaterialCoverage, PalsFootprint, SectionFrame3D};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+
+/// Discrete physical face or zone of a tactical platform, used for multi-face
+/// 2D section switching and 3D mesh plane projection.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum KitSection {
+    /// Front torso / placard face.
+    Front,
+    /// Rear torso / back-panel face.
+    Rear,
+    /// Left cummerbund / wing face.
+    LeftSide,
+    /// Right cummerbund / wing face.
+    RightSide,
+    /// Sub-load / dangler / buttpack zone.
+    SubLoad,
+    /// Waist / battle belt ring.
+    Belt,
+}
+
+impl KitSection {
+    /// Infer the canonical `KitSection` from a slot identifier.
+    pub fn from_slot_id(slot_id: &str) -> Self {
+        let bare = slot_id.rsplit_once('.').map_or(slot_id, |(_, child)| child);
+        if bare.contains("rear") || bare.contains("back") || bare.contains("panel_tool") {
+            Self::Rear
+        } else if bare.contains("left") {
+            Self::LeftSide
+        } else if bare.contains("right") {
+            Self::RightSide
+        } else if bare.contains("dangler") || bare.contains("buttpack") || bare.contains("sub_load") {
+            Self::SubLoad
+        } else if bare.contains("belt") || bare.contains("holster") {
+            Self::Belt
+        } else {
+            Self::Front
+        }
+    }
+
+    /// Deterministic 3D plane coordinate frame (`normal`, `origin_3d`, `up_3d`)
+    /// so each 2D section maps directly onto a 3D rig mesh.
+    pub const fn default_frame_3d(self) -> SectionFrame3D {
+        match self {
+            Self::Front => SectionFrame3D {
+                normal: [0.0, 0.0, 1.0],
+                origin_3d: [0.0, 0.15, 0.18],
+                up_3d: [0.0, 1.0, 0.0],
+            },
+            Self::Rear => SectionFrame3D {
+                normal: [0.0, 0.0, -1.0],
+                origin_3d: [0.0, 0.15, -0.18],
+                up_3d: [0.0, 1.0, 0.0],
+            },
+            Self::LeftSide => SectionFrame3D {
+                normal: [-1.0, 0.0, 0.0],
+                origin_3d: [-0.22, 0.05, 0.0],
+                up_3d: [0.0, 1.0, 0.0],
+            },
+            Self::RightSide => SectionFrame3D {
+                normal: [1.0, 0.0, 0.0],
+                origin_3d: [0.22, 0.05, 0.0],
+                up_3d: [0.0, 1.0, 0.0],
+            },
+            Self::SubLoad => SectionFrame3D {
+                normal: [0.0, 0.0, 1.0],
+                origin_3d: [0.0, -0.22, 0.19],
+                up_3d: [0.0, 1.0, 0.0],
+            },
+            Self::Belt => SectionFrame3D {
+                normal: [0.0, 0.0, 1.0],
+                origin_3d: [0.0, -0.35, 0.16],
+                up_3d: [0.0, 1.0, 0.0],
+            },
+        }
+    }
+}
 
 /// A physical mount point on a platform (a placard field, zipper track,
 /// cummerbund face, or PALS/MOLLE grid).
@@ -23,6 +100,19 @@ pub struct MountSlot {
     /// Occupancy grid, present when the slot exposes a PALS/MOLLE field.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pals_grid: Option<PalsMatrix>,
+}
+
+impl MountSlot {
+    /// The `KitSection` this slot belongs to, derived deterministically from
+    /// its slot identifier.
+    pub fn section(&self) -> KitSection {
+        KitSection::from_slot_id(&self.id)
+    }
+
+    /// The 3D-ready coordinate frame for this slot's section plane.
+    pub fn frame_3d(&self) -> SectionFrame3D {
+        self.section().default_frame_3d()
+    }
 }
 
 /// Broad category of a load-bearing platform, used for catalog filtering and
@@ -98,7 +188,7 @@ pub enum ComponentKind {
     CummerbundFrontPouch,
     /// Rear cummerbund pouch.
     CummerbundRearPouch,
-    /// Belt-mounted item.
+    /// Belt-mounted or general PALS item.
     BeltItem,
 }
 
@@ -128,16 +218,7 @@ pub enum CapabilityTag {
     ProneLowProfile,
 }
 
-/// PALS footprint of a component, in 1" grid cells.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct PalsFootprint {
-    /// Footprint width in PALS columns.
-    pub cols: u8,
-    /// Footprint height in PALS rows.
-    pub rows: u8,
-}
-
-/// A mountable component (placard, pouch, back panel, ...).
+/// A mountable component (placard, pouch, back panel, tool, munition, radio...).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComponentSpec {
     /// Unique component identifier.
@@ -153,9 +234,13 @@ pub struct ComponentSpec {
     pub interface: InterfaceStandard,
     /// Render anchor, expressed relative to the mount slot's anchor.
     pub anchor: AnchorBox2D,
-    /// PALS footprint, present for webbing-mounted components.
+    /// PALS attachment footprint (`1x1` webbing cuts the straps weave into).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pals_footprint: Option<PalsFootprint>,
+    /// Physical material coverage footprint when the item's body/fabric covers
+    /// more `1x1` cells than its `pals_footprint` attachment straps.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub material_coverage: Option<MaterialCoverage>,
     /// Slots this component exposes once mounted (e.g. a placard's front
     /// PALS field). Slot anchors are relative to this component's render
     /// [`anchor`](ComponentSpec::anchor).
@@ -288,19 +373,6 @@ impl CompatibilityResult {
 
 /// Resolve whether `component` can mount onto `platform`'s slot `slot_id`,
 /// considering at most one adapter hop.
-///
-/// Resolution order:
-/// 1. The slot must exist and be of the same [`InterfaceFamily`] as the
-///    component.
-/// 2. Identical standards resolve to [`CompatibilityResult::NativeFit`].
-/// 3. Otherwise the adapter registry is searched (in order, so the first
-///    matching bridge wins deterministically) for a single-hop
-///    `slot -> adapter -> component` path.
-/// 4. Failing all of the above, the mismatch is classified as a
-///    [`IncompatibilityReason`].
-///
-/// This function is pure: it never mutates occupancy. Call
-/// [`mount_on_pals`] to actually place a PALS-footprinted component.
 pub fn resolve_mount(
     platform: &PlatformSpec,
     slot_id: &str,
@@ -319,18 +391,6 @@ pub fn resolve_mount(
 
 /// Resolve whether `component` can mount onto one specific `slot`,
 /// considering at most one adapter hop.
-///
-/// This is the slot-level engine shared by [`resolve_mount`] (platform slots)
-/// and the child-slot resolution in [`crate::loadout`]. Slot-lookup failures
-/// are the caller's responsibility: this function assumes the slot exists.
-///
-/// Resolution order:
-/// 1. Identical standards resolve to [`CompatibilityResult::NativeFit`].
-/// 2. Otherwise the adapter registry is searched (in order, so the first
-///    matching bridge wins deterministically) for a single-hop
-///    `slot -> adapter -> component` path.
-/// 3. Failing the above, the mismatch is classified as an
-///    [`IncompatibilityReason`].
 pub fn resolve_slot_mount(
     slot: &MountSlot,
     component: &ComponentSpec,
@@ -339,18 +399,24 @@ pub fn resolve_slot_mount(
     let slot_interface = slot.interface;
     let component_interface = component.interface;
 
+    // 1. The slot must exist and be of the same InterfaceFamily as the
+    //    component — OR, when the slot exposes a physical 1" PALS webbing
+    //    grid (`pals_grid.is_some()`), a StandardPals1In component mounts
+    //    natively onto its PALS webbing cuts.
+    if slot_interface == component_interface
+        || (slot.pals_grid.is_some() && component_interface == InterfaceStandard::StandardPals1In)
+    {
+        return CompatibilityResult::NativeFit {
+            anchor: slot.anchor.compose(&component.anchor),
+        };
+    }
+
     if slot_interface.family() != component_interface.family() {
         return CompatibilityResult::Incompatible {
             reason: IncompatibilityReason::InterfaceFamilyMismatch {
                 slot_interface,
                 component_interface,
             },
-        };
-    }
-
-    if slot_interface == component_interface {
-        return CompatibilityResult::NativeFit {
-            anchor: slot.anchor.compose(&component.anchor),
         };
     }
 
@@ -391,11 +457,12 @@ fn classify_mismatch(
 }
 
 /// Place a PALS-footprinted component onto a slot's grid: mutates occupancy
-/// and returns the component's canvas anchor.
+/// (both attachment cells and any material coverage overhang) and returns the
+/// component's canvas anchor.
 ///
-/// Each PALS cell is an even fraction of the slot's [`AnchorBox2D`], so the
-/// anchor scales with the render target. [`InterfaceFamily`] compatibility is
-/// checked by [`resolve_mount`]; call this after a successful resolution.
+/// The returned `AnchorBox2D` spans the visual `material_coverage` envelope
+/// when present (so overhanging tools/pouches render at their true physical
+/// coverage size), or the `pals_footprint` when `material_coverage` is `None`.
 pub fn mount_on_pals(
     slot: &mut MountSlot,
     component: &ComponentSpec,
@@ -409,7 +476,7 @@ pub fn mount_on_pals(
     })?;
     let grid = slot.pals_grid.as_mut().ok_or(SpatialError::NoPalsGrid { slot_id })?;
 
-    grid.mount(col_idx, row_idx, footprint.cols, footprint.rows)?;
+    grid.mount_with_coverage(col_idx, row_idx, footprint, component.material_coverage)?;
 
     let cell_w = slot_anchor.width_pct / f32::from(grid.cols);
     let cell_h = slot_anchor.height_pct / f32::from(grid.rows);

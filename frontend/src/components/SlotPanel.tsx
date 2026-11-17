@@ -1,5 +1,14 @@
-import type { DraftState, SlotAddress } from "../types";
-import { prettifyEnum } from "../types";
+import type { DraftState, KitSection, SlotAddress } from "../types";
+import { prettifyEnum, sectionOfSlotId } from "../types";
+
+const SECTION_SHORT: Record<Exclude<KitSection, "all">, string> = {
+  front: "front",
+  rear: "rear",
+  left_side: "left",
+  right_side: "right",
+  sub_load: "sub-load",
+  belt: "belt",
+};
 
 /** Slot addressing panel: platform slots plus child slots exposed by
  * mounted components (`m2.placard_front_pals` style addresses). */
@@ -8,6 +17,7 @@ export function SlotPanel({
   selectedSlotAddress,
   state,
   selectedMountId,
+  activeSection,
   onSelectSlot,
   onSelectMount,
 }: {
@@ -15,16 +25,36 @@ export function SlotPanel({
   selectedSlotAddress: string | null;
   state: DraftState | null;
   selectedMountId: string | null;
+  activeSection: KitSection;
   onSelectSlot: (address: string) => void;
   onSelectMount: (mountId: string) => void;
 }) {
-  const platformSlots = slots.filter((slot) => slot.host.kind === "platform");
-  const childSlots = slots.filter((slot) => slot.host.kind === "mounted");
+  const matchesSection = (address: string): boolean => {
+    if (activeSection === "all") return true;
+    const sec = sectionOfSlotId(address, state?.mounted);
+    if (activeSection === "sub_load") return sec === "sub_load" || sec === "belt";
+    return sec === activeSection;
+  };
+
+  const visibleSlots = slots.filter((s) => matchesSection(s.address));
+  const platformSlots = visibleSlots.filter(
+    (slot) => slot.host.kind === "platform"
+  );
+  const childSlots = visibleSlots.filter(
+    (slot) => slot.host.kind === "mounted"
+  );
   const mounts = state?.mounted ?? [];
 
   return (
     <section className="pane slot-pane">
-      <h2 className="pane-title">Mount Slots</h2>
+      <h2 className="pane-title">
+        Mount Slots{" "}
+        {activeSection !== "all" && (
+          <span className="pane-count">
+            // {activeSection.replace("_", " ")}
+          </span>
+        )}
+      </h2>
       <h3 className="slot-group-title">Platform</h3>
       <ul className="slot-list">
         {platformSlots.map(({ slot, address }) => (
@@ -32,6 +62,7 @@ export function SlotPanel({
             key={address}
             address={address}
             slot={slot}
+            sectionTag={SECTION_SHORT[sectionOfSlotId(address, state?.mounted)]}
             hostName={state?.platform.name ?? ""}
             selected={address === selectedSlotAddress}
             onSelect={onSelectSlot}
@@ -52,6 +83,9 @@ export function SlotPanel({
                   key={address}
                   address={address}
                   slot={slot}
+                  sectionTag={
+                    SECTION_SHORT[sectionOfSlotId(address, state?.mounted)]
+                  }
                   hostName={hostItem?.name ?? hostMountId}
                   selected={address === selectedSlotAddress}
                   onSelect={onSelectSlot}
@@ -107,12 +141,14 @@ export function SlotPanel({
 function SlotRow({
   address,
   slot,
+  sectionTag,
   hostName,
   selected,
   onSelect,
 }: {
   address: string;
   slot: SlotAddress["slot"];
+  sectionTag: string;
   hostName: string;
   selected: boolean;
   onSelect: (address: string) => void;
@@ -120,6 +156,9 @@ function SlotRow({
   const grid = slot.pals_grid;
   const occupied = grid
     ? grid.occupied.flat().filter(Boolean).length
+    : 0;
+  const covered = grid?.covered
+    ? grid.covered.flat().filter(Boolean).length
     : 0;
   return (
     <li>
@@ -129,12 +168,17 @@ function SlotRow({
       >
         <span className="slot-row-main">
           <span className="slot-id">{slot.id}</span>
-          <span className="slot-interface">{prettifyEnum(slot.interface)}</span>
+          <span className="slot-interface">
+            <span className="slot-section-tag">{sectionTag}</span> &middot;{" "}
+            {prettifyEnum(slot.interface)}
+          </span>
         </span>
         <span className="slot-row-meta">
           {grid ? (
             <>
-              {occupied}/{grid.cols * grid.rows} cells
+              {occupied}/{grid.cols * grid.rows} cells ({grid.cols}&times;
+              {grid.rows} 1&times;1 cuts
+              {covered > 0 ? `, ${covered} covered` : ""})
             </>
           ) : (
             "anchor mount"

@@ -438,6 +438,79 @@ const ITEM_SPECS: &[(&str, ItemSpec)] = &[
             &[("Optactical", 4_399, true), ("SKD Tactical", 4_650, true)],
         ),
     ),
+    // --- tools, munitions & radios (tools_and_munitions.csv) ------------------
+    (
+        "good-guy-brb-tool",
+        (
+            18_500,
+            &[Colorway::Black, Colorway::CoyoteBrown, Colorway::RangerGreen],
+            Colorway::Black,
+            &[("Optactical", 16_999, true), ("SKD Tactical", 17_500, true)],
+        ),
+    ),
+    (
+        "paratech-halligan-tool",
+        (
+            29_500,
+            &[Colorway::Black, Colorway::CoyoteBrown],
+            Colorway::Black,
+            &[("US Patriot Tactical", 26_999, true), ("Gritr Sports", 27_900, true)],
+        ),
+    ),
+    (
+        "slap-strip-breach-charge",
+        (
+            11_000,
+            &[Colorway::Multicam, Colorway::CoyoteBrown, Colorway::RangerGreen, Colorway::Black],
+            Colorway::Multicam,
+            &[("Optactical", 9_799, true), ("Vingtqlc Ops", 10_200, true)],
+        ),
+    ),
+    (
+        "tyr-m84-flashbang-pouch",
+        (
+            4_800,
+            &[Colorway::Multicam, Colorway::CoyoteBrown, Colorway::RangerGreen, Colorway::Black],
+            Colorway::Multicam,
+            &[("SKD Tactical", 4_199, true), ("Optactical", 4_450, true)],
+        ),
+    ),
+    (
+        "spiritus-prc-152-radio-pouch",
+        (
+            7_800,
+            &[Colorway::Multicam, Colorway::CoyoteBrown, Colorway::RangerGreen, Colorway::Black],
+            Colorway::Multicam,
+            &[("SKD Tactical", 6_899, true), ("Optactical", 7_200, true)],
+        ),
+    ),
+    (
+        "crye-prc-163-radio-pouch",
+        (
+            8_900,
+            &[Colorway::Multicam, Colorway::CoyoteBrown, Colorway::RangerGreen],
+            Colorway::Multicam,
+            &[("Optactical", 7_899, true), ("Primary Arms", 8_300, true)],
+        ),
+    ),
+    (
+        "magpul-pmag-556-triple-insert",
+        (
+            6_400,
+            &[Colorway::Black, Colorway::CoyoteBrown, Colorway::Multicam, Colorway::RangerGreen],
+            Colorway::Multicam,
+            &[("Primary Arms", 5_499, true), ("SKD Tactical", 5_850, true)],
+        ),
+    ),
+    (
+        "nar-cat-tq-shear-wing",
+        (
+            5_200,
+            &[Colorway::Multicam, Colorway::CoyoteBrown, Colorway::RangerGreen, Colorway::Black],
+            Colorway::Multicam,
+            &[("US Patriot Tactical", 4_499, true), ("Optactical", 4_799, true)],
+        ),
+    ),
     // --- adapter hardware -----------------------------------------------------
     (
         "axl-avp-jpc",
@@ -498,6 +571,17 @@ const COMPONENT_CAPABILITIES: &[(&str, &[CapabilityTag])] = &[
     ("bfg-micro-trauma-now", &[CapabilityTag::MedicalIfak]),
     ("agilite-ptt-3-panel", &[CapabilityTag::CommsRoutingOrPtt]),
     ("ferro-concepts-admin-pouch", &[CapabilityTag::AdminAtakUtility]),
+    ("good-guy-brb-tool", &[CapabilityTag::BreachingOrOrdnance]),
+    ("paratech-halligan-tool", &[CapabilityTag::BreachingOrOrdnance]),
+    ("slap-strip-breach-charge", &[CapabilityTag::BreachingOrOrdnance]),
+    ("tyr-m84-flashbang-pouch", &[CapabilityTag::BreachingOrOrdnance]),
+    ("spiritus-prc-152-radio-pouch", &[CapabilityTag::CommsRoutingOrPtt]),
+    (
+        "crye-prc-163-radio-pouch",
+        &[CapabilityTag::CommsRoutingOrPtt, CapabilityTag::AdminAtakUtility],
+    ),
+    ("magpul-pmag-556-triple-insert", &[CapabilityTag::RifleMagCapacity(3)]),
+    ("nar-cat-tq-shear-wing", &[CapabilityTag::MedicalIfak]),
 ];
 
 /// A fully resolved pricing record for one item.

@@ -141,9 +141,9 @@ async fn compatible_components_classify_the_jpc_front_placard_slot() {
     let kywi = find_entry(incompatible, KYWI);
     assert!(kywi.get("adapters").is_none(), "incompatible entries carry no adapters");
 
-    // The classification is exhaustive over the catalog.
+    // The classification is exhaustive over the catalog (12 core + 8 tools/munitions/radios).
     let total = native.len() + requires_adapter.len() + incompatible.len();
-    assert_eq!(total, 12);
+    assert_eq!(total, 20);
 
     // Missing slot_id and unknown slot are 400s; unknown platform a 404.
     let (status, _) = get(&app, &format!("/api/v1/catalog/platforms/{JPC}/compatible-components")).await;

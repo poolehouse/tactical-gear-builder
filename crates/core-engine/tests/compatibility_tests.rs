@@ -118,6 +118,7 @@ fn spiritus_mk5_placard() -> ComponentSpec {
         interface: InterfaceStandard::SwiftClip1InchQasm,
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 100.0, 1),
         pals_footprint: None,
+        material_coverage: None,
         child_slots: Vec::new(),
     }
 }
@@ -137,6 +138,7 @@ fn avs_flap_placard() -> ComponentSpec {
         interface: InterfaceStandard::CryeAvsFlap,
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 100.0, 1),
         pals_footprint: None,
+        material_coverage: None,
         child_slots: Vec::new(),
     }
 }
@@ -156,6 +158,7 @@ fn spiritus_back_panel() -> ComponentSpec {
         interface: InterfaceStandard::SpiritusZip,
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 100.0, 1),
         pals_footprint: None,
+        material_coverage: None,
         child_slots: Vec::new(),
     }
 }
@@ -175,6 +178,7 @@ fn four_column_pouch() -> ComponentSpec {
         interface: InterfaceStandard::StandardPals1In,
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 100.0, 2),
         pals_footprint: Some(core_engine::graph::PalsFootprint { cols: 4, rows: 1 }),
+        material_coverage: None,
         child_slots: Vec::new(),
     }
 }
@@ -344,6 +348,7 @@ fn adapter_bridging_is_limited_to_a_single_hop() {
         interface: InterfaceStandard::ShawArcQuad,
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 100.0, 1),
         pals_footprint: None,
+        material_coverage: None,
         child_slots: Vec::new(),
         msrp_cents: 0,
         vendor_offers: Vec::new(),
@@ -399,6 +404,50 @@ fn unknown_slot_id_is_reported() {
             },
         }
     );
+}
+
+#[test]
+fn dual_footprint_material_coverage_blocks_in_bounds_and_allows_edge_overhang() {
+    use core_engine::graph::{KitSection, MaterialCoverage, PalsFootprint};
+
+    let mut grid = PalsMatrix::new(6, 3);
+    let attach = PalsFootprint { cols: 1, rows: 2 };
+    let coverage = MaterialCoverage {
+        cols: 2,
+        rows: 4,
+        offset_col: 0,
+        offset_row: 0,
+    };
+
+    // Placing at (5, 0): attachment is 1x2 at col 5, rows 0..2 (in bounds of 6x3).
+    // Material coverage is 2x4 spanning cols 5..7, rows 0..4 (overhangs right and bottom edge).
+    assert!(grid.can_fit_with_coverage(5, 0, attach, Some(coverage)));
+    grid.mount_with_coverage(5, 0, attach, Some(coverage))
+        .expect("overhanging material coverage is allowed when attachment fits inside grid");
+    assert!(grid.is_occupied(5, 0));
+    assert!(grid.is_occupied(5, 1));
+    assert!(grid.is_occupied(5, 2), "in-bounds covered cell (5,2) is marked occupied");
+    assert!(grid.is_covered(5, 2), "cell (5,2) is marked covered by material overhang");
+
+    // Placing another item at (4, 0) with 1x2 attach and 2x2 coverage would overlap col 5.
+    let neighbor_attach = PalsFootprint { cols: 1, rows: 2 };
+    let neighbor_coverage = MaterialCoverage {
+        cols: 2,
+        rows: 2,
+        offset_col: 0,
+        offset_row: 0,
+    };
+    assert!(!grid.can_fit_with_coverage(4, 0, neighbor_attach, Some(neighbor_coverage)));
+
+    // Releasing the first item frees both attached and covered cells.
+    grid.release_with_coverage(5, 0, attach, Some(coverage));
+    assert!(!grid.is_occupied(5, 0));
+    assert!(!grid.is_occupied(5, 2));
+    assert!(!grid.is_covered(5, 2));
+
+    // Verify KitSection 3D frame defaults.
+    let frame = KitSection::LeftSide.default_frame_3d();
+    assert_eq!(frame.normal, [-1.0, 0.0, 0.0]);
 }
 
 #[test]

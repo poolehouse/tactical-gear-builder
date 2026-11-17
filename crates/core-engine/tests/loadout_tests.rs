@@ -98,6 +98,7 @@ fn spiritus_mk5_placard() -> ComponentSpec {
         interface: InterfaceStandard::SwiftClip1InchQasm,
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 100.0, 1),
         pals_footprint: None,
+        material_coverage: None,
         child_slots: vec![MountSlot {
             id: "placard_front_pals".into(),
             label: "Placard front PALS field".into(),
@@ -123,6 +124,7 @@ fn esstac_kywi_double() -> ComponentSpec {
         interface: InterfaceStandard::StandardPals1In,
         anchor: AnchorBox2D::new(0.0, 0.0, 100.0, 100.0, 2),
         pals_footprint: Some(PalsFootprint { cols: 2, rows: 2 }),
+        material_coverage: None,
         child_slots: Vec::new(),
     }
 }

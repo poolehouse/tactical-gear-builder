@@ -13,7 +13,7 @@
 //!   canvas layout constants defined below.
 
 use crate::csv_models::{
-    RawBeltRow, RawChestRigRow, RawLbeRow, RawPlateCarrierRow, RawSchemaRuleRow,
+    RawBeltRow, RawChestRigRow, RawLbeRow, RawPlateCarrierRow, RawSchemaRuleRow, RawToolMunitionRow,
 };
 use crate::{Catalog, IngestError, IngestReport};
 use core_engine::interfaces::{InterfaceStandard, PlateCut, Size};
@@ -289,14 +289,14 @@ pub fn plate_carrier_slots(
             label: "Cummerbund left".into(),
             interface: cummerbund_interface,
             anchor: lay::CUMMERBUND_LEFT,
-            pals_grid: None,
+            pals_grid: Some(PalsMatrix::new(6, 3)),
         },
         MountSlot {
             id: "cummerbund_right".into(),
             label: "Cummerbund right".into(),
             interface: cummerbund_interface,
             anchor: lay::CUMMERBUND_RIGHT,
-            pals_grid: None,
+            pals_grid: Some(PalsMatrix::new(6, 3)),
         },
         MountSlot {
             id: "dangler_slot".into(),
@@ -587,7 +587,7 @@ pub fn seed_core_adapters_and_components() -> (Vec<core_engine::graph::AdapterBr
             ComponentKind::Placard,
             InterfaceStandard::GhookLowProfile,
             None,
-            Vec::new(),
+            vec![placard_front_pals()],
         ),
         component(
             "haley-d3crm-placard",
@@ -595,7 +595,7 @@ pub fn seed_core_adapters_and_components() -> (Vec<core_engine::graph::AdapterBr
             ComponentKind::Placard,
             InterfaceStandard::SwiftClip1InchQasm,
             None,
-            Vec::new(),
+            vec![placard_front_pals()],
         ),
         component(
             "esstac-kywi-556-double",
@@ -627,7 +627,7 @@ pub fn seed_core_adapters_and_components() -> (Vec<core_engine::graph::AdapterBr
             ComponentKind::BackPanel,
             InterfaceStandard::CryeZip10,
             None,
-            Vec::new(),
+            vec![back_panel_tool_pals()],
         ),
         component(
             "ferro-back-panel-banger",
@@ -635,7 +635,7 @@ pub fn seed_core_adapters_and_components() -> (Vec<core_engine::graph::AdapterBr
             ComponentKind::BackPanel,
             InterfaceStandard::FerroZip,
             None,
-            Vec::new(),
+            vec![back_panel_tool_pals()],
         ),
         component(
             "safariland-ubl-mid-ride",
@@ -721,6 +721,7 @@ fn component(
         interface,
         anchor: lay::FULL(),
         pals_footprint: footprint.map(|(cols, rows)| core_engine::graph::PalsFootprint { cols, rows }),
+        material_coverage: None,
         child_slots,
         msrp_cents: pricing.msrp_cents,
         vendor_offers: pricing.offers,
@@ -730,7 +731,7 @@ fn component(
     }
 }
 
-/// Child slot exposed by the MK5 placard once mounted: a 6x3 front PALS
+/// Child slot exposed by placards once mounted: a 6x3 front PALS
 /// field. The anchor is relative to the placard's render anchor.
 fn placard_front_pals() -> MountSlot {
     MountSlot {
@@ -740,6 +741,102 @@ fn placard_front_pals() -> MountSlot {
         anchor: AnchorBox2D::new(4.0, 10.0, 92.0, 82.0, 4),
         pals_grid: Some(PalsMatrix::new(6, 3)),
     }
+}
+
+/// Child slot exposed by zip-on back panels once mounted: a 6x4 rear tool
+/// and ordnance PALS field.
+fn back_panel_tool_pals() -> MountSlot {
+    MountSlot {
+        id: "panel_tool_pals".into(),
+        label: "Back panel tool & ordnance PALS".into(),
+        interface: InterfaceStandard::StandardPals1In,
+        anchor: AnchorBox2D::new(6.0, 8.0, 88.0, 84.0, 4),
+        pals_grid: Some(PalsMatrix::new(6, 4)),
+    }
+}
+
+/// Parse a `"Cols x Rows"` footprint string (e.g. `"1x2"`, `"2x4"`) fail-closed.
+fn parse_dims(raw: &str, row_no: usize, column: &str) -> Result<(u8, u8), IngestError> {
+    let cleaned = raw.trim().to_lowercase();
+    let Some((c_str, r_str)) = cleaned.split_once('x') else {
+        return Err(IngestError::UnmappedInterface {
+            row: row_no,
+            column: column.to_owned(),
+            raw_value: raw.trim().to_owned(),
+        });
+    };
+    let cols = c_str.trim().parse::<u8>().map_err(|_| IngestError::UnmappedInterface {
+        row: row_no,
+        column: column.to_owned(),
+        raw_value: raw.trim().to_owned(),
+    })?;
+    let rows = r_str.trim().parse::<u8>().map_err(|_| IngestError::UnmappedInterface {
+        row: row_no,
+        column: column.to_owned(),
+        raw_value: raw.trim().to_owned(),
+    })?;
+    if cols == 0 || rows == 0 {
+        return Err(IngestError::UnmappedInterface {
+            row: row_no,
+            column: column.to_owned(),
+            raw_value: raw.trim().to_owned(),
+        });
+    }
+    Ok((cols, rows))
+}
+
+/// Normalize one `tools_and_munitions.csv` row into a [`ComponentSpec`].
+pub fn normalize_tool_munition(
+    row: &RawToolMunitionRow,
+    row_no: usize,
+) -> Result<ComponentSpec, IngestError> {
+    let slug = slug_id(&row.brand, &row.item_name);
+    let interface = map_interface(
+        &row.mounting_interface,
+        PALS_SPEC_TABLE,
+        row_no,
+        "Mounting Interface",
+    )?;
+    let (attach_cols, attach_rows) = parse_dims(
+        &row.attachment_footprint,
+        row_no,
+        "Attachment Footprint (Cols x Rows)",
+    )?;
+    let (cover_cols, cover_rows) = parse_dims(
+        &row.material_coverage,
+        row_no,
+        "Material Coverage (Cols x Rows)",
+    )?;
+    let pricing = crate::pricing_seed::item_offer_pricing(&slug).ok_or_else(|| {
+        IngestError::MissingPricing {
+            row: row_no,
+            sheet: "tools_and_munitions.csv",
+            sku: slug.clone(),
+        }
+    })?;
+    let display_name = format!("{} {}", row.brand.trim(), row.item_name.trim());
+    Ok(ComponentSpec {
+        id: deterministic_uuid(&slug),
+        sku: slug.clone(),
+        name: display_name,
+        kind: ComponentKind::BeltItem,
+        interface,
+        anchor: lay::FULL(),
+        pals_footprint: Some(core_engine::graph::PalsFootprint {
+            cols: attach_cols,
+            rows: attach_rows,
+        }),
+        material_coverage: Some(core_engine::graph::MaterialCoverage::new(
+            cover_cols,
+            cover_rows,
+        )),
+        child_slots: Vec::new(),
+        msrp_cents: pricing.msrp_cents,
+        vendor_offers: pricing.offers,
+        allowed_colorways: pricing.allowed_colorways,
+        default_colorway: pricing.default_colorway,
+        capabilities: crate::pricing_seed::capabilities(&slug),
+    })
 }
 
 /// Slugs of the seed adapters (used for schema bridge validation).
@@ -764,6 +861,7 @@ pub fn normalize_catalog(input_dir: &std::path::Path) -> Result<IngestReport, In
     let rigs: Vec<RawChestRigRow> = crate::read_csv(input_dir, "chest_rigs.csv")?;
     let lbe: Vec<RawLbeRow> = crate::read_csv(input_dir, "lbe.csv")?;
     let schema: Vec<RawSchemaRuleRow> = crate::read_csv(input_dir, "compatibility_schema.csv")?;
+    let tools: Vec<RawToolMunitionRow> = crate::read_csv(input_dir, "tools_and_munitions.csv")?;
 
     let mut platforms = Vec::new();
     for (idx, row) in carriers.iter().enumerate() {
@@ -779,7 +877,10 @@ pub fn normalize_catalog(input_dir: &std::path::Path) -> Result<IngestReport, In
         platforms.push(normalize_lbe(row, idx + 1)?);
     }
 
-    let (adapters, components) = seed_core_adapters_and_components();
+    let (adapters, mut components) = seed_core_adapters_and_components();
+    for (idx, row) in tools.iter().enumerate() {
+        components.push(normalize_tool_munition(row, idx + 1)?);
+    }
     validate_schema_rows(&schema, &core_adapter_slugs())?;
 
     Ok(IngestReport {
@@ -795,6 +896,7 @@ pub fn normalize_catalog(input_dir: &std::path::Path) -> Result<IngestReport, In
             ("chest_rigs.csv".into(), rigs.len()),
             ("lbe.csv".into(), lbe.len()),
             ("compatibility_schema.csv".into(), schema.len()),
+            ("tools_and_munitions.csv".into(), tools.len()),
         ],
     })
 }

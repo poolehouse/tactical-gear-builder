@@ -30,8 +30,9 @@ pub mod spatial;
 pub use catalog::Catalog;
 pub use graph::{
     AdapterBridge, CapabilityTag, CompatibilityResult, ComponentKind, ComponentSpec,
-    IncompatibilityReason, MountSlot, PalsFootprint, PlatformCategory, PlatformSpec, mount_on_pals,
-    resolve_mount, resolve_slot_mount,
+    IncompatibilityReason, KitSection, MaterialCoverage, MountSlot, PalsFootprint,
+    PlatformCategory, PlatformSpec, SectionFrame3D, mount_on_pals, resolve_mount,
+    resolve_slot_mount,
 };
 /// Re-export so downstream crates can construct `Uuid` id fields without
 /// adding `uuid` as a direct dependency.
