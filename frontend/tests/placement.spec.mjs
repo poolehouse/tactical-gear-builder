@@ -280,3 +280,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 console.log("\nALL PLAYWRIGHT CANVAS SEAM TESTS PASSED");
+process.exit(0);
