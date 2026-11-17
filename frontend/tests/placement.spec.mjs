@@ -23,6 +23,7 @@
  */
 import { createRequire } from "node:module";
 import { spawn } from "node:child_process";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -66,8 +67,15 @@ try {
   }
   if (!up) throw new Error("vite preview did not start");
 
+  const executablePath =
+    process.env.PLAYWRIGHT_CHROMIUM_PATH ||
+    (fs.existsSync("/usr/bin/google-chrome")
+      ? "/usr/bin/google-chrome"
+      : fs.existsSync("/usr/bin/chromium")
+        ? "/usr/bin/chromium"
+        : undefined);
   const browser = await chromium.launch({
-    ...(process.env.CI ? {} : { executablePath: "/usr/bin/chromium" }),
+    ...(executablePath ? { executablePath } : {}),
     headless: true,
     args: ["--no-sandbox"],
   });
