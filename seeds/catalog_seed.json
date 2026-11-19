@@ -22,9 +22,9 @@
           "interface": "CryeAvsFlap",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -34,9 +34,9 @@
           "interface": "CryeZip10",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -46,9 +46,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -95,10 +95,10 @@
           "label": "Cummerbund left",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -137,10 +137,10 @@
           "label": "Cummerbund right",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -179,9 +179,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -238,9 +238,9 @@
           "interface": "CryeAvsFlap",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -250,9 +250,9 @@
           "interface": "CryeZip10",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -262,9 +262,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -311,10 +311,10 @@
           "label": "Cummerbund left",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -353,10 +353,10 @@
           "label": "Cummerbund right",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -395,9 +395,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -448,9 +448,9 @@
           "interface": "CryeAvsFlap",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -460,9 +460,9 @@
           "interface": "CryeZip10",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -472,9 +472,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -521,10 +521,10 @@
           "label": "Cummerbund left",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -563,10 +563,10 @@
           "label": "Cummerbund right",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -605,9 +605,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -657,9 +657,9 @@
           "interface": "GhookLowProfile",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -669,9 +669,9 @@
           "interface": "FerroZip",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -681,9 +681,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -730,10 +730,10 @@
           "label": "Cummerbund left",
           "interface": "ProprietaryTegris",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -772,10 +772,10 @@
           "label": "Cummerbund right",
           "interface": "ProprietaryTegris",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -814,9 +814,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -872,9 +872,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -884,9 +884,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -896,9 +896,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -945,10 +945,10 @@
           "label": "Cummerbund left",
           "interface": "InternalVelcroLoop",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -987,10 +987,10 @@
           "label": "Cummerbund right",
           "interface": "InternalVelcroLoop",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -1029,9 +1029,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -1083,9 +1083,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -1095,9 +1095,9 @@
           "interface": "SpiritusZip",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -1107,9 +1107,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -1156,10 +1156,10 @@
           "label": "Cummerbund left",
           "interface": "FirstSpearTubes2In",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -1198,10 +1198,10 @@
           "label": "Cummerbund right",
           "interface": "FirstSpearTubes2In",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -1240,9 +1240,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -1293,9 +1293,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -1305,9 +1305,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -1317,9 +1317,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -1366,10 +1366,10 @@
           "label": "Cummerbund left",
           "interface": "VelcroFlap",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -1408,10 +1408,10 @@
           "label": "Cummerbund right",
           "interface": "VelcroFlap",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -1450,9 +1450,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -1502,9 +1502,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -1514,9 +1514,9 @@
           "interface": "VelocityYkk10",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -1526,9 +1526,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -1575,10 +1575,10 @@
           "label": "Cummerbund left",
           "interface": "InternalVelcroLoop",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -1617,10 +1617,10 @@
           "label": "Cummerbund right",
           "interface": "InternalVelcroLoop",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -1659,9 +1659,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -1711,9 +1711,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -1723,9 +1723,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -1735,9 +1735,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -1784,10 +1784,10 @@
           "label": "Cummerbund left",
           "interface": "VelcroFlap",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -1826,10 +1826,10 @@
           "label": "Cummerbund right",
           "interface": "VelcroFlap",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -1868,9 +1868,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -1920,9 +1920,9 @@
           "interface": "ShawArcQuad",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -1932,9 +1932,9 @@
           "interface": "VelocityYkk10",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -1944,9 +1944,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -1993,10 +1993,10 @@
           "label": "Cummerbund left",
           "interface": "FirstSpearTubes2In",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2035,10 +2035,10 @@
           "label": "Cummerbund right",
           "interface": "FirstSpearTubes2In",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2077,9 +2077,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -2130,9 +2130,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -2142,9 +2142,9 @@
           "interface": "VelocityYkk10",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -2154,9 +2154,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -2203,10 +2203,10 @@
           "label": "Cummerbund left",
           "interface": "VelcroFlap",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2245,10 +2245,10 @@
           "label": "Cummerbund right",
           "interface": "VelcroFlap",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2287,9 +2287,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -2347,9 +2347,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -2359,9 +2359,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -2371,9 +2371,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -2420,10 +2420,10 @@
           "label": "Cummerbund left",
           "interface": "InternalVelcroLoop",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2462,10 +2462,10 @@
           "label": "Cummerbund right",
           "interface": "InternalVelcroLoop",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2504,9 +2504,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -2556,9 +2556,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -2568,9 +2568,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -2580,9 +2580,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -2629,10 +2629,10 @@
           "label": "Cummerbund left",
           "interface": "ProprietaryTegris",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2671,10 +2671,10 @@
           "label": "Cummerbund right",
           "interface": "ProprietaryTegris",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2713,9 +2713,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -2765,9 +2765,9 @@
           "interface": "GhookLowProfile",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -2777,9 +2777,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -2789,9 +2789,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -2838,10 +2838,10 @@
           "label": "Cummerbund left",
           "interface": "FirstSpearTubes2In",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2880,10 +2880,10 @@
           "label": "Cummerbund right",
           "interface": "FirstSpearTubes2In",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -2922,9 +2922,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -2980,9 +2980,9 @@
           "interface": "StandardPals1In",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           },
           "pals_grid": {
@@ -3022,9 +3022,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -3034,9 +3034,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -3083,10 +3083,10 @@
           "label": "Cummerbund left",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -3125,10 +3125,10 @@
           "label": "Cummerbund right",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -3167,9 +3167,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -3220,9 +3220,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -3232,9 +3232,9 @@
           "interface": "VelocityYkk10",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -3244,9 +3244,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -3293,10 +3293,10 @@
           "label": "Cummerbund left",
           "interface": "InternalVelcroLoop",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -3335,10 +3335,10 @@
           "label": "Cummerbund right",
           "interface": "InternalVelcroLoop",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -3377,9 +3377,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -3430,9 +3430,9 @@
           "interface": "SwiftClip1InchQasm",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           }
         },
@@ -3442,9 +3442,9 @@
           "interface": "VelocityYkk10",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -3454,9 +3454,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -3503,10 +3503,10 @@
           "label": "Cummerbund left",
           "interface": "FirstSpearTubes2In",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -3545,10 +3545,10 @@
           "label": "Cummerbund right",
           "interface": "FirstSpearTubes2In",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -3587,9 +3587,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -3639,9 +3639,9 @@
           "interface": "StandardPals1In",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 18.0,
+            "y_pct": 44.0,
             "width_pct": 40.0,
-            "height_pct": 46.0,
+            "height_pct": 34.0,
             "z_index": 10
           },
           "pals_grid": {
@@ -3681,9 +3681,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 10
           }
         },
@@ -3693,9 +3693,9 @@
           "interface": "StandardMolle",
           "anchor": {
             "x_pct": 30.0,
-            "y_pct": 20.0,
+            "y_pct": 4.0,
             "width_pct": 40.0,
-            "height_pct": 44.0,
+            "height_pct": 32.0,
             "z_index": 9
           },
           "pals_grid": {
@@ -3742,10 +3742,10 @@
           "label": "Cummerbund left",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 5.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 4.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -3784,10 +3784,10 @@
           "label": "Cummerbund right",
           "interface": "PassThroughSkeletal",
           "anchor": {
-            "x_pct": 75.0,
-            "y_pct": 25.0,
-            "width_pct": 20.0,
-            "height_pct": 35.0,
+            "x_pct": 73.0,
+            "y_pct": 47.0,
+            "width_pct": 23.0,
+            "height_pct": 28.0,
             "z_index": 8
           },
           "pals_grid": {
@@ -3826,9 +3826,9 @@
           "label": "Dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -4451,9 +4451,9 @@
           "label": "Sub-load / dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -4535,9 +4535,9 @@
           "label": "Sub-load / dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -4650,9 +4650,9 @@
           "label": "Sub-load / dangler zone",
           "interface": "GhookLowProfile",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }
@@ -4735,9 +4735,9 @@
           "label": "Sub-load / dangler zone",
           "interface": "SwiftClip1InchQasm",
           "anchor": {
-            "x_pct": 40.0,
-            "y_pct": 66.0,
-            "width_pct": 20.0,
+            "x_pct": 38.0,
+            "y_pct": 80.0,
+            "width_pct": 24.0,
             "height_pct": 12.0,
             "z_index": 12
           }

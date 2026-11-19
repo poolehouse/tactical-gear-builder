@@ -127,15 +127,48 @@ export function LoadoutCanvas({
           onSelectMount(null);
         }}
       >
-        {/* base platform */}
+        {/* base platform (top-down bench flat-lay: inner platebag facing floor, exterior MOLLE facing ceiling) */}
         <div
-          className="layer platform-silhouette"
+          className={`layer platform-silhouette${
+            state.platform.category === "plate_carrier"
+              ? " is-flatlay-carrier"
+              : ""
+          }`}
           data-colorway={state.colorway ?? state.platform.default_colorway}
           style={layerStyle(layers[0].anchor)}
         >
+          {state.platform.category === "plate_carrier" && (
+            <div className="flatlay-anatomy" aria-hidden="true">
+              <div className="flatlay-bag flatlay-rear-bag">
+                <span className="flatlay-bag-tag">
+                  REAR PLATEBAG // EXTERIOR MOLLE UP (&uarr; CEILING)
+                </span>
+              </div>
+              <div className="flatlay-shoulders">
+                <span className="flatlay-strap flatlay-strap-left" />
+                <span className="flatlay-neck-cutout">
+                  TOP-DOWN BENCH VIEW &middot; INNER LINER DOWN (&darr; FLOOR)
+                </span>
+                <span className="flatlay-strap flatlay-strap-right" />
+              </div>
+              <div className="flatlay-bag flatlay-front-bag">
+                <span className="flatlay-bag-tag">
+                  FRONT PLATEBAG // PLACARD FACE UP (&uarr; CEILING)
+                </span>
+              </div>
+              <div className="flatlay-wing flatlay-wing-left">
+                <span className="flatlay-wing-tag">L CUMMERBUND</span>
+              </div>
+              <div className="flatlay-wing flatlay-wing-right">
+                <span className="flatlay-wing-tag">R CUMMERBUND</span>
+              </div>
+            </div>
+          )}
           <span className="platform-name">
             {state.platform.name}
-            {activeSection !== "all" ? ` // ${activeSection.replace("_", " ")}` : ""}
+            {activeSection !== "all"
+              ? ` // ${activeSection.replace("_", " ")}`
+              : " // top-down flat-lay"}
           </span>
         </div>
 

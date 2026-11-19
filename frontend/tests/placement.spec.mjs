@@ -100,6 +100,27 @@ try {
   await page.click("button.picker-item:has-text('JPC 2.0')");
   await page.waitForSelector(".platform-silhouette");
 
+  // Verify top-down flat-lay geometry: rear platebag is positioned strictly ABOVE front placard (no overlap)
+  const rearBox = await page
+    .locator(".slot-zone:has-text('rear_panel')")
+    .boundingBox();
+  const frontBox = await page
+    .locator(".slot-zone:has-text('front_placard')")
+    .boundingBox();
+  assert(
+    "slice 0: top-down flat-lay positions rear_panel strictly above front_placard without overlap",
+    Boolean(
+      rearBox &&
+        frontBox &&
+        rearBox.y + rearBox.height < frontBox.y &&
+        (await page.locator(".flatlay-rear-bag").count()) === 1 &&
+        (await page.locator(".flatlay-front-bag").count()) === 1
+    ),
+    rearBox && frontBox
+      ? `rear bottom=${Math.round(rearBox.y + rearBox.height)}px < front top=${Math.round(frontBox.y)}px`
+      : "missing slot boxes"
+  );
+
   // Mount MK5 placard on front_placard (anchor slot)
   await page.click(".compat-entry:has-text('Spiritus Systems MK5 Placard')");
   assert(

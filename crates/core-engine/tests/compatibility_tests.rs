@@ -445,9 +445,15 @@ fn dual_footprint_material_coverage_blocks_in_bounds_and_allows_edge_overhang() 
     assert!(!grid.is_occupied(5, 2));
     assert!(!grid.is_covered(5, 2));
 
-    // Verify KitSection 3D frame defaults.
-    let frame = KitSection::LeftSide.default_frame_3d();
-    assert_eq!(frame.normal, [-1.0, 0.0, 0.0]);
+    // Verify KitSection flat-lay 3D frame defaults (all exterior MOLLE faces ceiling +Z,
+    // rear platebag at +Y above front platebag at -Y).
+    let left_frame = KitSection::LeftSide.default_frame_3d();
+    assert_eq!(left_frame.normal, [0.0, 0.0, 1.0]);
+    let rear_frame = KitSection::Rear.default_frame_3d();
+    let front_frame = KitSection::Front.default_frame_3d();
+    assert_eq!(rear_frame.normal, [0.0, 0.0, 1.0]);
+    assert_eq!(front_frame.normal, [0.0, 0.0, 1.0]);
+    assert!(rear_frame.origin_3d[1] > front_frame.origin_3d[1]);
 }
 
 #[test]

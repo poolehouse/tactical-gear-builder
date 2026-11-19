@@ -46,39 +46,41 @@ impl KitSection {
         }
     }
 
-    /// Deterministic 3D plane coordinate frame (`normal`, `origin_3d`, `up_3d`)
-    /// so each 2D section maps directly onto a 3D rig mesh.
+    /// Flat-lay top-down coordinate frame (`normal`, `origin_3d`, `up_3d`):
+    /// inner platebag faces the floor (`-Z`), outer MOLLE webbing faces the
+    /// ceiling (`+Z`), and the rear platebag sits above (`+Y`) the front
+    /// platebag (`-Y`), joined through the shoulder straps.
     pub const fn default_frame_3d(self) -> SectionFrame3D {
         match self {
+            Self::Rear => SectionFrame3D {
+                normal: [0.0, 0.0, 1.0],
+                origin_3d: [0.0, 0.34, 0.06],
+                up_3d: [0.0, 1.0, 0.0],
+            },
             Self::Front => SectionFrame3D {
                 normal: [0.0, 0.0, 1.0],
-                origin_3d: [0.0, 0.15, 0.18],
-                up_3d: [0.0, 1.0, 0.0],
-            },
-            Self::Rear => SectionFrame3D {
-                normal: [0.0, 0.0, -1.0],
-                origin_3d: [0.0, 0.15, -0.18],
-                up_3d: [0.0, 1.0, 0.0],
+                origin_3d: [0.0, -0.14, 0.06],
+                up_3d: [0.0, -1.0, 0.0],
             },
             Self::LeftSide => SectionFrame3D {
-                normal: [-1.0, 0.0, 0.0],
-                origin_3d: [-0.22, 0.05, 0.0],
-                up_3d: [0.0, 1.0, 0.0],
+                normal: [0.0, 0.0, 1.0],
+                origin_3d: [-0.36, -0.14, 0.04],
+                up_3d: [0.0, -1.0, 0.0],
             },
             Self::RightSide => SectionFrame3D {
-                normal: [1.0, 0.0, 0.0],
-                origin_3d: [0.22, 0.05, 0.0],
-                up_3d: [0.0, 1.0, 0.0],
+                normal: [0.0, 0.0, 1.0],
+                origin_3d: [0.36, -0.14, 0.04],
+                up_3d: [0.0, -1.0, 0.0],
             },
             Self::SubLoad => SectionFrame3D {
                 normal: [0.0, 0.0, 1.0],
-                origin_3d: [0.0, -0.22, 0.19],
-                up_3d: [0.0, 1.0, 0.0],
+                origin_3d: [0.0, -0.44, 0.05],
+                up_3d: [0.0, -1.0, 0.0],
             },
             Self::Belt => SectionFrame3D {
                 normal: [0.0, 0.0, 1.0],
-                origin_3d: [0.0, -0.35, 0.16],
-                up_3d: [0.0, 1.0, 0.0],
+                origin_3d: [0.0, -0.58, 0.04],
+                up_3d: [0.0, -1.0, 0.0],
             },
         }
     }

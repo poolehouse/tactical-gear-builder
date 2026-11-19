@@ -215,23 +215,30 @@ fn map_plate_cuts(text: &str, row: usize) -> Result<Vec<PlateCut>, IngestError> 
 // --- orthographic slot generators --------------------------------------------------
 
 /// Canvas geometry constants (percent of the platform canvas).
+///
+/// Plate carriers use a top-down bench flat-lay ("butterfly") layout:
+/// the inner platebags face the floor (`-Z`), all exterior MOLLE faces the
+/// ceiling (`+Z`), the **rear platebag** sits at the top (`y: 4..36%`),
+/// shoulder straps bridge `y: 36..44%`, the **front placard** sits below
+/// (`y: 44..78%`), cummerbund wings extend left/right from the front platebag,
+/// and the dangler hangs below the front platebag (`y: 80..92%`).
 mod layout {
     use core_engine::spatial::AnchorBox2D;
 
     /// Full-slot anchor helper: child fills the slot box.
     pub const FULL: fn() -> AnchorBox2D = || AnchorBox2D::new(0.0, 0.0, 100.0, 100.0, 1);
-    /// Front placard field.
-    pub const FRONT_PLACARD: AnchorBox2D = AnchorBox2D::new(30.0, 18.0, 40.0, 46.0, 10);
-    /// Zip-on back panel area.
-    pub const REAR_PANEL: AnchorBox2D = AnchorBox2D::new(30.0, 20.0, 40.0, 44.0, 10);
-    /// Rear MOLLE field.
-    pub const REAR_PALS: AnchorBox2D = AnchorBox2D::new(30.0, 20.0, 40.0, 44.0, 9);
-    /// Left cummerbund face.
-    pub const CUMMERBUND_LEFT: AnchorBox2D = AnchorBox2D::new(5.0, 25.0, 20.0, 35.0, 8);
-    /// Right cummerbund face.
-    pub const CUMMERBUND_RIGHT: AnchorBox2D = AnchorBox2D::new(75.0, 25.0, 20.0, 35.0, 8);
-    /// Dangler zone under the placard.
-    pub const DANGLER: AnchorBox2D = AnchorBox2D::new(40.0, 66.0, 20.0, 12.0, 12);
+    /// Zip-on back panel area (top of flat-lay: rear platebag).
+    pub const REAR_PANEL: AnchorBox2D = AnchorBox2D::new(30.0, 4.0, 40.0, 32.0, 10);
+    /// Rear MOLLE field (top of flat-lay: rear platebag).
+    pub const REAR_PALS: AnchorBox2D = AnchorBox2D::new(30.0, 4.0, 40.0, 32.0, 9);
+    /// Front placard field (below shoulder bridge on flat-lay).
+    pub const FRONT_PLACARD: AnchorBox2D = AnchorBox2D::new(30.0, 44.0, 40.0, 34.0, 10);
+    /// Left cummerbund face (flanking the front platebag).
+    pub const CUMMERBUND_LEFT: AnchorBox2D = AnchorBox2D::new(4.0, 47.0, 23.0, 28.0, 8);
+    /// Right cummerbund face (flanking the front platebag).
+    pub const CUMMERBUND_RIGHT: AnchorBox2D = AnchorBox2D::new(73.0, 47.0, 23.0, 28.0, 8);
+    /// Dangler zone under the front placard.
+    pub const DANGLER: AnchorBox2D = AnchorBox2D::new(38.0, 80.0, 24.0, 12.0, 12);
     /// Belt PALS field.
     pub const BELT_PALS: AnchorBox2D = AnchorBox2D::new(2.0, 40.0, 96.0, 20.0, 5);
     /// Holster drop zone.
